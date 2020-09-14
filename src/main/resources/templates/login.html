@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8"/>
 
-    <title>Backend Ninja - Signin</title>
+    <title>CORFID</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -18,14 +18,17 @@
 
     <div class="container">
 
-      <form class="form-signin">
-        <h2 class="form-signin-heading">Sign in</h2>
-        <label for="inputEmail" class="sr-only">Username</label>
-        <input type="text" id="inputUsername" class="form-control" placeholder="Username"/>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password"/>
+      <form class="form-signin" th:action="@{/logincheck}" method="POST">
+      	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <h2 class="form-signin-heading">Credenciales</h2>
+        <label for="inputEmail" class="sr-only">Usuario</label>
+        <input type="text" class="form-control" placeholder="Ingrese usuario" name="usuario" id="usuario"/>
+        <label for="inputPassword" class="sr-only">Contraseña</label>
+        <input type="password" class="form-control" placeholder="Ingrese Contraseña" name="password" id="password"/>
+        <div th:if="${error != null}" class="alert alert-danger" role="alert">Usuario o contraseña incorrecta</div>
+        <div th:if="${logout != null}" class="alert alert-info" role="alert">Sesión cerrada con éxito!</div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">
-        	<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Sign in
+        	<span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Ingresar
         </button>
       </form>
 
