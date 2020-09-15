@@ -1,9 +1,12 @@
-body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #eee;
+:root {
 }
 
-h1 {
-	text-align: center
+body {
+	font-family: 'Spartan', sans-serif;
+	font-weight: 300;
+	color: var(--light);
+}
+.form-control, .btn {
+	min-height: 3.125rem;
+	line-height: initial;
 }
