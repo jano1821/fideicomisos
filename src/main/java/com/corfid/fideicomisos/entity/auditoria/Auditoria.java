@@ -3,15 +3,17 @@ package com.corfid.fideicomisos.entity.auditoria;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+@MappedSuperclass
 public class Auditoria {
 	@Column(name = "a_estreg", nullable = false, length = 1, insertable = true, updatable = true)
 	protected String estadoRegistro;
 
-	@Column(name = "a_usuins", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
-	protected int usuarioInsercion;
+	@Column(name = "a_usuins", nullable = false, length = 100, insertable = true, updatable = true)
+	protected String usuarioInsercion;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "a_fecins", nullable = false, insertable = true, updatable = true, length = 7)
@@ -20,8 +22,8 @@ public class Auditoria {
 	@Column(name = "a_ipeins", nullable = false, length = 45, insertable = true, updatable = true)
 	protected String ipInsercion;
 
-	@Column(name = "a_usumod", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
-	protected int usuarioModificacion;
+	@Column(name = "a_usumod", nullable = true, length = 100, insertable = true, updatable = true)
+	protected String usuarioModificacion;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "a_fecmod", nullable = true, insertable = true, updatable = true, length = 7)
@@ -38,11 +40,11 @@ public class Auditoria {
 		this.estadoRegistro = estadoRegistro;
 	}
 
-	public int getUsuarioInsercion() {
+	public String getUsuarioInsercion() {
 		return usuarioInsercion;
 	}
 
-	public void setUsuarioInsercion(int usuarioInsercion) {
+	public void setUsuarioInsercion(String usuarioInsercion) {
 		this.usuarioInsercion = usuarioInsercion;
 	}
 
@@ -62,11 +64,11 @@ public class Auditoria {
 		this.ipInsercion = ipInsercion;
 	}
 
-	public int getUsuarioModificacion() {
+	public String getUsuarioModificacion() {
 		return usuarioModificacion;
 	}
 
-	public void setUsuarioModificacion(int usuarioModificacion) {
+	public void setUsuarioModificacion(String usuarioModificacion) {
 		this.usuarioModificacion = usuarioModificacion;
 	}
 

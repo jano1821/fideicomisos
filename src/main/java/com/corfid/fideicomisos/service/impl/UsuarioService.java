@@ -15,9 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.corfid.fideicomisos.entity.seguridad.Rol;
-import com.corfid.fideicomisos.entity.seguridad.Usuario;
-import com.corfid.fideicomisos.repository.UsuarioRepository;
+import com.corfid.fideicomisos.entity.administrativo.Rol;
+import com.corfid.fideicomisos.entity.administrativo.Usuario;
+import com.corfid.fideicomisos.repository.administrativo.UsuarioRepository;
 
 @Service("usuarioService")
 public class UsuarioService implements UserDetailsService {

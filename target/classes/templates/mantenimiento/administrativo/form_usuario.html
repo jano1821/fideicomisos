@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Formulario de Usuarios</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui segments">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+		<div class="ui segments">
+			<div class="ui segment">
+				<div class="ui grid">
+					<div class="row">
+						<div class="three wide column">
+							<div th:replace="~{layout/menu :: menu}"></div>
+						</div>
+						<div class="one wide column"></div>
+						<div class="twelve wide column">
+
+							<div class="ui segments">
+								<div class="ui segment">
+
+
+									<form class="ui form" action="#"
+										th:action="@{/usuario/addusuario}" th:object="${usuarioModel}"
+										method="post">
+										<h4 class="ui dividing header">Formulario de Usuario</h4>
+										<input type="hidden" th:field="*{idUsuario}"
+											th:value="${idUsuario}"></input>
+										<div class="field">
+											<label>Usuario</label>
+											<div class="two fields">
+												<div class="field">
+													<input type="text" name="usuario" placeholder="Usuario"
+														th:field="*{usuario}" th:value="${usuario}">
+												</div>
+												<div class="field">
+													<input type="password" name="password"
+														placeholder="Password" th:field="*{password}"
+														th:value="${password}">
+												</div>
+											</div>
+										</div>
+										<div class="ui segment">
+											<div class="ui toggle checkbox">
+												<input type="checkbox" name="public"> <label>Es
+													Cliente</label>
+											</div>
+										</div>
+										<div class="field">
+											<label>Cliente</label>
+											<div class="fields">
+												<div class="twelve wide field">
+													<input type="text" name="shipping[address]"
+														placeholder="Nombre del cliente">
+												</div>
+												<div class="four wide field">
+													<a href="#">
+														<div class="ui button" tabindex="0">Buscar</div>
+													</a>
+												</div>
+											</div>
+										</div>
+										<div class="three fields">
+											<div class="field">
+												<label>Indicador de Actividad</label> 
+												<select class="ui fluid dropdown" name="estadoActividad" id="estadoActividad" th:field="*{estadoActividad}">
+													<option value="">Seleccionar...</option>
+													<option th:each="actividad : ${listActividad}" 
+														th:value="${actividad.valorConstraint}" 
+														th:text="${actividad.descConstraint}" 
+														th:selected="${actividad.valorConstraint==estadoActividad}"></option>
+												</select>
+											</div>
+											<div class="field">
+												<label>Tipo de Usuario</label> 
+												<select class="ui dropdown" name="tipoUsuario" id="tipoUsuario" th:field="*{tipoUsuario}">
+													<option value="">Seleccionar...</option>
+													<option th:each="tipo : ${listTipoUsuario}"
+														th:value="${tipo.valorConstraint}"
+														th:text="${tipo.descConstraint}"
+														th:selected="${tipo.valorConstraint==tipoUsuario}"></option>
+												</select>
+											</div>
+											<div class="field">
+												<label>Estado del Usuario</label> 
+												<select class="ui dropdown" name="estadoRegistro" id="estadoRegistro" th:field="*{estadoRegistro}">
+													<option value="">Seleccionar...</option>
+													<option th:each="estado : ${listEstado}"
+														th:value="${estado.valorConstraint}"
+														th:text="${estado.descConstraint}"
+														th:selected="${estado.valorConstraint==estadoRegistro}"></option>
+												</select>
+											</div>
+										</div>
+
+										<div class="ui buttons">
+											<button class="ui primary button">Guardar</button>
+											<div class="or"></div>
+											<button class="ui button">Cancelar</button>
+										</div>
+									</form>
+
+
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		
+	</script>
+
+</body>
+
+
+</html>

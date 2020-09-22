@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8"  />
+</head>
+<body>
+<div class="ui vertical menu" wfd-id="229" th:fragment="menu">
+	<div class="item" wfd-id="239">
+		<div class="header" wfd-id="241">Mantenimientos</div>
+		<div class="menu" wfd-id="240">
+			<a class="item" href="#" th:href="@{/usuario/lista_usuarios}">Usuarios</a> 
+			<a class="item">Clientes</a> 
+			<a class="item">Roles</a>
+		</div>
+
+	</div>
+	<div class="item" wfd-id="236">
+		<div class="header" wfd-id="238">Posición de Bancos</div>
+		<div class="menu" wfd-id="237">
+			<a class="item active">Resumen</a> 
+			<a class="item">Posición Soles</a>
+			<a class="item">Posición Dolares</a>
+		</div>
+	</div>
+	<div class="item" wfd-id="233">
+		<div class="header" wfd-id="235">Flujo de Procesos</div>
+		<div class="menu" wfd-id="234">
+			<a class="item">Contratos</a>
+		</div>
+	</div>
+	<div class="item" wfd-id="230">
+		<div class="header" wfd-id="232">Operaciones</div>
+		<div class="menu" wfd-id="231">
+			<a class="item">Emisión de Ordenes</a> 
+			<a class="item">Firma de Documentos</a>
+		</div>
+	</div>
+</div>
+</body>

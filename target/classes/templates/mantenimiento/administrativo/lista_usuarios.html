@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Usuarios</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui segments">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+		<div class="ui segments">
+			<div class="ui segment">
+				<div class="ui grid">
+					<div class="row">
+						<div class="three wide column">
+							<div th:replace="~{layout/menu :: menu}"></div>
+						</div>
+						<div class="one wide column"></div>
+						<div class="twelve wide column">
+
+
+
+
+							<table class="ui selectable celled table">
+								<thead>
+									<tr>
+										<th>Usuario</th>
+										<th>Tipo</th>
+										<th>Actividad</th>
+										<th>Estado</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="user : ${usuarios}">
+										<td th:text="${user.usuario}"></td>
+										<td th:text="${user.descTipoUsuario}"></td>
+										<td th:text="${user.descEstadoActividad}"></td>
+										<td th:text="${user.descEstadoRegistro}"></td>
+										<td class="ui center aligned">
+											<div class="ui icon buttons">
+												<a href="#"
+													th:href="@{/usuario/usuarioform?id=__${user.idUsuario}__}">
+													<button class="ui button">
+														<i class="edit icon"></i>
+														
+													</button>
+												</a> <a href="#"
+													th:href="@{/usuario/removeusuario?id=__${user.idUsuario}__}">
+													<button class="ui button">
+														<i class="trash alternate icon"></i>
+													</button>
+												</a>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+
+							<div th:if="${result == 1}" class="alert alert-success"
+								role="alert">Se agregó usuario satisfactoriamente!</div>
+							<div th:if="${result == 0}" class="alert alert-danger"
+								role="alert">Error al insertar usuario</div>
+
+							<a href="#" th:href="@{/usuario/usuarioform?id=0}">
+								<button class="ui primary button" type="submit">
+									<i class="plus circle icon"></i>
+									Agregar Usuario
+								</button>
+							</a>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

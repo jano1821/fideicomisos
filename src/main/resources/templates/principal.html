@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8"  />
+
+<title>Menú Principal</title>
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui segments">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+		<div class="ui segments">
+			<div class="ui segment">
+				<div class="ui grid">
+					<div class="row">
+						<div class="three wide column">
+							<div th:replace="~{layout/menu :: menu}"></div>
+						</div>
+						<div class="one wide column"></div>
+						<div class="twelve wide column">
+						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

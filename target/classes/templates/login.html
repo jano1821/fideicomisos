@@ -13,8 +13,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;600&display=swap" rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="#" th:href="@{/css/login.css}" rel="stylesheet" />
-<link href="#" th:href="@{/css/style.css}" rel="stylesheet" />
 
 <title>CORFID</title>
 </head>
@@ -28,7 +26,7 @@
 				  </ol>
 				  <div class="carousel-inner">
 				    <div class="carousel-item min.vh-100 active">
-				      <img src="../static/imgs/portada.png" th:src="@{/imgs/portada.png}"/>
+				      <img src="../static/imgs/portada.png" th:src="@{/imgs/Image_1_P_D.png}"/>
 				      <div class="carousel-caption d-none d-md-block">
 				        <h5>Extranet Corporación Fiduciaria</h5>
 				        <p>Realice sus operaciones como persona natural sin demora, de forma sencilla y desde su móvil</p>
@@ -53,6 +51,10 @@
 					<h1 class="font-weight-bold mb-4">Inicio de Sesión</h1>
 					<form th:action="@{/logincheck}" method="POST">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
+						<div class="mb-4">
+						    <label for="ruc" class="form-label font-weight-bold">RUC</label>
+						    <input type="text" class="form-control" placeholder="Ingrese RUC" name="ruc" id="ruc" >
+					  	</div>
 					  	<div class="mb-4">
 						    <label for="usuario" class="form-label font-weight-bold">Usuario</label>
 						    <input type="text" class="form-control" placeholder="Ingrese Usuario" name="usuario" id="usuario" >
