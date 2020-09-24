@@ -2,6 +2,10 @@ package com.corfid.fideicomisos.utilities;
 
 import java.util.Date;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 
@@ -100,5 +104,44 @@ public class AbstractService {
 		auditoria.setFechaModificacion(fechaModificacion);
 		auditoria.setUsuarioModificacion(usuarioModificacion);
 		auditoria.setIpModificacion(ipModificacion);
+	}
+
+	/**
+	 * Este metodo devuelbe una clase Pageable con datos cargados segun parametros
+	 * 
+	 * @param pagina
+	 * @param cantidad
+	 * @param campo
+	 * @param ordenar
+	 * @param descendente
+	 * @return
+	 */
+	protected Pageable obtenerIndexPorPagina(Integer pagina, Integer cantidad, String campo, boolean ordenar,
+			boolean descendente) {
+		Integer index = 0;
+		Pageable pageable;
+		
+		index = (pagina - 1);
+		
+		if(ordenar) {
+			if (descendente) {
+				pageable = PageRequest.of(index, cantidad, Sort.by(campo).descending());
+			} else {
+				pageable = PageRequest.of(index, cantidad, Sort.by(campo));
+			}
+		}else {
+			pageable = PageRequest.of(index, cantidad);
+		}
+		return pageable;
+	}
+	
+	protected Integer obtenerPaginaDeCantidadRegistros(Integer cantReg) {
+		Integer pagina = 0;
+		
+		pagina = cantReg / Constante.PAGINADO;
+		if ((cantReg % Constante.PAGINADO) > 0) {
+			pagina++;
+		}
+		return pagina;
 	}
 }

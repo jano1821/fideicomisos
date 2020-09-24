@@ -7,11 +7,11 @@
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
 
-
-<script type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 <script type="text/javascript"
 	src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
 
 </head>
 
@@ -33,57 +33,120 @@
 						<div class="twelve wide column">
 
 
+							<form class="ui form" action="#"
+								th:action="@{/usuario/crudAccionesListaUsuarios}"
+								th:object="${crudUsuarioModel}" method="POST" id="frm-usuario">
 
 
-							<table class="ui selectable celled table">
-								<thead>
-									<tr>
-										<th>Usuario</th>
-										<th>Tipo</th>
-										<th>Actividad</th>
-										<th>Estado</th>
-										<th>Acciones</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr th:each="user : ${usuarios}">
-										<td th:text="${user.usuario}"></td>
-										<td th:text="${user.descTipoUsuario}"></td>
-										<td th:text="${user.descEstadoActividad}"></td>
-										<td th:text="${user.descEstadoRegistro}"></td>
-										<td class="ui center aligned">
-											<div class="ui icon buttons">
-												<a href="#"
-													th:href="@{/usuario/usuarioform?id=__${user.idUsuario}__}">
-													<button class="ui button">
-														<i class="edit icon"></i>
-														
-													</button>
-												</a> <a href="#"
-													th:href="@{/usuario/removeusuario?id=__${user.idUsuario}__}">
-													<button class="ui button">
-														<i class="trash alternate icon"></i>
-													</button>
+								<div class="ui segments">
+									<div class="ui segment">
+
+										<div class="ui fluid icon input">
+											<input type="text" th:field="*{busqueda}"
+												th:value="${busqueda}" placeholder="Busqueda por Usuario...">
+											<button name="findRow" class="ui icon button">
+												<i class="search icon"></i>
+											</button>
+										</div>
+
+									</div>
+									<div class="ui secondary segment">
+
+
+
+
+										<table class="ui selectable celled table">
+											<thead>
+												<tr>
+													<th>Usuario</th>
+													<th>Tipo</th>
+													<th>Actividad</th>
+													<th>Estado</th>
+													<th>Acciones</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="user : ${crudUsuarioModel.rows}">
+													<td th:text="${user.usuario}"></td>
+													<td th:text="${user.descTipoUsuario}"></td>
+													<td th:text="${user.descEstadoActividad}"></td>
+													<td th:text="${user.descEstadoRegistro}"></td>
+													<td class="ui center aligned">
+														<div class="ui icon buttons">
+															<button class="ui button" type="submit" name="editRow"
+																th:value="${user.idUsuario}">
+																<i class="edit icon"></i>
+															</button>
+															<button class="ui button" type="submit" name="removeRow"
+																th:value="${user.idUsuario}">
+																<i class="trash alternate icon"></i>
+															</button>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+									<div class="ui right aligned secondary segment">
+										<div class="ui pagination menu">
+
+											<button class="button" type="submit" name="leftRow">
+												<a class="icon item"> <i class="left arrow icon"></i>
 												</a>
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+											</button>
+
+											<a th:text="${crudUsuarioModel.paginaActual}"
+												class="active item"> </a>
+											<div class="disabled item">...</div>
+											<a th:text="${crudUsuarioModel.paginaFinal}" class="item">
+
+											</a>
+											<button class="button" type="submit" name="rightRow">
+												<a class="icon item"> <i class="right arrow icon"></i>
+												</a>
+											</button>
+										</div>
+									</div>
+									<div class="ui secondary segment">
+										<div th:if="${crudUsuarioModel.result == '3'}"
+											class="ui info message">
+											<i class="close icon"></i>
+											<div class="header">Mensaje de información</div>
+											<p>No hay mas registros a la derecha.</p>
+										</div>
+										<div th:if="${crudUsuarioModel.result == '2'}"
+											class="ui info message">
+											<i class="close icon"></i>
+											<div class="header">Mensaje de información</div>
+											<p>No hay mas registros a la izquierda.</p>
+										</div>
+										<div th:if="${crudUsuarioModel.result == '1'}"
+											class="ui positive message">
+											<i class="close icon"></i>
+											<div class="header">Mensaje de confirmación</div>
+											<p>Se realizó la operación satisfactoriamente.</p>
+										</div>
+										<div th:if="${crudUsuarioModel.result == '0'}"
+											class="ui negative message">
+											<i class="close icon"></i>
+											<div class="header">Mensaje de error</div>
+											<p>Ocurrió un error en la operación solicitada.</p>
+										</div>
+
+										<button class="fluid ui primary button" type="submit"
+											name="addRow">
+											<i class="plus circle icon"></i> Agregar Usuario
+										</button>
+										<input type="hidden" th:field="*{paginaActual}"
+											th:value="${paginaActual}"> <input type="hidden"
+											th:field="*{paginaFinal}" th:value="${paginaFinal}">
+
+									</div>
+								</div>
 
 
-							<div th:if="${result == 1}" class="alert alert-success"
-								role="alert">Se agregó usuario satisfactoriamente!</div>
-							<div th:if="${result == 0}" class="alert alert-danger"
-								role="alert">Error al insertar usuario</div>
-
-							<a href="#" th:href="@{/usuario/usuarioform?id=0}">
-								<button class="ui primary button" type="submit">
-									<i class="plus circle icon"></i>
-									Agregar Usuario
-								</button>
-							</a>
-
+							</form>
 
 						</div>
 					</div>
@@ -91,7 +154,9 @@
 			</div>
 		</div>
 	</div>
-
-
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+	</script>
+	
 </body>
 </html>

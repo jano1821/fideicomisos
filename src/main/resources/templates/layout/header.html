@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-<meta charset="utf-8"  />
+<meta charset="utf-8" />
 </head>
 <body>
-<div class="ui grid" th:fragment="header">
-	<div class="ui four column row">
-		<div class="left floated column">
-			<div class="ui medium image">
-				<img src="../static/imgs/logo.png" th:src="@{/imgs/logo.png}" />
+	<div class="ui grid" th:fragment="header">
+		<div class="ui four column row">
+			<div class="left floated column">
+				<div class="ui medium image">
+					<img src="../static/imgs/logo.png" th:src="@{/imgs/logo.png}" />
+				</div>
+			</div>
+			<div class="ui center aligned right floated column">
+				<h4 class="ui center aligned icon header">
+					<!--<i class="user icon"></i>-->
+					Usuario: <span th:text="${usuario}"></span>
+				</h4>
+				<form th:action="@{/logout}" method="POST" id="myForm" name="myForm">
+					<div class="negative ui vertical animated button" tabindex="0">
+						<div class="hidden content" onclick="document.myForm.submit()">Salir</div>
+						<div class="visible content">
+							<i class="power off icon"></i>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
-		<div class="ui center aligned right floated column">
-			<h4 class="ui center aligned icon header">
-				<i class="user icon"></i> <span th:text="${usuario}"></span>
-			</h4>
-			<form th:action="@{/logout}" method="POST">
-				<button class="ui icon button">
-					<i class="power off icon"></i>Cerrar Sesión
-				</button>
-			</form>
-		</div>
 	</div>
-</div>
+	<script type="text/javascript">
+		$('div').click(function() {
+			$('form').submit();
+		});
+	</script>
 </body>

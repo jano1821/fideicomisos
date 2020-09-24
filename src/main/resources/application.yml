@@ -8,3 +8,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+      
+server:
+  error:
+    whitelabel:
+      enabled: false
+      
+      

@@ -26,7 +26,6 @@ public class MenuController {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		mav.addObject("usuario", user.getUsername());
-		// mav.addObject("contacts", contactService.listAllContacts());
 
 		return mav;
 
