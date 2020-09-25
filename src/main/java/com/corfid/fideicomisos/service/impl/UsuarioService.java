@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.corfid.fideicomisos.entity.administrativo.Rol;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
 import com.corfid.fideicomisos.repository.administrativo.UsuarioRepository;
+import com.corfid.fideicomisos.utilities.StringUtil;
 
 @Service("usuarioService")
 public class UsuarioService implements UserDetailsService {
@@ -44,7 +45,7 @@ public class UsuarioService implements UserDetailsService {
 		Set<GrantedAuthority> auths = new HashSet<GrantedAuthority>();
 
 		for (Rol rol : roles) {
-			auths.add(new SimpleGrantedAuthority(rol.getDescripcion()));
+			auths.add(new SimpleGrantedAuthority(StringUtil.toStr(rol.getIdRol())));
 		}
 
 		return new ArrayList<GrantedAuthority>(auths);

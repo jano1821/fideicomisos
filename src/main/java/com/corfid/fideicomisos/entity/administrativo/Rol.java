@@ -28,7 +28,10 @@ public class Rol extends Auditoria {
 	private String descripcion;
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
- 	private Set<Usuario> usuarios = new HashSet<Usuario>();
+	private Set<Usuario> usuarios = new HashSet<Usuario>();
+
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
+	private Set<Menu> menus = new HashSet<Menu>();
 
 	public Integer getIdRol() {
 		return idRol;
@@ -52,6 +55,14 @@ public class Rol extends Auditoria {
 
 	public void setUsuarios(Set<Usuario> usuarios) {
 		this.usuarios = usuarios;
+	}
+
+	public Set<Menu> getMenus() {
+		return menus;
+	}
+
+	public void setMenus(Set<Menu> menus) {
+		this.menus = menus;
 	}
 
 	public Rol(Integer idRol, String descripcion) {

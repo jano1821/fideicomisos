@@ -89,4 +89,7 @@ public class ConstantesSistema extends Auditoria {
 		this.ipModificacion = ipModificacion;
 	}
 
+	public ConstantesSistema() {
+		
+	}
 }

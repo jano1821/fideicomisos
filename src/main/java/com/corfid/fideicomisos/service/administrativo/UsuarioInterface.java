@@ -11,8 +11,16 @@ public interface UsuarioInterface {
 			ParametrosAuditoriaModel parametrosAuditoriaModel);
 
 	public abstract List<UsuarioModel> listAllUsuarios();
+	
+	public List<UsuarioModel> listUsuarioByUsernamePaginado(String userName, Integer pagina, Integer cant);
+	
+	public Integer countUsuarioByUsername(String userName);
+	
+	public Integer devuelvePaginaFinal(String userName);
 
 	public Usuario findUsuarioById(Integer id);
 
 	public abstract UsuarioModel findUsuarioByIdModel(Integer id);
+	
+	public abstract void removeUsuario(Integer id);
 }

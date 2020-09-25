@@ -1,7 +1,5 @@
 package com.corfid.fideicomisos.utilities;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
