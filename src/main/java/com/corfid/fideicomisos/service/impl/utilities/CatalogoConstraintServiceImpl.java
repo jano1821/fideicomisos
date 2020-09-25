@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.utilities.CatalogoConstraintConverter;
 import com.corfid.fideicomisos.entity.utilities.CatalogoConstraint;
-import com.corfid.fideicomisos.model.utilities.CatalogoConstraintModel;
+import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 import com.corfid.fideicomisos.repository.utilities.CatalogoConstraintRepository;
 import com.corfid.fideicomisos.service.utilities.CatalogoConstraintInterface;
 import com.corfid.fideicomisos.utilities.Constante;

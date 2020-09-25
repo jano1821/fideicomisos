@@ -25,23 +25,4 @@ public class CrudUsuarioModel extends CrudModel {
 	public void setBusqueda(String busqueda) {
 		this.busqueda = busqueda;
 	}
-
-	public CrudUsuarioModel(String id, String descripcion, String usuario, String tipo, String acciones, String result,
-			List<UsuarioModel> rows, String busqueda, Integer paginaActual, Integer paginaFinal) {
-		super();
-		this.id = id;
-		this.descripcion = descripcion;
-		this.usuario = usuario;
-		this.tipo = tipo;
-		this.acciones = acciones;
-		this.result = result;
-		this.rows.addAll(rows);
-		this.busqueda = busqueda;
-		this.paginaActual = paginaActual;
-		this.paginaFinal = paginaFinal;
-	}
-
-	public CrudUsuarioModel() {
-
-	}
 }

@@ -1,4 +1,4 @@
-package com.corfid.fideicomisos.model.utilities;
+package com.corfid.fideicomisos.model.administrativo;
 
 public class CatalogoConstraintModel {
 	private Integer idConstraint;

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="ui right aligned secondary segment" th:fragment="paginado">
+		<div class="ui pagination menu">
+
+			<button class="button" type="submit" name="leftRow">
+				<a class="icon item"> <i class="left arrow icon"></i>
+				</a>
+			</button>
+
+			<a th:text="${crudUsuarioModel.paginaActual}" class="active item">
+			</a>
+			<div class="disabled item">...</div>
+			<a th:text="${crudUsuarioModel.cantidadRegistros + ' Reg.'}"
+				class="disabled item"> </a>
+			<div class="disabled item">...</div>
+			<a th:text="${crudUsuarioModel.paginaFinal}" class="item"> </a>
+			<button class="button" type="submit" name="rightRow">
+				<a class="icon item"> <i class="right arrow icon"></i>
+				</a>
+			</button>
+		</div>
+	</div>
+	<div class="ui secondary segment">
+		<div th:if="${crudUsuarioModel.result == '3'}" class="ui info message">
+			<i class="close icon"></i>
+			<div class="header">Mensaje de información</div>
+			<p>No hay mas registros a la derecha.</p>
+		</div>
+		<div th:if="${crudUsuarioModel.result == '2'}" class="ui info message">
+			<i class="close icon"></i>
+			<div class="header">Mensaje de información</div>
+			<p>No hay mas registros a la izquierda.</p>
+		</div>
+		<div th:if="${crudUsuarioModel.result == '1'}"
+			class="ui positive message">
+			<i class="close icon"></i>
+			<div class="header">Mensaje de confirmación</div>
+			<p>Se realizó la operación satisfactoriamente.</p>
+		</div>
+		<div th:if="${crudUsuarioModel.result == '0'}"
+			class="ui negative message">
+			<i class="close icon"></i>
+			<div class="header">Mensaje de error</div>
+			<p>Ocurrió un error en la operación solicitada.</p>
+		</div>
+</body>
+</html>

@@ -1,14 +1,15 @@
 package com.corfid.fideicomisos.model.utilities;
 
 public class CrudModel {
-	protected String id;
-	protected String descripcion;
-	protected String usuario;
-	protected String tipo;
-	protected String acciones;
-	protected String result;
-	protected Integer paginaActual;
-	protected Integer paginaFinal;
+	private String id;
+	private String descripcion;
+	private String usuario;
+	private String tipo;
+	private String acciones;
+	private String result;
+	private Integer paginaActual;
+	private Integer paginaFinal;
+	private Integer cantidadRegistros;
 
 	public String getId() {
 		return id;
@@ -72,6 +73,14 @@ public class CrudModel {
 
 	public void setPaginaFinal(Integer paginaFinal) {
 		this.paginaFinal = paginaFinal;
+	}
+
+	public Integer getCantidadRegistros() {
+		return cantidadRegistros;
+	}
+
+	public void setCantidadRegistros(Integer cantidadRegistros) {
+		this.cantidadRegistros = cantidadRegistros;
 	}
 
 }

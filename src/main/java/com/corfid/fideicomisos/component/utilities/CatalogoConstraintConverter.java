@@ -3,7 +3,7 @@ package com.corfid.fideicomisos.component.utilities;
 import org.springframework.stereotype.Component;
 
 import com.corfid.fideicomisos.entity.utilities.CatalogoConstraint;
-import com.corfid.fideicomisos.model.utilities.CatalogoConstraintModel;
+import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 
 @Component("catalogoConstraintConverter")
 public class CatalogoConstraintConverter {

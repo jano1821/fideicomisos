@@ -2,7 +2,7 @@ package com.corfid.fideicomisos.service.utilities;
 
 import java.util.List;
 
-import com.corfid.fideicomisos.model.utilities.CatalogoConstraintModel;
+import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 
 public interface CatalogoConstraintInterface {
 	public abstract List<CatalogoConstraintModel> findByNombreTabla(String nombreTabla);

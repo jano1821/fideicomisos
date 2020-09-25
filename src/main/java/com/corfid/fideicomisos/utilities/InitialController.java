@@ -2,6 +2,7 @@ package com.corfid.fideicomisos.utilities;
 
 import java.util.Date;
 
+import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 
 public class InitialController {
@@ -76,13 +77,13 @@ public class InitialController {
 		this.usuarioModificacion = usuarioModificacion;
 		this.ipModificacion = ipModificacion;
 	}
-	
+
 	public InitialController() {
-		
+
 	}
-	
-	protected void setParametrosAuditoriaModel(Date fechaInsercion, String usuarioInsercion, String ipInsercion, Date fechaModificacion,
-			String usuarioModificacion, String ipModificacion) {
+
+	protected void setParametrosAuditoriaModel(Date fechaInsercion, String usuarioInsercion, String ipInsercion,
+			Date fechaModificacion, String usuarioModificacion, String ipModificacion) {
 		this.fechaInsercion = fechaInsercion;
 		this.usuarioInsercion = usuarioInsercion;
 		this.ipInsercion = ipInsercion;
@@ -90,7 +91,7 @@ public class InitialController {
 		this.usuarioModificacion = usuarioModificacion;
 		this.ipModificacion = ipModificacion;
 	}
-	
+
 	protected ParametrosAuditoriaModel getParametrosAuditoriaModel() {
 		ParametrosAuditoriaModel parametrosAuditoriaModel = new ParametrosAuditoriaModel();
 		parametrosAuditoriaModel.setFechaInsercion(this.fechaInsercion);
@@ -99,17 +100,50 @@ public class InitialController {
 		parametrosAuditoriaModel.setFechaModificacion(this.fechaModificacion);
 		parametrosAuditoriaModel.setUsuarioModificacion(this.usuarioModificacion);
 		parametrosAuditoriaModel.setIpModificacion(this.ipModificacion);
-		
+
 		return parametrosAuditoriaModel;
 	}
-	
+
 	protected Date getFechaAndHoraActual() {
 		String dateString = "", hourString = "";
-		
+
 		dateString = FormatoFecha.obtenerFechaActual();
 		hourString = FormatoFecha.obtenerHora();
-		
+
 		return FormatoFecha.stringToTimestampddMMyyyyhhmmss(dateString, hourString);
+	}
+
+	protected PaginadoModel obtenerMovimientoAndPagina(String paginaActual, String paginaFinal, String movIzquierda,
+			String movDerecha) {
+		PaginadoModel paginadoModel = new PaginadoModel();
+		Integer nuevapaginaActual = 1;
+		boolean izquierda = false;
+		boolean derecha = false;
+
+		if (StringUtil.equiv(movIzquierda, Constante.IZQUIERDA)) {
+			if (StringUtil.equiv(paginaActual, Constante.PAGINA_INICIAL)) {
+				nuevapaginaActual = StringUtil.toInteger(paginaActual);
+				izquierda = true;
+			} else {
+				nuevapaginaActual = StringUtil.toInteger(paginaActual) - 1;
+			}
+
+		} else if (StringUtil.equiv(movDerecha, Constante.DERECHA)) {
+			if (StringUtil.equiv(paginaActual, paginaFinal)) {
+				nuevapaginaActual = StringUtil.toInteger(paginaActual);
+				derecha = true;
+			} else {
+				nuevapaginaActual = StringUtil.toInteger(paginaActual) + 1;
+			}
+		} else {
+			nuevapaginaActual = StringUtil.toInteger(paginaActual);
+		}
+
+		paginadoModel.setMovDerecha(derecha);
+		paginadoModel.setMovIzquierda(izquierda);
+		paginadoModel.setPaginaActual(nuevapaginaActual);
+
+		return paginadoModel;
 	}
 
 }

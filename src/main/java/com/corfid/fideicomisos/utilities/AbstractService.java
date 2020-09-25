@@ -120,28 +120,18 @@ public class AbstractService {
 			boolean descendente) {
 		Integer index = 0;
 		Pageable pageable;
-		
+
 		index = (pagina - 1);
-		
-		if(ordenar) {
+
+		if (ordenar) {
 			if (descendente) {
 				pageable = PageRequest.of(index, cantidad, Sort.by(campo).descending());
 			} else {
 				pageable = PageRequest.of(index, cantidad, Sort.by(campo));
 			}
-		}else {
+		} else {
 			pageable = PageRequest.of(index, cantidad);
 		}
 		return pageable;
-	}
-	
-	protected Integer obtenerPaginaDeCantidadRegistros(Integer cantReg) {
-		Integer pagina = 0;
-		
-		pagina = cantReg / Constante.PAGINADO;
-		if ((cantReg % Constante.PAGINADO) > 0) {
-			pagina++;
-		}
-		return pagina;
 	}
 }

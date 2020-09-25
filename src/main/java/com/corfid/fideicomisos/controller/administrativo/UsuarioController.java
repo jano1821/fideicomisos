@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.controller.administrativo;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,14 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 import com.corfid.fideicomisos.model.administrativo.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
-import com.corfid.fideicomisos.model.utilities.CatalogoConstraintModel;
-import com.corfid.fideicomisos.model.utilities.CrudModel;
+import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
 import com.corfid.fideicomisos.service.utilities.CatalogoConstraintInterface;
 import com.corfid.fideicomisos.utilities.Constante;
@@ -172,51 +170,24 @@ public class UsuarioController extends InitialController {
 
 	private ModelAndView busqueda(String busqueda, String izquierda, String derecha, String pagina, String fin,
 			CrudUsuarioModel crudUsuarioModel) {
-		Integer paginaFinal = 1;
-		Integer paginaActual = 1;
-		boolean movimientoIzquierda = false;
-		boolean movimientoDerecha = false;
-
-		List<UsuarioModel> listUsuarioModel;
-
 		ModelAndView mav = new ModelAndView(Constante.LISTA_USUARIOS);
 
-		if (StringUtil.equiv(izquierda, Constante.IZQUIERDA)) {
-			if (StringUtil.equiv(pagina, "1")) {
-				paginaActual = StringUtil.toInteger(pagina);
-				movimientoIzquierda = true;
-			} else {
-				paginaActual = StringUtil.toInteger(pagina) - 1;
-			}
+		PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
-		} else if (StringUtil.equiv(derecha, Constante.DERECHA)) {
-			if (StringUtil.equiv(pagina, fin)) {
-				paginaActual = StringUtil.toInteger(pagina);
-				movimientoDerecha = true;
-			} else {
-				paginaActual = StringUtil.toInteger(pagina) + 1;
-			}
+		crudUsuarioModel = usuarioInterface.listUsuarioByUsernamePaginado(busqueda, paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
+
+		if (paginadoModel.isMovIzquierda()) {
+			crudUsuarioModel.setResult(Constante.NO_HAY_REGISTROS_A_LA_IZQUIERDA);
+		} else if (paginadoModel.isMovDerecha()) {
+			crudUsuarioModel.setResult(Constante.NO_HAY_REGISTROS_A_LA_DERECHA);
 		} else {
-			paginaActual = StringUtil.toInteger(pagina);
+			crudUsuarioModel.setResult(Constante.CONST_VACIA);
 		}
-
-		if (movimientoIzquierda) {
-			crudUsuarioModel.setResult("2");
-		} else if (movimientoDerecha) {
-			crudUsuarioModel.setResult("3");
-		} else {
-			crudUsuarioModel.setResult("");
-		}
-
-		listUsuarioModel = usuarioInterface.listUsuarioByUsernamePaginado(busqueda, paginaActual, Constante.PAGINADO);
-		paginaFinal = usuarioInterface.devuelvePaginaFinal(busqueda);
-
+		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		crudUsuarioModel.setPaginaActual(paginaActual);
-		crudUsuarioModel.setPaginaFinal(paginaFinal);
+		crudUsuarioModel.setPaginaActual(paginadoModel.getPaginaActual());
 		crudUsuarioModel.setUsuario(user.getUsername());
-		crudUsuarioModel.setRows(listUsuarioModel);
 
 		mav.addObject("crudUsuarioModel", crudUsuarioModel);
 		mav.addObject("usuario", user.getUsername());

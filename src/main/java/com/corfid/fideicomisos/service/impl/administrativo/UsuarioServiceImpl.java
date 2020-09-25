@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.administrativo.UsuarioConverter;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
+import com.corfid.fideicomisos.model.administrativo.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.UsuarioRepository;
@@ -41,40 +42,28 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
 	}
 
 	@Override
-	public List<UsuarioModel> listUsuarioByUsernamePaginado(String userName, Integer pagina, Integer cant) {
+	public CrudUsuarioModel listUsuarioByUsernamePaginado(String userName, Integer pagina, Integer cant) {
 		List<Usuario> listUsuario;
 		List<UsuarioModel> listUsuarioModel = new ArrayList<UsuarioModel>();
+		Page<Usuario> pageUsuario;
+		CrudUsuarioModel crudUsuarioModel = new CrudUsuarioModel();
 
 		String cadenaUsuario = Constante.COMODIN_LIKE + userName + Constante.COMODIN_LIKE;
 
-		listUsuario = usuarioRepository.listUsuarioByUserNamePaginado(cadenaUsuario,
+		pageUsuario = usuarioRepository.listUsuarioByUserNamePaginado(cadenaUsuario,
 				obtenerIndexPorPagina(pagina, cant, "usuario", true, false));
+
+		listUsuario = pageUsuario.getContent();
+		crudUsuarioModel.setPaginaFinal(pageUsuario.getTotalPages());
+		crudUsuarioModel.setCantidadRegistros(_toInteger(pageUsuario.getTotalElements()));
 
 		for (Usuario usuario : listUsuario) {
 			listUsuarioModel.add(usuarioConverter.convertUsuarioToUsuarioModel(usuario));
 		}
 
-		return listUsuarioModel;
-	}
+		crudUsuarioModel.setRows(listUsuarioModel);
 
-	@Override
-	public Integer countUsuarioByUsername(String userName) {
-		Integer cantRegistros = 0;
-
-		String cadenaUsuario = Constante.COMODIN_LIKE + userName + Constante.COMODIN_LIKE;
-
-		cantRegistros = usuarioRepository.countUsuarioByUserName(cadenaUsuario);
-
-		return cantRegistros;
-	}
-
-	@Override
-	public Integer devuelvePaginaFinal(String userName) {
-		Integer cantRegistros = 0;
-
-		cantRegistros = countUsuarioByUsername(userName);
-
-		return obtenerPaginaDeCantidadRegistros(cantRegistros);
+		return crudUsuarioModel;
 	}
 
 	@Override
