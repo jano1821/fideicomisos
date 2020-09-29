@@ -54,6 +54,9 @@ public class UsuarioConverter {
 		usuarioModel.setTipoUsuario(usuario.getTipoUsuario());
 		usuarioModel.setEstadoActividadUsuario(usuario.isEstadoActividadUsuario());
 		usuarioModel.setEstadoRegistro(usuario.getEstadoRegistro());
+		if(!StringUtil.isEmpty(usuario.getPersona())) {
+			usuarioModel.setIdPersona(usuario.getPersona().getIdPersona());
+		}
 
 		if (StringUtil.equiv(usuario.getTipoUsuario(), "S")) {
 			usuarioModel.setDescTipoUsuario("Super Administrador");

@@ -1,4 +1,4 @@
-package com.corfid.fideicomisos.service.impl;
+package com.corfid.fideicomisos.service.impl.seguridad;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import com.corfid.fideicomisos.entity.administrativo.Rol;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
@@ -31,6 +32,11 @@ public class UsuarioService implements UserDetailsService {
 
 		Usuario usuario = usuarioRepository.findByUsuario(username);
 		
+		if (usuario == null) {
+			throw new UsernameNotFoundException(
+					String.format("Usuario no autorizado, usuario=%s", usuario));
+		}
+
 		List<GrantedAuthority> authorities = buildAuthorities(usuario.getRoles());
 
 		return buildUser(usuario, authorities);
@@ -38,7 +44,8 @@ public class UsuarioService implements UserDetailsService {
 
 	private User buildUser(Usuario usuario, List<GrantedAuthority> authorities) {
 
-		return new User(usuario.getUsuario(), usuario.getPassword(), usuario.isEstadoActividadUsuario(), true, true, true, authorities);
+		return new User(usuario.getUsuario(), usuario.getPassword(), usuario.isEstadoActividadUsuario(), true, true,
+				true, authorities);
 	}
 
 	private List<GrantedAuthority> buildAuthorities(Set<Rol> roles) {

@@ -19,19 +19,6 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "banmfico")
 public class Fideicomiso extends Auditoria {
 
-	public Fideicomiso() {
-
-	}
-
-	public Fideicomiso(Integer identificadorFideicomiso, String nombreFideicomiso, String codigoEstado,
-			List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera) {
-		super();
-		this.identificadorFideicomiso = identificadorFideicomiso;
-		this.nombreFideicomiso = nombreFideicomiso;
-		this.codigoEstado = codigoEstado;
-		this.lstCuentaEntidadFinanciera = lstCuentaEntidadFinanciera;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_idfico", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
@@ -45,7 +32,7 @@ public class Fideicomiso extends Auditoria {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "fideicomiso")
 	private List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera = new ArrayList<CuentaEntidadFinanciera>(0);
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "fideicomiso")
 	private List<FideicomisoFideicomitente> lstFideicomisoFideicomitente = new ArrayList<FideicomisoFideicomitente>(0);
 
@@ -79,5 +66,18 @@ public class Fideicomiso extends Auditoria {
 
 	public void setLstCuentaEntidadFinanciera(List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera) {
 		this.lstCuentaEntidadFinanciera = lstCuentaEntidadFinanciera;
+	}
+
+	public Fideicomiso(Integer identificadorFideicomiso, String nombreFideicomiso, String codigoEstado,
+			List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera) {
+		super();
+		this.identificadorFideicomiso = identificadorFideicomiso;
+		this.nombreFideicomiso = nombreFideicomiso;
+		this.codigoEstado = codigoEstado;
+		this.lstCuentaEntidadFinanciera = lstCuentaEntidadFinanciera;
+	}
+
+	public Fideicomiso() {
+
 	}
 }

@@ -6,15 +6,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class FideicomisoFideicomisarioId implements java.io.Serializable {
 
-	public FideicomisoFideicomisarioId() {
-
-	}
-
-	public FideicomisoFideicomisarioId(Integer identificadorFideicomiso, Integer identificadorFideicomisario) {
-		super();
-		this.identificadorFideicomiso = identificadorFideicomiso;
-		this.identificadorFideicomisario = identificadorFideicomisario;
-	}
+	private static final long serialVersionUID = -8687655040073456600L;
 
 	@Column(name = "n_idfico", nullable = false, insertable = true, updatable = true)
 	private Integer identificadorFideicomiso;
@@ -36,6 +28,16 @@ public class FideicomisoFideicomisarioId implements java.io.Serializable {
 
 	public void setIdentificadorFideicomisario(Integer identificadorFideicomisario) {
 		this.identificadorFideicomisario = identificadorFideicomisario;
+	}
+	
+	public FideicomisoFideicomisarioId(Integer identificadorFideicomiso, Integer identificadorFideicomisario) {
+		super();
+		this.identificadorFideicomiso = identificadorFideicomiso;
+		this.identificadorFideicomisario = identificadorFideicomisario;
+	}
+	
+	public FideicomisoFideicomisarioId() {
+
 	}
 
 	public boolean equals(Object other) {

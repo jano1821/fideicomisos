@@ -3,8 +3,8 @@ package com.corfid.fideicomisos.service.administrativo;
 import java.util.List;
 
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
-import com.corfid.fideicomisos.model.administrativo.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
+import com.corfid.fideicomisos.model.cruds.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 
 public interface UsuarioInterface {
@@ -16,6 +16,8 @@ public interface UsuarioInterface {
 	public CrudUsuarioModel listUsuarioByUsernamePaginado(String userName, Integer pagina, Integer cant);
 	
 	public Usuario findUsuarioById(Integer id);
+	
+	public UsuarioModel findUsuarioByUsuario(String userName);
 
 	public abstract UsuarioModel findUsuarioByIdModel(Integer id);
 	

@@ -1,8 +1,9 @@
-package com.corfid.fideicomisos.model.administrativo;
+package com.corfid.fideicomisos.model.cruds;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
 import com.corfid.fideicomisos.model.utilities.CrudModel;
 
 public class CrudUsuarioModel extends CrudModel {

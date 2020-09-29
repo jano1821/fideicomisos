@@ -1,7 +1,9 @@
 package com.corfid.fideicomisos.utilities;
 
 import java.util.Date;
+import java.util.List;
 
+import com.corfid.fideicomisos.model.administrativo.MenuModel;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 
@@ -146,4 +148,16 @@ public class InitialController {
 		return paginadoModel;
 	}
 
+	protected String construirMenu(List<MenuModel> listMenuModel) {
+		String menu="";
+		for (MenuModel menuModel : listMenuModel) {
+			if (StringUtil.equiv(menuModel.getIdMenu(),menuModel.getIdMenuPadre())){
+				menu+="<div class=\"header item\" ><i class=\"globe icon\"></i>"+ menuModel.getDescripcion() +"</div>";
+			} else {
+				menu+="<a class=\"blue inverted item\" href=\""+menuModel.getUrl()+"\">"+menuModel.getDescripcion()+"</a> ";
+			}
+		}
+		
+		return menu;
+	}
 }

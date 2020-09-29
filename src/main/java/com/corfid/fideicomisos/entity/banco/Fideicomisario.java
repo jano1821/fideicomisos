@@ -13,19 +13,6 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "banmfisa")
 public class Fideicomisario extends Auditoria {
 
-	public Fideicomisario() {
-
-	}
-
-	public Fideicomisario(Integer identificadorFideicomisario, String nombreFideicomisario, String tipoDocumento,
-			String numeroDocumento) {
-		super();
-		this.identificadorFideicomisario = identificadorFideicomisario;
-		this.nombreFideicomisario = nombreFideicomisario;
-		this.tipoDocumento = tipoDocumento;
-		this.numeroDocumento = numeroDocumento;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_idfisa", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
@@ -70,6 +57,19 @@ public class Fideicomisario extends Auditoria {
 
 	public void setNumeroDocumento(String numeroDocumento) {
 		this.numeroDocumento = numeroDocumento;
+	}
+
+	public Fideicomisario(Integer identificadorFideicomisario, String nombreFideicomisario, String tipoDocumento,
+			String numeroDocumento) {
+		super();
+		this.identificadorFideicomisario = identificadorFideicomisario;
+		this.nombreFideicomisario = nombreFideicomisario;
+		this.tipoDocumento = tipoDocumento;
+		this.numeroDocumento = numeroDocumento;
+	}
+
+	public Fideicomisario() {
+
 	}
 
 }

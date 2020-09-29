@@ -1,4 +1,4 @@
-package com.corfid.fideicomisos.service;
+package com.corfid.fideicomisos.service.administrativo;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -4,36 +4,32 @@
 <meta charset="utf-8" />
 </head>
 <body>
-	<div class="ui secondary vertical menu" th:fragment="menu">
-		<div class="ui dropdown item">
-			<i class="dropdown icon"></i> Administración
-			<div class="menu">
-				<div class="header">Mantenimientos</div>
-				<a class="item" href="#" th:href="@{/usuario/lista_usuarios}" >Usuarios</a> 
-				<a class="item">Roles</a> 
-				<a class="item">Menu</a>
+<div th:fragment="menu">
+		<div class="ui blue inverted vertical menu" th:utext="${session.datosGenerales.menu}">
+			
+			<!-- <div class="header item" th:utext="${session.datosGenerales.menu}">
 			</div>
-		</div>
-		<div class="ui dropdown item">
-			<i class="dropdown icon"></i> Display Options
-			<div class="menu">
-				<div class="header">Text Size</div>
-				<a class="item" href="#" th:href="@{/usuario/lista_usuarios}" >Small</a> 
-				<a class="item">Medium</a> 
-				<a class="item">Large</a>
+				
+			<a class="blue inverted item" href="#"
+						th:href="@{/usuario/lista_usuarios}">Usuarios</a> 
+			<a class="item"
+						href="#" th:href="@{/rol/lista_roles}">Roles</a> 
+			<a class="item"
+						href="#" th:href="@{/menu/lista_menus}">Menu</a> 
+			<a class="item"
+						href="#" th:href="@{/persona/lista_personas}">Persona</a>
+			<div class="header item" >
+				<i class="globe icon"></i> Posición de Bancos
 			</div>
-		</div>
-		<div class="ui dropdown item">
-			<i class="dropdown icon"></i> Display Options
-			<div class="menu">
-				<div class="header">Text Size</div>
-				<a class="item" href="#" th:href="@{/usuario/lista_usuarios}" >Small</a> 
-				<a class="item">Medium</a> 
-				<a class="item">Large</a>
+			<a class="item"> New York </a> 
+			<a class="item"> Montreal </a> 
+			<a class="item"> Los Angeles </a> 
+			<a class="item"> San Francisco </a>
+			<div class="header item" >
+				<i class="icon calendar"></i> Months
 			</div>
+			<a class="item"> August </a> 
+			<a class="item"> June </a> -->
 		</div>
-		<a class="active item"> Account </a> 
-		<a class="item"> Settings </a>
-		
-	</div>
+		</div>
 </body>

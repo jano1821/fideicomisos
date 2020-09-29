@@ -10,19 +10,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.corfid.fideicomisos.entity.auditoria.Auditoria;
+
 @Entity
 @Table(name = "bandfifo")
-public class FideicomisoFideicomisario {
-
-	public FideicomisoFideicomisario() {
-
-	}
-
-	public FideicomisoFideicomisario(FideicomisoFideicomisarioId fideicomisoFideicomisarioId, String codigoEstado) {
-		super();
-		this.fideicomisoFideicomisarioId = fideicomisoFideicomisarioId;
-		this.codigoEstado = codigoEstado;
-	}
+public class FideicomisoFideicomisario extends Auditoria {
 
 	@EmbeddedId
 	private FideicomisoFideicomisarioId fideicomisoFideicomisarioId;
@@ -56,4 +48,13 @@ public class FideicomisoFideicomisario {
 		this.codigoEstado = codigoEstado;
 	}
 
+	public FideicomisoFideicomisario(FideicomisoFideicomisarioId fideicomisoFideicomisarioId, String codigoEstado) {
+		super();
+		this.fideicomisoFideicomisarioId = fideicomisoFideicomisarioId;
+		this.codigoEstado = codigoEstado;
+	}
+
+	public FideicomisoFideicomisario() {
+
+	}
 }

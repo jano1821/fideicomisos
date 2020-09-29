@@ -12,10 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-/*@EnableGlobalMethodSecurity(
-		// securedEnabled = true,
-		// jsr250Enabled = true,
-		prePostEnabled = true)*/
 public class SecutiryConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -34,7 +30,7 @@ public class SecutiryConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests().antMatchers("/", "/css/*", "/imgs/*").permitAll() 
 				.antMatchers("/usuario").hasRole("1").anyRequest().authenticated()
 				.and()
-				.formLogin().loginPage("/login").loginProcessingUrl("/logincheck").usernameParameter("usuario")
+				.formLogin().loginPage("/login").loginProcessingUrl("/logincheck").usernameParameter("username")
 				.passwordParameter("password").defaultSuccessUrl("/loginsuccess").permitAll().and().logout()
 				.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll();
 	}

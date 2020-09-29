@@ -16,16 +16,6 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "bandfife")
 public class FideicomisoFideicomitente extends Auditoria {
 
-	public FideicomisoFideicomitente() {
-
-	}
-
-	public FideicomisoFideicomitente(FideicomisoFideicomitenteId fideicomisoFideicomitenteId, String codigoEstado) {
-		super();
-		this.fideicomisoFideicomitenteId = fideicomisoFideicomitenteId;
-		this.codigoEstado = codigoEstado;
-	}
-
 	@EmbeddedId
 	private FideicomisoFideicomitenteId fideicomisoFideicomitenteId;
 
@@ -56,6 +46,16 @@ public class FideicomisoFideicomitente extends Auditoria {
 
 	public void setCodigoEstado(String codigoEstado) {
 		this.codigoEstado = codigoEstado;
+	}
+
+	public FideicomisoFideicomitente(FideicomisoFideicomitenteId fideicomisoFideicomitenteId, String codigoEstado) {
+		super();
+		this.fideicomisoFideicomitenteId = fideicomisoFideicomitenteId;
+		this.codigoEstado = codigoEstado;
+	}
+
+	public FideicomisoFideicomitente() {
+
 	}
 
 }

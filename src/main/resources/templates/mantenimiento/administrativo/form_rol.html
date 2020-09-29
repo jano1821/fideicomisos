@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Formulario de Usuarios</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui segments">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+		<div class="ui segments">
+			<div class="ui segment">
+				<div class="ui grid">
+					<div class="row">
+						<div class="three wide column">
+							<div th:replace="~{layout/menu :: menu}"></div>
+						</div>
+						<div class="one wide column"></div>
+						<div class="twelve wide column">
+
+							<div class="ui segments">
+								<div class="ui segment">
+
+
+									<form class="ui form" action="#"
+										th:action="@{/rol/addrol}" th:object="${rolModel}"
+										method="POST" id="frm-rol">
+										<h4 class="ui dividing header">Formulario de Rol</h4>
+										<input type="hidden" th:field="*{idRol}"
+											th:value="${idRol}"></input>
+										<div class="required field">
+											<label>Datos</label>
+											<div class="two fields">
+												<div class="required field">
+													<input type="text" name="descripcion" placeholder="Descripcion"
+														th:field="*{descripcion}" th:value="${descripcion}">
+												</div>
+												
+												<div class="required field">
+												<select
+													class="ui dropdown" name="estadoRegistro"
+													id="estadoRegistro" th:field="*{estadoRegistro}">
+													<option value="">Seleccionar...</option>
+													<option th:each="estado : ${listEstado}"
+														th:value="${estado.valorConstraint}"
+														th:text="${estado.descConstraint}"
+														th:selected="${estado.valorConstraint==estadoRegistro}"></option>
+												</select>
+											</div>
+											</div>
+										</div>
+										<div class="one fields">
+											<div class="ui center aligned field">
+												<div class="ui buttons">
+													<button class="fluid ui primary button active"
+														type="submit" id="saveRow" name="saveRow">Guardar</button>
+													<div class="or" data-text="O"></div>
+													
+													<div class="fluid ui reset button">Limpiar Campos</div>
+												</div>
+											</div>
+										</div>
+										<!-- <button class="fluid ui primary button">Guardar</button> -->
+										<div class="ui error message"></div>
+									</form>
+									<form class="ui form" action="#" th:action="@{/rol/cancel}"
+										method="POST" id="frm-cancelar">
+										<a href="#">
+											<button class="fluid ui negative basic button">Cancelar</button>
+										</a>
+									</form>
+
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+	</script>
+	<script type="text/javascript">
+		$('#frm-rol').form({
+			on : 'blur',
+			fields : {
+				descripcion : {
+					identifier : 'descripcion',
+					rules : [ {
+						type : 'empty',
+						prompt : 'Por Favor Ingrese Descripcion'
+					} ]
+				},
+				estadoRegistro : {
+					identifier : 'estadoRegistro',
+					rules : [ {
+						type : 'empty',
+						prompt : 'Por Favor seleccione Estado de Registro'
+					} ]
+				}
+			}
+		});
+	</script>
+</body>
+
+
+</html>

@@ -24,27 +24,6 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "bandmvcf")
 public class MovimientoCuentaEntidadFinanciera extends Auditoria {
 
-	public MovimientoCuentaEntidadFinanciera() {
-
-	}
-
-	public MovimientoCuentaEntidadFinanciera(Integer identificadorMovimientoCuentaEntidadFinanciera,
-			String descripcionMovimiento, String numeroOperacionMovimiento, String descripcionOficinaMovimiento,
-			Date fechaProcesoMovimiento, Date fechaValutaMovimiento, Double montoCargoMovimiento,
-			Double montoAbonoMovimiento, CuentaEntidadFinanciera cuentaEntidadFinanciera) {
-		super();
-		this.identificadorMovimientoCuentaEntidadFinanciera = identificadorMovimientoCuentaEntidadFinanciera;
-		this.descripcionMovimiento = descripcionMovimiento;
-		this.numeroOperacionMovimiento = numeroOperacionMovimiento;
-		this.descripcionOficinaMovimiento = descripcionOficinaMovimiento;
-		this.fechaProcesoMovimiento = fechaProcesoMovimiento;
-		this.fechaValutaMovimiento = fechaValutaMovimiento;
-		this.montoCargoMovimiento = montoCargoMovimiento;
-		this.montoAbonoMovimiento = montoAbonoMovimiento;
-		this.cuentaEntidadFinanciera = cuentaEntidadFinanciera;
-
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_idmvcf", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
@@ -163,4 +142,24 @@ public class MovimientoCuentaEntidadFinanciera extends Auditoria {
 		this.lstDetalleMovCuentaEntidadFinanciera = lstDetalleMovCuentaEntidadFinanciera;
 	}
 
+	public MovimientoCuentaEntidadFinanciera(Integer identificadorMovimientoCuentaEntidadFinanciera,
+			String descripcionMovimiento, String numeroOperacionMovimiento, String descripcionOficinaMovimiento,
+			Date fechaProcesoMovimiento, Date fechaValutaMovimiento, Double montoCargoMovimiento,
+			Double montoAbonoMovimiento, CuentaEntidadFinanciera cuentaEntidadFinanciera) {
+		super();
+		this.identificadorMovimientoCuentaEntidadFinanciera = identificadorMovimientoCuentaEntidadFinanciera;
+		this.descripcionMovimiento = descripcionMovimiento;
+		this.numeroOperacionMovimiento = numeroOperacionMovimiento;
+		this.descripcionOficinaMovimiento = descripcionOficinaMovimiento;
+		this.fechaProcesoMovimiento = fechaProcesoMovimiento;
+		this.fechaValutaMovimiento = fechaValutaMovimiento;
+		this.montoCargoMovimiento = montoCargoMovimiento;
+		this.montoAbonoMovimiento = montoAbonoMovimiento;
+		this.cuentaEntidadFinanciera = cuentaEntidadFinanciera;
+
+	}
+
+	public MovimientoCuentaEntidadFinanciera() {
+
+	}
 }

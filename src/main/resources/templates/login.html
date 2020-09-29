@@ -10,70 +10,84 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
 	integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
 	crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;600&display=swap" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;600&display=swap"
+	rel="stylesheet">
 
 <!-- Custom styles for this template -->
 
 <title>CORFID</title>
 </head>
-<body class = "">
+<body class="">
 	<section>
-		<div class = "row g-0">
-			<div class = "col-lg-7">
-				<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-				  <ol class="carousel-indicators">
-				    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-				  </ol>
-				  <div class="carousel-inner">
-				    <div class="carousel-item min.vh-100 active">
-				      <img src="../static/imgs/portada.png" th:src="@{/imgs/Image_1_P_D.png}"/>
-				      <div class="carousel-caption d-none d-md-block">
-				        <h5>Extranet Corporación Fiduciaria</h5>
-				        <p>Realice sus operaciones como persona natural sin demora, de forma sencilla y desde su móvil</p>
-				      </div>
-				    </div>
-				  </div>
-				  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-				    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				    <span class="sr-only">Previous</span>
-				  </a>
-				  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-				    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-				    <span class="sr-only">Next</span>
-				  </a>
+		<div class="row g-0">
+			<div class="col-lg-7">
+				<div id="carouselExampleCaptions" class="carousel slide"
+					data-ride="carousel">
+					<ol class="carousel-indicators">
+						<li data-target="#carouselExampleCaptions" data-slide-to="0"
+							class="active"></li>
+					</ol>
+					<div class="carousel-inner">
+						<div class="carousel-item min.vh-100 active">
+							<img src="../static/imgs/portada.png"
+								th:src="@{/imgs/Image_1_P_D.png}" />
+							<div class="carousel-caption d-none d-md-block">
+								<h5>Extranet Corporación Fiduciaria</h5>
+								<p>Realice sus operaciones como persona natural sin demora,
+									de forma sencilla y desde su móvil</p>
+							</div>
+						</div>
+					</div>
+					<a class="carousel-control-prev" href="#carouselExampleCaptions"
+						role="button" data-slide="prev"> <span
+						class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+						class="sr-only">Previous</span>
+					</a> <a class="carousel-control-next" href="#carouselExampleCaptions"
+						role="button" data-slide="next"> <span
+						class="carousel-control-next-icon" aria-hidden="true"></span> <span
+						class="sr-only">Next</span>
+					</a>
 				</div>
 			</div>
-			<div class = "col-lg-5 d-flex flex-column align-items-end min-vh-100">
+			<div class="col-lg-5 d-flex flex-column align-items-end min-vh-100">
 				<div class="px-lg-5 pt-lg-4 pb-lg-4 p-4 w-100 mb-auto">
-					<img src="../static/imgs/logo.png" th:src="@{/imgs/logo.png}" class = "img-fluid"/>
+					<img src="../static/imgs/logo.png" th:src="@{/imgs/logo.png}"
+						class="img-fluid" />
 				</div>
 				<div class="px-lg-5 py-lg-6 p-4 w-100 align-self-center">
 					<h1 class="font-weight-bold mb-4">Inicio de Sesión</h1>
 					<form th:action="@{/logincheck}" method="POST">
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+
 						<div class="mb-4">
-						    <label for="ruc" class="form-label font-weight-bold">RUC</label>
-						    <input type="text" class="form-control" placeholder="Ingrese RUC" name="ruc" id="ruc" >
-					  	</div>
-					  	<div class="mb-4">
-						    <label for="usuario" class="form-label font-weight-bold">Usuario</label>
-						    <input type="text" class="form-control" placeholder="Ingrese Usuario" name="usuario" id="usuario" >
-					  	</div>
-					  	<div class="mb-4">
-						    <label for="password" class="form-label font-weight-bold">Contraseña</label>
-						    <input type="password" class="form-control mb-2" placeholder="Ingrese Contraseña" name="password" id="password" />
-						    <a href="#" class="form-text text-muted text-decoration">¿Olvidaste tu contraseña?</a>
-					  	</div>
-					  	<div class="mb-4 form-check">
-						    <input type="checkbox" class="form-check-input" id="comprobacion">
-						    <label class="form-check-label" for="comprobacion">No soy un robot</label>
+							<label for="usuario" class="form-label font-weight-bold">Usuario</label>
+							<input type="text" class="form-control"
+								placeholder="Ingrese Usuario" name="username" id="username">
 						</div>
-					  	<button class="btn btn-primary w-100" type="submit">Ingresar</button>
+						<div class="mb-4">
+							<label for="password" class="form-label font-weight-bold">Contraseña</label>
+							<input type="password" class="form-control mb-2"
+								placeholder="Ingrese Contraseña" name="password" id="password" />
+							<a href="#" class="form-text text-muted text-decoration">¿Olvidaste
+								tu contraseña?</a>
+						</div>
+						<div class="mb-4 form-check">
+							<input type="checkbox" class="form-check-input" id="comprobacion">
+							<label class="form-check-label" for="comprobacion">No soy
+								un robot</label>
+						</div>
+						<button class="btn btn-primary w-100"
+							onclick="j_username.value=domain.value + '@' + username.value; return true"
+							type="submit">Ingresar</button>
 					</form>
 				</div>
 				<div class="text-center px-lg-5 pt-lg-3 pb-lg-4 p-4 w-100 mt-auto">
-					<div th:if="${error != null}" class="alert alert-danger" role="alert">Usuario o contraseña incorrecta</div>
-        			<div th:if="${logout != null}" class="alert alert-info" role="alert">Sesión cerrada con éxito!</div>
+					<div th:if="${param.error}" class="alert alert-danger" role="alert">Empresa,
+						Usuario o contraseña incorrecta</div>
+					<div th:if="${logout != null}" class="alert alert-info"
+						role="alert">Sesión cerrada con éxito!</div>
 				</div>
 			</div>
 		</div>
@@ -89,5 +103,22 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
 		integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
 		crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+
+function procesar() {
+
+    campo1=document.getElementById('campo1').value;
+    campo2=document.getElementById('campo2').value;
+
+    final=campo1+campo2;
+
+    document.getElementById('final').value=final;
+
+    document.forms.ejemplo.submit();
+
+}
+
+</script>
 </body>
 </html>

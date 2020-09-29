@@ -17,21 +17,6 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "banddemv")
 public class DetalleMovCuentaEntidadFinanciera extends Auditoria {
 
-	public DetalleMovCuentaEntidadFinanciera() {
-
-	}
-
-	public DetalleMovCuentaEntidadFinanciera(Integer identificadorDetalleMovCuentaFinanciera,
-			Integer correlativoDetalleMovimiento, String descripcionDetalleMovimiento, Double montoMovimiento,
-			MovimientoCuentaEntidadFinanciera movimientoCuentaEntidadFinanciera) {
-		super();
-		this.identificadorDetalleMovCuentaFinanciera = identificadorDetalleMovCuentaFinanciera;
-		this.correlativoDetalleMovimiento = correlativoDetalleMovimiento;
-		this.descripcionDetalleMovimiento = descripcionDetalleMovimiento;
-		this.montoMovimiento = montoMovimiento;
-		this.movimientoCuentaEntidadFinanciera = movimientoCuentaEntidadFinanciera;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_iddemv", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
@@ -89,6 +74,21 @@ public class DetalleMovCuentaEntidadFinanciera extends Auditoria {
 	public void setMovimientoCuentaEntidadFinanciera(
 			MovimientoCuentaEntidadFinanciera movimientoCuentaEntidadFinanciera) {
 		this.movimientoCuentaEntidadFinanciera = movimientoCuentaEntidadFinanciera;
+	}
+
+	public DetalleMovCuentaEntidadFinanciera(Integer identificadorDetalleMovCuentaFinanciera,
+			Integer correlativoDetalleMovimiento, String descripcionDetalleMovimiento, Double montoMovimiento,
+			MovimientoCuentaEntidadFinanciera movimientoCuentaEntidadFinanciera) {
+		super();
+		this.identificadorDetalleMovCuentaFinanciera = identificadorDetalleMovCuentaFinanciera;
+		this.correlativoDetalleMovimiento = correlativoDetalleMovimiento;
+		this.descripcionDetalleMovimiento = descripcionDetalleMovimiento;
+		this.montoMovimiento = montoMovimiento;
+		this.movimientoCuentaEntidadFinanciera = movimientoCuentaEntidadFinanciera;
+	}
+
+	public DetalleMovCuentaEntidadFinanciera() {
+
 	}
 
 }

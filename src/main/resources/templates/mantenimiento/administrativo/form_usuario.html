@@ -123,9 +123,12 @@
 										<!-- <button class="fluid ui primary button">Guardar</button> -->
 										<div class="ui error message"></div>
 									</form>
-									<a href="#" th:href="@{/usuario/cancel}">
-										<button class="fluid ui negative basic button">Cancelar</button>
-									</a>
+									<form class="ui form" action="#" th:action="@{/usuario/cancel}"
+										method="POST" id="frm-cancelar">
+										<a href="#" >
+											<button class="fluid ui negative basic button">Cancelar</button>
+										</a>
+									</form>
 
 
 								</div>

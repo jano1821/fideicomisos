@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
-import com.corfid.fideicomisos.model.administrativo.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
+import com.corfid.fideicomisos.model.cruds.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
 import com.corfid.fideicomisos.service.utilities.CatalogoConstraintInterface;
@@ -48,10 +48,10 @@ public class UsuarioController extends InitialController {
 		return environment.getProperty("local.server.port");
 	}
 
-	@GetMapping("/cancel")
+	@PostMapping("/cancel")
 	public String cancel() {
 
-		return "redirect:" + Constante.URL_LISTA_MENU;
+		return "redirect:" + Constante.URL_LISTA_USUARIOS;
 	}
 
 	@GetMapping("/lista_usuarios")
@@ -64,8 +64,6 @@ public class UsuarioController extends InitialController {
 
 	@PostMapping(value = "/crudAccionesListaUsuarios", params = { "findRow",
 	"busqueda" })
-	/*@RequestMapping(value = "/crudAccionesListaUsuarios", method = RequestMethod.POST, params = { "findRow",
-			"busqueda" })*/
 	public ModelAndView buscarUsuario(CrudUsuarioModel crudUsuarioModel, final BindingResult bindingResult,
 			final HttpServletRequest req) {
 		String caja = req.getParameter("busqueda");
@@ -97,7 +95,7 @@ public class UsuarioController extends InitialController {
 	}
 
 	@PostMapping("/addusuario")
-	public String addUsuario(@ModelAttribute(name = "usuarioModel") UsuarioModel usuarioModel, Model model) {
+	public String registrarUsuario(@ModelAttribute(name = "usuarioModel") UsuarioModel usuarioModel, Model model) {
 		String result;
 		Date fechaAndHoraActual = getFechaAndHoraActual();
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -110,7 +108,7 @@ public class UsuarioController extends InitialController {
 			result = "0";
 		}
 
-		return "redirect:" + Constante.URL_LISTA_MENU + "?result=" + result;
+		return "redirect:" + Constante.URL_LISTA_USUARIOS + "?result=" + result;
 	}
 
 	@PostMapping(value = "/crudAccionesListaUsuarios", params = { "addRow" })
@@ -136,7 +134,7 @@ public class UsuarioController extends InitialController {
 		} else {
 			result = "0";
 		}
-		return "redirect:" + Constante.URL_LISTA_MENU + "?result=" + result;
+		return "redirect:" + Constante.URL_LISTA_USUARIOS + "?result=" + result;
 
 	}
 
@@ -175,6 +173,7 @@ public class UsuarioController extends InitialController {
 		PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
 		crudUsuarioModel = usuarioInterface.listUsuarioByUsernamePaginado(busqueda, paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
+		crudUsuarioModel.setBusqueda(busqueda);
 
 		if (paginadoModel.isMovIzquierda()) {
 			crudUsuarioModel.setResult(Constante.NO_HAY_REGISTROS_A_LA_IZQUIERDA);

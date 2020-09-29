@@ -24,28 +24,6 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "banmcufi")
 public class CuentaEntidadFinanciera extends Auditoria {
 
-	public CuentaEntidadFinanciera() {
-
-	}
-
-	public CuentaEntidadFinanciera(Integer identificadorCuentaEntidadFinanciera, String numeroCuentaEntidadFinanciera,
-			String nombreEntidadFinanciera, String tipoEntidadFinanciera, String descripcionCuentaEntidadFinanciera,
-			String descripcionMonedaCuentaEntidadFinanciera, Double saldoContableActual, Double saldoDisponibleActual,
-			String codigoEstado, Date fechaUltimaActualizacion, Fideicomiso fideicomiso) {
-		super();
-		this.identificadorCuentaEntidadFinanciera = identificadorCuentaEntidadFinanciera;
-		this.numeroCuentaEntidadFinanciera = numeroCuentaEntidadFinanciera;
-		this.nombreEntidadFinanciera = nombreEntidadFinanciera;
-		this.tipoEntidadFinanciera = tipoEntidadFinanciera;
-		this.descripcionCuentaEntidadFinanciera = descripcionCuentaEntidadFinanciera;
-		this.descripcionMonedaCuentaEntidadFinanciera = descripcionMonedaCuentaEntidadFinanciera;
-		this.saldoContableActual = saldoContableActual;
-		this.saldoDisponibleActual = saldoDisponibleActual;
-		this.codigoEstado = codigoEstado;
-		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
-		this.fideicomiso = fideicomiso;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_idcufi", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
@@ -184,4 +162,25 @@ public class CuentaEntidadFinanciera extends Auditoria {
 		this.lstMovimientoCuentaEntidadFinanciera = lstMovimientoCuentaEntidadFinanciera;
 	}
 
+	public CuentaEntidadFinanciera(Integer identificadorCuentaEntidadFinanciera, String numeroCuentaEntidadFinanciera,
+			String nombreEntidadFinanciera, String tipoEntidadFinanciera, String descripcionCuentaEntidadFinanciera,
+			String descripcionMonedaCuentaEntidadFinanciera, Double saldoContableActual, Double saldoDisponibleActual,
+			String codigoEstado, Date fechaUltimaActualizacion, Fideicomiso fideicomiso) {
+		super();
+		this.identificadorCuentaEntidadFinanciera = identificadorCuentaEntidadFinanciera;
+		this.numeroCuentaEntidadFinanciera = numeroCuentaEntidadFinanciera;
+		this.nombreEntidadFinanciera = nombreEntidadFinanciera;
+		this.tipoEntidadFinanciera = tipoEntidadFinanciera;
+		this.descripcionCuentaEntidadFinanciera = descripcionCuentaEntidadFinanciera;
+		this.descripcionMonedaCuentaEntidadFinanciera = descripcionMonedaCuentaEntidadFinanciera;
+		this.saldoContableActual = saldoContableActual;
+		this.saldoDisponibleActual = saldoDisponibleActual;
+		this.codigoEstado = codigoEstado;
+		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+		this.fideicomiso = fideicomiso;
+	}
+
+	public CuentaEntidadFinanciera() {
+
+	}
 }

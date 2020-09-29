@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+
+<title>Menú de Selección</title>
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui segments">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+		<div class="ui segments">
+			<div class="ui segment">
+				<div class="ui grid">
+					<div class="row">
+						<div class="sixteen wide column">
+
+
+							<form class="ui form" action="#"
+								th:action="@{/seleccion/accionSeleccion}"
+								th:object="${crudMenuModel}" method="POST" id="frm-seleccion">
+								<div class="ui segments">
+									<div class="ui segment">
+										<div class="required field">
+											<label>Modo de Ingreso</label> <select class="ui dropdown"
+												name="modo" id="modo">
+												<option value="">Seleccionar...</option>
+												<option value="F">Fideicomisario</option>
+												<option value="C">Fideicomitente</option>
+											</select>
+										</div>
+									</div>
+									<div class="ui segment">
+										<table class="ui selectable celled table">
+											<thead>
+												<tr>
+													<th>Empresa</th>
+													<th>Tipo de Documento</th>
+													<th>Numero de Documento</th>
+													<th>Acciones</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="empresa : ${crudMenuModel.rows}">
+													<td th:text="${empresa.razonSocial}"></td>
+													<td th:text="${empresa.descTipoDocumento}"></td>
+													<td th:text="${empresa.numeroDocumento}"></td>
+													<td class="ui center aligned">
+														<div class="ui icon buttons" >
+															<button class="ui button"
+																data-tooltip="Presione para Seleccionar Empresa"
+																type="submit" name="selectRow"
+																th:value="${empresa.numeroDocumento}">
+																<i class="sign-in icon"></i>
+															</button>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+								</div>
+							</form>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+	</script>
+	<script type="text/javascript">
+		$('#frm-seleccion').form({
+			on : 'blur',
+			fields : {
+				modo : {
+					identifier : 'modo',
+					rules : [ {
+						type : 'empty',
+						prompt : 'Por Seleccione Modo de Ingreso'
+					} ]
+				}
+			}
+		});
+	</script>
+	
+</body>
+</html>

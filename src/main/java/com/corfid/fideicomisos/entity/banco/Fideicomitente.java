@@ -19,19 +19,6 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "banmfite")
 public class Fideicomitente extends Auditoria {
 
-	public Fideicomitente() {
-
-	}
-
-	public Fideicomitente(Integer identificadorFideicomitente, String nombreFideicomitente, String tipoDocumento,
-			String numeroDocumento) {
-		super();
-		this.identificadorFideicomitente = identificadorFideicomitente;
-		this.nombreFideicomitente = nombreFideicomitente;
-		this.tipoDocumento = tipoDocumento;
-		this.numeroDocumento = numeroDocumento;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_idfite", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
@@ -45,7 +32,7 @@ public class Fideicomitente extends Auditoria {
 
 	@Column(name = "c_numdoc", nullable = false, insertable = true, updatable = true, length = 11)
 	private String numeroDocumento;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "fideicomitente")
 	private List<FideicomisoFideicomitente> lstFideicomisoFideicomitente = new ArrayList<FideicomisoFideicomitente>(0);
 
@@ -81,4 +68,16 @@ public class Fideicomitente extends Auditoria {
 		this.numeroDocumento = numeroDocumento;
 	}
 
+	public Fideicomitente(Integer identificadorFideicomitente, String nombreFideicomitente, String tipoDocumento,
+			String numeroDocumento) {
+		super();
+		this.identificadorFideicomitente = identificadorFideicomitente;
+		this.nombreFideicomitente = nombreFideicomitente;
+		this.tipoDocumento = tipoDocumento;
+		this.numeroDocumento = numeroDocumento;
+	}
+
+	public Fideicomitente() {
+
+	}
 }

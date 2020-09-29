@@ -1,4 +1,4 @@
-package com.corfid.fideicomisos.controller;
+package com.corfid.fideicomisos.controller.administrativo;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,10 @@ public class LoginController {
 
 	@GetMapping({"/loginsuccess","/"})
 	public String loginCheck() {
-		return "redirect:/menu/showmenu";
+		
+		
+		
+		return "redirect:/seleccion/seleccion";
 	}
 	
 }

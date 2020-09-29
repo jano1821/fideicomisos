@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.administrativo.UsuarioConverter;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
-import com.corfid.fideicomisos.model.administrativo.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
+import com.corfid.fideicomisos.model.cruds.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.UsuarioRepository;
 import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
@@ -69,6 +69,11 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
 	@Override
 	public Usuario findUsuarioById(Integer id) {
 		return usuarioRepository.findByIdUsuario(id);
+	}
+	
+	@Override
+	public UsuarioModel findUsuarioByUsuario(String userName) {
+		return usuarioConverter.convertUsuarioToUsuarioModel(usuarioRepository.findByUsuario(userName));
 	}
 
 	@Override
