@@ -61,7 +61,7 @@ public class CuentaEntidadFinanciera extends Auditoria {
 	@JoinColumn(name = "n_idfico", nullable = false, insertable = true, updatable = true)
 	private Fideicomiso fideicomiso;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "cuentaEntidadFinanciera")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cuentaEntidadFinanciera")
 	private List<MovimientoCuentaEntidadFinanciera> lstMovimientoCuentaEntidadFinanciera = new ArrayList<MovimientoCuentaEntidadFinanciera>(
 			0);
 
@@ -165,7 +165,8 @@ public class CuentaEntidadFinanciera extends Auditoria {
 	public CuentaEntidadFinanciera(Integer identificadorCuentaEntidadFinanciera, String numeroCuentaEntidadFinanciera,
 			String nombreEntidadFinanciera, String tipoEntidadFinanciera, String descripcionCuentaEntidadFinanciera,
 			String descripcionMonedaCuentaEntidadFinanciera, Double saldoContableActual, Double saldoDisponibleActual,
-			String codigoEstado, Date fechaUltimaActualizacion, Fideicomiso fideicomiso) {
+			String codigoEstado, Date fechaUltimaActualizacion, Fideicomiso fideicomiso,
+			List<MovimientoCuentaEntidadFinanciera> lstMovimientoCuentaEntidadFinanciera) {
 		super();
 		this.identificadorCuentaEntidadFinanciera = identificadorCuentaEntidadFinanciera;
 		this.numeroCuentaEntidadFinanciera = numeroCuentaEntidadFinanciera;
@@ -178,8 +179,9 @@ public class CuentaEntidadFinanciera extends Auditoria {
 		this.codigoEstado = codigoEstado;
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
 		this.fideicomiso = fideicomiso;
+		this.lstMovimientoCuentaEntidadFinanciera = lstMovimientoCuentaEntidadFinanciera;
 	}
-
+	
 	public CuentaEntidadFinanciera() {
 
 	}

@@ -18,6 +18,7 @@ public class Constante {
 	public static final String FORM_MENU = "mantenimiento/administrativo/form_menu";
 	public static final String LISTA_PERSONAS = "mantenimiento/administrativo/lista_personas";
 	public static final String FORM_PERSONA = "mantenimiento/administrativo/form_persona";
+	public static final String URL_LISTA_FIDEICOMISO = "";
 	
 	//TABLAS
 	public static final String TABLA_USUARIO = "admusuar";

@@ -48,14 +48,32 @@ public class FideicomisoFideicomitente extends Auditoria {
 		this.codigoEstado = codigoEstado;
 	}
 
-	public FideicomisoFideicomitente(FideicomisoFideicomitenteId fideicomisoFideicomitenteId, String codigoEstado) {
+	public Fideicomiso getFideicomiso() {
+		return fideicomiso;
+	}
+
+	public void setFideicomiso(Fideicomiso fideicomiso) {
+		this.fideicomiso = fideicomiso;
+	}
+
+	public Fideicomitente getFideicomitente() {
+		return fideicomitente;
+	}
+
+	public void setFideicomitente(Fideicomitente fideicomitente) {
+		this.fideicomitente = fideicomitente;
+	}
+
+	public FideicomisoFideicomitente(FideicomisoFideicomitenteId fideicomisoFideicomitenteId, String codigoEstado,
+			Fideicomiso fideicomiso, Fideicomitente fideicomitente) {
 		super();
 		this.fideicomisoFideicomitenteId = fideicomisoFideicomitenteId;
 		this.codigoEstado = codigoEstado;
+		this.fideicomiso = fideicomiso;
+		this.fideicomitente = fideicomitente;
 	}
 
 	public FideicomisoFideicomitente() {
 
 	}
-
 }

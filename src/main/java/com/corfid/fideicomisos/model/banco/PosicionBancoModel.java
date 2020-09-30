@@ -2,7 +2,7 @@ package com.corfid.fideicomisos.model.banco;
 
 import java.util.Date;
 
-public class PosicionBancoModel {
+public class PosicionBancoModel extends PaginacionGeneralModel{
 
 	private Integer identificadorFideicomiso;
 	private String nombreFideicomiso;

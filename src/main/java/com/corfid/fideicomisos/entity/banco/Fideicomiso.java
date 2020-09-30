@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,11 +29,14 @@ public class Fideicomiso extends Auditoria {
 	@Column(name = "c_codest", nullable = false, insertable = true, updatable = true, length = 2)
 	private String codigoEstado;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "fideicomiso")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "fideicomiso")
 	private List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera = new ArrayList<CuentaEntidadFinanciera>(0);
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "fideicomiso")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "fideicomiso")
 	private List<FideicomisoFideicomitente> lstFideicomisoFideicomitente = new ArrayList<FideicomisoFideicomitente>(0);
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "fideicomisario")
+	private List<FideicomisoFideicomisario> lstFideicomisoFideicomisario = new ArrayList<FideicomisoFideicomisario>(0);
 
 	public Integer getIdentificadorFideicomiso() {
 		return identificadorFideicomiso;
@@ -68,16 +70,36 @@ public class Fideicomiso extends Auditoria {
 		this.lstCuentaEntidadFinanciera = lstCuentaEntidadFinanciera;
 	}
 
+	public List<FideicomisoFideicomitente> getLstFideicomisoFideicomitente() {
+		return lstFideicomisoFideicomitente;
+	}
+
+	public void setLstFideicomisoFideicomitente(List<FideicomisoFideicomitente> lstFideicomisoFideicomitente) {
+		this.lstFideicomisoFideicomitente = lstFideicomisoFideicomitente;
+	}
+
+	public List<FideicomisoFideicomisario> getLstFideicomisoFideicomisario() {
+		return lstFideicomisoFideicomisario;
+	}
+
+	public void setLstFideicomisoFideicomisario(List<FideicomisoFideicomisario> lstFideicomisoFideicomisario) {
+		this.lstFideicomisoFideicomisario = lstFideicomisoFideicomisario;
+	}
+	
+	public Fideicomiso() {
+
+	}
+
 	public Fideicomiso(Integer identificadorFideicomiso, String nombreFideicomiso, String codigoEstado,
-			List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera) {
+			List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera,
+			List<FideicomisoFideicomitente> lstFideicomisoFideicomitente,
+			List<FideicomisoFideicomisario> lstFideicomisoFideicomisario) {
 		super();
 		this.identificadorFideicomiso = identificadorFideicomiso;
 		this.nombreFideicomiso = nombreFideicomiso;
 		this.codigoEstado = codigoEstado;
 		this.lstCuentaEntidadFinanciera = lstCuentaEntidadFinanciera;
-	}
-
-	public Fideicomiso() {
-
+		this.lstFideicomisoFideicomitente = lstFideicomisoFideicomitente;
+		this.lstFideicomisoFideicomisario = lstFideicomisoFideicomisario;
 	}
 }

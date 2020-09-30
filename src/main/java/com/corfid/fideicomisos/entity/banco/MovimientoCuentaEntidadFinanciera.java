@@ -56,7 +56,7 @@ public class MovimientoCuentaEntidadFinanciera extends Auditoria {
 	@JoinColumn(name = "n_idcufi", nullable = false, insertable = true, updatable = true)
 	private CuentaEntidadFinanciera cuentaEntidadFinanciera;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "movimientoCuentaEntidadFinanciera")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "movimientoCuentaEntidadFinanciera")
 	private List<DetalleMovCuentaEntidadFinanciera> lstDetalleMovCuentaEntidadFinanciera = new ArrayList<DetalleMovCuentaEntidadFinanciera>(
 			0);
 
@@ -162,4 +162,5 @@ public class MovimientoCuentaEntidadFinanciera extends Auditoria {
 	public MovimientoCuentaEntidadFinanciera() {
 
 	}
+
 }
