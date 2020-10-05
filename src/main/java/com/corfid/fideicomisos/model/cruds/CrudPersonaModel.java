@@ -7,23 +7,33 @@ import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.utilities.CrudModel;
 
 public class CrudPersonaModel extends CrudModel {
-	private List<PersonaModel> rows = new ArrayList<PersonaModel>();
-	private String busqueda;
 
-	public List<PersonaModel> getRows() {
-		return rows;
-	}
+    private List<PersonaModel> rows = new ArrayList<PersonaModel>();
+    private String busqueda;
+    private String busquedaTipoPersona;
 
-	public void setRows(List<PersonaModel> rows) {
-		this.rows = rows;
-	}
+    public List<PersonaModel> getRows() {
+        return rows;
+    }
 
-	public String getBusqueda() {
-		return busqueda;
-	}
+    public void setRows(List<PersonaModel> rows) {
+        this.rows = rows;
+    }
 
-	public void setBusqueda(String busqueda) {
-		this.busqueda = busqueda;
-	}
+    public String getBusqueda() {
+        return busqueda;
+    }
+
+    public void setBusqueda(String busqueda) {
+        this.busqueda = busqueda;
+    }
+
+    public String getBusquedaTipoPersona() {
+        return busquedaTipoPersona;
+    }
+
+    public void setBusquedaTipoPersona(String busquedaTipoPersona) {
+        this.busquedaTipoPersona = busquedaTipoPersona;
+    }
 
 }

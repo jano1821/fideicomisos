@@ -3,12 +3,16 @@ package com.corfid.fideicomisos.entity.administrativo;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.corfid.fideicomisos.entity.auditoria.Auditoria;
@@ -18,12 +22,16 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 public class Rol extends Auditoria {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_iderol", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
 	private Integer idRol;
 
 	@Column(name = "c_descri", nullable = false, length = 100, insertable = true, updatable = true)
 	private String descripcion;
+
+	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "c_idtius", nullable = false, insertable = true, updatable = true)
+	private TipoUsuario tipoUsuario;
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
 	private Set<Usuario> usuarios = new HashSet<Usuario>();
@@ -63,10 +71,21 @@ public class Rol extends Auditoria {
 		this.menus = menus;
 	}
 
-	public Rol(Integer idRol, String descripcion) {
+	public TipoUsuario getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+	public void setTipoUsuario(TipoUsuario tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
+
+	public Rol(Integer idRol, String descripcion, TipoUsuario tipoUsuario, Set<Usuario> usuarios, Set<Menu> menus) {
 		super();
 		this.idRol = idRol;
 		this.descripcion = descripcion;
+		this.tipoUsuario = tipoUsuario;
+		this.usuarios = usuarios;
+		this.menus = menus;
 	}
 
 	public Rol() {

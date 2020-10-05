@@ -27,6 +27,14 @@ public class MenuRol extends Auditoria {
 	@JoinColumn(name = "n_iderol", nullable = false, insertable = false, updatable = false)
 	private Rol rol;
 
+	public MenuRolId getMenuRolId() {
+		return menuRolId;
+	}
+
+	public void setMenuRolId(MenuRolId menuRolId) {
+		this.menuRolId = menuRolId;
+	}
+
 	public Menu getMenu() {
 		return menu;
 	}

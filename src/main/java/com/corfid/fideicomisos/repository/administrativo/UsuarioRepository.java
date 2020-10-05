@@ -1,6 +1,7 @@
 package com.corfid.fideicomisos.repository.administrativo;
 
 import java.io.Serializable;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.corfid.fideicomisos.entity.administrativo.Persona;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
 
 @Repository("usuarioRepository")
@@ -24,4 +26,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Serializable> 
 	public abstract Page<Usuario> listUsuarioByUserNamePaginado (
 		      @Param("usuario") String userName, 
 		      Pageable pageable);
+	
+	public Usuario findUsuarioByPersona(Persona persona);
 }

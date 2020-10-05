@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,7 +17,7 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "admtelef")
 public class Telefono extends Auditoria {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_idtele", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
 	private Integer idTelefono;
 

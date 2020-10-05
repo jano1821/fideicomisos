@@ -4,14 +4,17 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.corfid.fideicomisos.entity.auditoria.Auditoria;
@@ -20,7 +23,7 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "admcmenu")
 public class Menu extends Auditoria {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_idmenu", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
 	private Integer idMenu;
 
@@ -35,6 +38,10 @@ public class Menu extends Auditoria {
 
 	@Column(name = "n_idmede", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
 	private Integer idMenuPadre;
+
+	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "c_idtius", nullable = false, insertable = true, updatable = true)
+	private TipoUsuario tipoUsuario;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "admmerol", joinColumns = @JoinColumn(name = "n_idmenu"), inverseJoinColumns = @JoinColumn(name = "n_iderol"))
@@ -88,23 +95,24 @@ public class Menu extends Auditoria {
 		this.roles = roles;
 	}
 
+	public TipoUsuario getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+	public void setTipoUsuario(TipoUsuario tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
+
 	public Menu(Integer idMenu, String descripcion, String url, String tipoMenu, Integer idMenuPadre,
-			String estadoRegistro, String usuarioInsercion, Date fechaInsercion, String ipInsercion,
-			String usuarioModificacion, Date fechaModificacion, String ipModificacion) {
+			TipoUsuario tipoUsuario, Set<Rol> roles) {
 		super();
 		this.idMenu = idMenu;
 		this.descripcion = descripcion;
 		this.url = url;
 		this.tipoMenu = tipoMenu;
 		this.idMenuPadre = idMenuPadre;
-
-		this.estadoRegistro = estadoRegistro;
-		this.usuarioInsercion = usuarioInsercion;
-		this.fechaInsercion = fechaInsercion;
-		this.ipInsercion = ipInsercion;
-		this.usuarioModificacion = usuarioModificacion;
-		this.fechaModificacion = fechaModificacion;
-		this.ipModificacion = ipModificacion;
+		this.tipoUsuario = tipoUsuario;
+		this.roles = roles;
 	}
 
 	public Menu() {

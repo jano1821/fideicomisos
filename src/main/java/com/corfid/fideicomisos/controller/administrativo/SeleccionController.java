@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.administrativo.MenuModel;
-import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
 import com.corfid.fideicomisos.model.cruds.CrudMenuModel;
 import com.corfid.fideicomisos.model.cruds.CrudPersonaModel;
@@ -41,79 +40,91 @@ import com.corfid.fideicomisos.utilities.StringUtil;
 @RequestMapping("/seleccion")
 public class SeleccionController extends InitialController {
 
-	@Autowired
-	@Qualifier("menuServiceImpl")
-	MenuInterface menuInterface;
+    @Autowired
+    @Qualifier("menuServiceImpl")
+    MenuInterface menuInterface;
 
-	@Autowired
-	@Qualifier("personaServiceImpl")
-	PersonaInterface personaInterface;
+    @Autowired
+    @Qualifier("personaServiceImpl")
+    PersonaInterface personaInterface;
 
-	@Autowired
-	@Qualifier("usuarioServiceImpl")
-	UsuarioInterface usuarioInterface;
+    @Autowired
+    @Qualifier("usuarioServiceImpl")
+    UsuarioInterface usuarioInterface;
 
-	@Autowired
-	@Qualifier("empresaServiceImpl")
-	EmpresaInterface empresaInterface;
+    @Autowired
+    @Qualifier("empresaServiceImpl")
+    EmpresaInterface empresaInterface;
 
-	@GetMapping({ "/seleccion" })
-	public ModelAndView seleccionEmpresa(@ModelAttribute("datosGenerales") DatosGenerales datosGenerales) {
-		Set<String> roles;
-		ModelAndView mav = new ModelAndView(Constante.SELECCION);
-		CrudPersonaModel crudPersonaModel;
-		List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
-		Collection<Integer> rolesSesion = new ArrayList<Integer>();
-		UsuarioModel usuarioModel = new UsuarioModel();
+    @GetMapping({ "/seleccion" })
+    public ModelAndView seleccionEmpresa(@ModelAttribute("datosGenerales") DatosGenerales datosGenerales) {
+        ModelAndView mav = null;
+        try {
+            Set<String> roles;
+            CrudPersonaModel crudPersonaModel;
+            List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+            Collection<Integer> rolesSesion = new ArrayList<Integer>();
+            UsuarioModel usuarioModel = new UsuarioModel();
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
+            roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
 
-		for (String rol : roles) {
-			rolesSesion.add(StringUtil.toInteger(rol));
-		}
+            for (String rol : roles) {
+                rolesSesion.add(StringUtil.toInteger(rol));
+            }
 
-		listMenuModel = menuInterface.obtenerMenuByRol(rolesSesion);
-		datosGenerales.setListMenuModel(listMenuModel);
-		datosGenerales.setMenu(construirMenu(listMenuModel));
+            listMenuModel = menuInterface.obtenerMenuByRol(rolesSesion);
+            datosGenerales.setListMenuModel(listMenuModel);
+            datosGenerales.setMenu(construirMenu(listMenuModel));
+            usuarioModel = usuarioInterface.findUsuarioByUsuario(user.getUsername());
 
-		usuarioModel = usuarioInterface.findUsuarioByUsuario(user.getUsername());
+            datosGenerales.setIdUsuario(usuarioModel.getIdUsuario());
+            datosGenerales.setTipoUsuarioSession(usuarioModel.getTipoUsuario());
 
-		crudPersonaModel = personaInterface.obtenerEmpresaByPersona(usuarioModel.getIdPersona());
+            if (StringUtil.equiv(usuarioModel.getTipoUsuario(), Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                mav = new ModelAndView(Constante.MENU);
+                mav.addObject("usuario", user.getUsername());
+            } else {
+                mav = new ModelAndView(Constante.SELECCION);
+                crudPersonaModel = personaInterface.obtenerEmpresaByPersona(usuarioModel.getIdPersona());
 
-		crudPersonaModel.setUsuario(user.getUsername());
+                crudPersonaModel.setUsuario(user.getUsername());
 
-		mav.addObject("crudMenuModel", crudPersonaModel);
-		mav.addObject("usuario", user.getUsername());
+                mav.addObject("crudMenuModel", crudPersonaModel);
+                mav.addObject("usuario", user.getUsername());
+            }
+        } catch (Exception e) {
+            mav = new ModelAndView(Constante.SITIO_EN_CONSTRUCCION);
+        }
+        return mav;
+    }
 
-		return mav;
-	}
+    @PostMapping(value = "/accionSeleccion", params = { "selectRow", "modo" })
+    public ModelAndView selectModo(@ModelAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                   final CrudMenuModel crudMenuModel,
+                                   final BindingResult bindingResult,
+                                   final HttpServletRequest req) {
+        ModelAndView model;
 
-	@PostMapping(value = "/accionSeleccion", params = { "selectRow", "modo" })
-	public ModelAndView selectModo(@ModelAttribute("datosGenerales") DatosGenerales datosGenerales,
-			final CrudMenuModel crudMenuModel, final BindingResult bindingResult, final HttpServletRequest req) {
-		ModelAndView model;
+        if (StringUtil.equiv(req.getParameter("modo"), Constante.FIDEICOMISARIO)) {
+            model = new ModelAndView(Constante.MENU);
+        } else {
+            model = new ModelAndView(Constante.SITIO_EN_CONSTRUCCION);
+        }
 
-		if (StringUtil.equiv(req.getParameter("modo"), Constante.FIDEICOMISARIO)) {
-			model = new ModelAndView(Constante.MENU);
-		} else {
-			model = new ModelAndView(Constante.SITIO_EN_CONSTRUCCION);
-		}
+        datosGenerales.setModo(req.getParameter("modo"));
+        datosGenerales.setRucEmpresa(req.getParameter("selectRow"));
 
-		datosGenerales.setModo(req.getParameter("modo"));
-		datosGenerales.setRucEmpresa(req.getParameter("selectRow"));
-		//datosGenerales.setMenu("<i class='user icon'></i> Administración");
-		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		model.addObject("usuario", user.getUsername());
-		return model;
-	}
+        model.addObject("usuario", user.getUsername());
+        return model;
+    }
 
-	@ModelAttribute("datosGenerales")
-	public DatosGenerales getVisitor() {
-		return new DatosGenerales();
-	}
+    @ModelAttribute("datosGenerales")
+    public DatosGenerales getVisitor() {
+        return new DatosGenerales();
+    }
 }

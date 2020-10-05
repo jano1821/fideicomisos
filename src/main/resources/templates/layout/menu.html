@@ -4,32 +4,9 @@
 <meta charset="utf-8" />
 </head>
 <body>
-<div th:fragment="menu">
-		<div class="ui blue inverted vertical menu" th:utext="${session.datosGenerales.menu}">
-			
-			<!-- <div class="header item" th:utext="${session.datosGenerales.menu}">
-			</div>
-				
-			<a class="blue inverted item" href="#"
-						th:href="@{/usuario/lista_usuarios}">Usuarios</a> 
-			<a class="item"
-						href="#" th:href="@{/rol/lista_roles}">Roles</a> 
-			<a class="item"
-						href="#" th:href="@{/menu/lista_menus}">Menu</a> 
-			<a class="item"
-						href="#" th:href="@{/persona/lista_personas}">Persona</a>
-			<div class="header item" >
-				<i class="globe icon"></i> Posición de Bancos
-			</div>
-			<a class="item"> New York </a> 
-			<a class="item"> Montreal </a> 
-			<a class="item"> Los Angeles </a> 
-			<a class="item"> San Francisco </a>
-			<div class="header item" >
-				<i class="icon calendar"></i> Months
-			</div>
-			<a class="item"> August </a> 
-			<a class="item"> June </a> -->
-		</div>
-		</div>
+	<div th:fragment="menu">
+		<!-- <div class="ui blue inverted vertical menu"
+			th:utext="${session.datosGenerales.menu}"></div>-->
+		<div class="ui left vertical blue inverted labeled icon sidebar menu" th:utext="${session.datosGenerales.menu}"></div>
+	</div>
 </body>

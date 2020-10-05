@@ -14,122 +14,127 @@
 </head>
 
 <body>
-	<div class="ui container">
-		<div class="ui segments">
+	<div class="ui one column stackable grid">
+		<div class="column">
 			<div class="ui segment">
 				<div th:replace="~{layout/header :: header}"></div>
 			</div>
 		</div>
-		<div class="ui segments">
-			<div class="ui segment">
-				<div class="ui grid">
-					<div class="row">
-						<div class="three wide column">
-							<div th:replace="~{layout/menu :: menu}"></div>
-						</div>
-						<div class="one wide column"></div>
-						<div class="twelve wide column">
 
-							<div class="ui segments">
-								<div class="ui segment">
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
 
-
-									<form class="ui form" action="#" th:action="@{/menu/addmenu}"
-										th:object="${menuModel}" method="POST" id="frm-menu">
-										<h4 class="ui dividing header">Formulario de Menu</h4>
-										<input type="hidden" th:field="*{idMenu}" th:value="${idMenu}"></input>
-										<div class="required field">
-											<label>Descripcion y URL</label>
-											<div class="two fields">
-												<div class="field">
-													<input type="text" name="descripcion"
-														placeholder="Descripcion" th:field="*{descripcion}"
-														th:value="${descripcion}">
-												</div>
-												<div class="field">
-													<input type="text" name="url" placeholder="URL"
-														th:field="*{url}" th:value="${url}">
-												</div>
-											</div>
-										</div>
-
-										<div class="two fields">
-											<div class="required field">
-												<label>Tipo de menu</label> <select class="ui dropdown"
-													name="tipoMenu" id="tipoMenu" th:field="*{tipoMenu}">
-													<option value="">Seleccionar...</option>
-													<option th:each="tipo : ${listTipoMenu}"
-														th:value="${tipo.valorConstraint}"
-														th:text="${tipo.descConstraint}"
-														th:selected="${tipo.valorConstraint==tipoMenu}"></option>
-												</select>
-											</div>
-											<div class="required field">
-												<label>Estado del Menu</label> <select class="ui dropdown"
-													name="estadoRegistro" id="estadoRegistro"
-													th:field="*{estadoRegistro}">
-													<option value="">Seleccionar...</option>
-													<option th:each="estado : ${listEstado}"
-														th:value="${estado.valorConstraint}"
-														th:text="${estado.descConstraint}"
-														th:selected="${estado.valorConstraint==estadoRegistro}"></option>
-												</select>
-											</div>
-										</div>
-										<div class="one fields">
-											<div class="ui fluid search selection dropdown">
-												<input type="hidden" name="country"> <i
-													class="dropdown icon"></i>
-												<div class="default text">Selecciona un País</div>
-												<div class="menu">
-													<div class="item" data-value="af">
-														<i class="af flag"></i>Afghanistan
-													</div>
-													<div class="item" data-value="ax">
-														<i class="ax flag"></i>Aland Islands
-													</div>
-													<div class="item" data-value="al">
-														<i class="al flag"></i>Albania
-													</div>
-													<div class="item" data-value="dz">
-														<i class="dz flag"></i>Algeria
-													</div>
-													<div class="item" data-value="as">
-														<i class="as flag"></i>American Samoa
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="one fields">
-											<div class="ui center aligned field">
-												<div class="ui buttons">
-													<button class="fluid ui primary button active"
-														type="submit" id="saveRow" name="saveRow">Guardar</button>
-													<div class="or" data-text="O"></div>
-
-													<div class="fluid ui reset button">Limpiar Campos</div>
-												</div>
-											</div>
-										</div>
-										<div class="ui error message"></div>
-									</form>
-									<form class="ui form" action="#" th:action="@{/menu/cancel}"
-										method="POST" id="frm-cancelar">
-										<a href="#">
-											<button class="fluid ui negative basic button">Cancelar</button>
-										</a>
-									</form>
+					<div class="ui secondary segment">
 
 
+						<form class="ui form" action="#" th:action="@{/menu/addmenu}"
+							th:object="${menuModel}" method="POST" id="frm-menu">
+							<h4 class="ui dividing header">Formulario de Menu</h4>
+							<input type="hidden" th:field="*{idMenu}" th:value="${idMenu}"></input>
+							<div class="required field">
+								<label>Descripcion y URL</label>
+								<div class="two fields">
+									<div class="field">
+										<input type="text" name="descripcion"
+											placeholder="Descripcion" th:field="*{descripcion}"
+											th:value="${descripcion}">
+									</div>
+									<div class="field">
+										<input type="text" name="url" placeholder="URL"
+											th:field="*{url}" th:value="${url}">
+									</div>
 								</div>
 							</div>
 
-						</div>
+							<div class="three fields">
+								<div class="required field">
+									<label>Tipo de menu</label> <select class="ui dropdown"
+										name="tipoMenu" id="tipoMenu" th:field="*{tipoMenu}">
+										<option value="">Seleccionar...</option>
+										<option th:each="tipo : ${listTipoMenu}"
+											th:value="${tipo.valorConstraint}"
+											th:text="${tipo.descConstraint}"
+											th:selected="${tipo.valorConstraint==tipoMenu}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Estado del Menu</label> <select class="ui dropdown"
+										name="estadoRegistro" id="estadoRegistro"
+										th:field="*{estadoRegistro}">
+										<option value="">Seleccionar...</option>
+										<option th:each="estado : ${listEstado}"
+											th:value="${estado.valorConstraint}"
+											th:text="${estado.descConstraint}"
+											th:selected="${estado.valorConstraint==estadoRegistro}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Menu Contenedor</label> <select class="ui dropdown"
+										name="idMenuPadre" id="idMenuPadre" th:field="*{idMenuPadre}">
+										<option value="">Seleccionar...</option>
+										<option th:each="padre : ${listMenuModelPadre}"
+											th:value="${padre.idMenu}" th:text="${padre.descripcion}"
+											th:selected="${padre.idMenu==idMenuPadre}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="one fields">
+								<div class="ui center aligned field">
+									<div class="ui buttons">
+										<button class="fluid ui primary button active" type="submit"
+											id="saveRow" name="saveRow">Guardar</button>
+										<div class="or" data-text="O"></div>
+
+										<div class="fluid ui reset button">Limpiar Campos</div>
+									</div>
+								</div>
+							</div>
+							<div class="ui error message"></div>
+						</form>
+						<form class="ui form" action="#" th:action="@{/menu/cancel}"
+							method="POST" id="frm-cancelar">
+							<a href="#">
+								<button class="fluid ui negative basic button">Cancelar</button>
+							</a>
+						</form>
+
+
 					</div>
+
 				</div>
+				<div class="one wide column"></div>
 			</div>
+
 		</div>
 	</div>
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+		//toggleSidebar();
+	});
+
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});	  
+	</script>
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
 	</script>
@@ -159,6 +164,13 @@
 					rules : [ {
 						type : 'empty',
 						prompt : 'Por Favor seleccione Estado de Registro'
+					} ]
+				},
+				idMenuPadre : {
+					identifier : 'idMenuPadre',
+					rules : [ {
+						type : 'empty',
+						prompt : 'Por Favor seleccione Menu Contenedor'
 					} ]
 				}
 			}

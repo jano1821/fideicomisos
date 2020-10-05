@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.service.administrativo;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,4 +24,6 @@ public interface MenuInterface {
 	public List<MenuModel> obtenerMenuByRol(Collection<Integer> roles);
 	
 	public List<MenuModel> obtenerMenusPadre();
+	
+	public List<MenuModel> obtenerAllMenuByRol(Collection<Integer> roles);
 }

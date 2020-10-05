@@ -12,155 +12,190 @@
 <script type="text/javascript"
 	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
-
 </head>
 
 <body>
-	<div class="ui container">
-		<div class="ui segments">
+
+	<div class="ui one column stackable grid">
+		<div class="column">
 			<div class="ui segment">
 				<div th:replace="~{layout/header :: header}"></div>
 			</div>
 		</div>
-		<div class="ui segments">
-			<div class="ui segment">
-				<div class="ui grid">
-					<div class="row">
-						<div class="three wide column">
-							<div th:replace="~{layout/menu :: menu}"></div>
-						</div>
-						<div class="one wide column"></div>
-						<div class="twelve wide column">
+
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
 
 
-							<form class="ui form" action="#"
-								th:action="@{/persona/crudAccionesListaPersonas}"
-								th:object="${crudPersonaModel}" method="POST" id="frm-usuario">
+					<form class="ui form" action="#"
+						th:action="@{/persona/crudAccionesListaPersonas}"
+						th:object="${crudPersonaModel}" method="POST" id="frm-usuario">
 
 
-								<div class="ui segments">
-									<div class="ui segment">
+						<div class="ui segments">
+							<div class="ui segment">
 
-										<div class="ui fluid icon input">
-											<input type="text" th:field="*{busqueda}"
-												th:value="${busqueda}" placeholder="Busqueda por Nombre...">
-											<button name="findRow" class="ui icon button">
-												<i class="search icon"></i>
-											</button>
-										</div>
-
-									</div>
-									<div class="ui secondary segment">
-
-
-
-
-										<table class="ui selectable celled table">
-											<thead>
-												<tr>
-													<th>Nombre</th>
-													<th>Tipo Doc.</th>
-													<th>Numero Doc.</th>
-													<th>Tipo Persona</th>
-													<th>Estado Persona</th>
-													<th>Acciones</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr th:each="persona : ${crudPersonaModel.rows}">
-													<td th:text="${persona.nombreCompleto}"></td>
-													<td th:text="${persona.tipoDocumento}"></td>
-													<td th:text="${persona.numeroDocumento}"></td>
-													<td th:text="${persona.descTipoPersona}"></td>
-													<td th:text="${persona.descEstadoRegistro}"></td>
-													<td class="ui center aligned">
-														<div class="ui icon buttons">
-															<button class="ui button" type="submit" name="editRow"
-																th:value="${persona.idPersona}">
-																<i class="edit icon"></i>
-															</button>
-															<button class="ui button" type="submit" name="removeRow"
-																th:value="${persona.idPersona}">
-																<i class="trash alternate icon"></i>
-															</button>
-														</div>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-
-									</div>
-									<div class="ui right aligned secondary segment">
-										<div class="ui pagination menu">
-
-											<button class="button" type="submit" name="leftRow">
-												<a class="icon item"> <i class="left arrow icon"></i>
-												</a>
-											</button>
-
-											<a th:text="${crudPersonaModel.paginaActual}"
-												class="active item"> </a>
-											<div class="disabled item">...</div>
-											<a th:text="${crudPersonaModel.cantidadRegistros + ' Reg.'}" class="disabled item"> </a>
-											<div class="disabled item">...</div>
-											<a th:text="${crudPersonaModel.paginaFinal}" class="item">
-
-											</a>
-											<button class="button" type="submit" name="rightRow">
-												<a class="icon item"> <i class="right arrow icon"></i>
-												</a>
-											</button>
+								<div class="ui fluid action input">
+									<div class="ui floating labeled icon dropdown button">
+										<i class="user circle outline icon"></i> <span class="text" th:text="${crudPersonaModel.busquedaTipoPersona}">Todos</span> <input id="busquedaTipoPersona"
+											name="busquedaTipoPersona" type="hidden" th:field="*{busquedaTipoPersona}" th:value="${busquedaTipoPersona}">
+										<div class="menu">
+											<div class="header">
+												<i class="tags icon"></i> Tipo de Persona
+											</div>
+											<div class="item">Todos</div>
+											<div class="item">Persona Natural</div>
+											<div class="item">Empresa</div>
 										</div>
 									</div>
-									<div class="ui secondary segment">
-										<div th:if="${crudPersonaModel.result == '3'}"
-											class="ui info message">
-											<i class="close icon"></i>
-											<div class="header">Mensaje de información</div>
-											<p>No hay mas registros a la derecha.</p>
-										</div>
-										<div th:if="${crudPersonaModel.result == '2'}"
-											class="ui info message">
-											<i class="close icon"></i>
-											<div class="header">Mensaje de información</div>
-											<p>No hay mas registros a la izquierda.</p>
-										</div>
-										<div th:if="${crudPersonaModel.result == '1'}"
-											class="ui positive message">
-											<i class="close icon"></i>
-											<div class="header">Mensaje de confirmación</div>
-											<p>Se realizó la operación satisfactoriamente.</p>
-										</div>
-										<div th:if="${crudPersonaModel.result == '0'}"
-											class="ui negative message">
-											<i class="close icon"></i>
-											<div class="header">Mensaje de error</div>
-											<p>Ocurrió un error en la operación solicitada.</p>
-										</div>
-
-										<button class="fluid ui primary button" type="submit"
-											name="addRow">
-											<i class="plus circle icon"></i> Agregar Persona
-										</button>
-										<input type="hidden" th:field="*{paginaActual}"
-											th:value="${paginaActual}"> <input type="hidden"
-											th:field="*{paginaFinal}" th:value="${paginaFinal}">
-
-									</div>
+									<input type="text" placeholder="Buscar..."
+										th:field="*{busqueda}" th:value="${busqueda}"> <select
+										class="ui selection dropdown">
+										<option selected value="nombre">Nombre Completo</option>
+										<option value="products">Número de Documento</option>
+									</select>
+									<button name="findRow" class="ui icon button"
+										data-tooltip="Buscar" data-position="bottom center">
+										<i class="search icon"></i>Búsqueda
+									</button>
 								</div>
+							</div>
+							<div class="ui secondary segment">
 
 
-							</form>
 
+
+								<table class="ui selectable celled table">
+									<thead>
+										<tr>
+											<th class="ui center aligned">Nombre Completo</th>
+											<th class="ui center aligned">Tipo Doc.</th>
+											<th class="ui center aligned">Numero Doc.</th>
+											<th class="ui center aligned">Tipo Persona</th>
+											<th class="ui center aligned">Estado Persona</th>
+											<th class="ui center aligned">Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="persona : ${crudPersonaModel.rows}"
+											th:class="${persona.estadoRegistro=='N'}? 'negative'">
+											<td th:text="${persona.nombreCompleto}"></td>
+											<td class="ui center aligned"
+												th:text="${persona.tipoDocumento}"></td>
+											<td th:text="${persona.numeroDocumento}"></td>
+											<td class="ui center aligned"
+												th:text="${persona.descTipoPersona}"></td>
+											<td class="ui center aligned"
+												th:text="${persona.descEstadoRegistro}"></td>
+											<td class="ui center aligned">
+												<div class="ui icon buttons">
+													<button class="ui button" data-tooltip="Eliminar"
+														data-position="right center" type="submit" name="editRow"
+														th:value="${persona.idPersona}">
+														<i class="edit icon"></i>
+													</button>
+													<button class="ui button" data-tooltip="Eliminar"
+														data-position="right center" type="submit"
+														name="removeRow" th:value="${persona.idPersona}">
+														<i class="trash alternate icon"></i>
+													</button>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+							<div class="ui right aligned secondary segment">
+								<div class="ui pagination menu">
+
+									<button class="button" type="submit" name="leftRow">
+										<a class="icon item" data-tooltip="Mover a la Izquierda"
+											data-position="top center"> <i class="left arrow icon"></i>
+										</a>
+									</button>
+
+									<a th:text="${crudPersonaModel.paginaActual}"
+										class="active item"> </a>
+									<div class="disabled item">...</div>
+									<a th:text="${crudPersonaModel.cantidadRegistros + ' Reg.'}"
+										class="disabled item"> </a>
+									<div class="disabled item">...</div>
+									<a th:text="${crudPersonaModel.paginaFinal}" class="item">
+
+									</a>
+									<button class="button" type="submit" name="rightRow">
+										<a class="icon item" data-tooltip="Mover a la Derecha"
+											data-position="top center"> <i class="right arrow icon"></i>
+										</a>
+									</button>
+								</div>
+							</div>
+							<div class="ui secondary segment">
+								<div th:if="${crudPersonaModel.result != null }"
+									th:utext="${crudPersonaModel.mensaje}"></div>
+
+								<button class="fluid ui primary button" type="submit"
+									name="addRow">
+									<i class="plus circle icon"></i> Agregar Persona
+								</button>
+								<input type="hidden" th:field="*{paginaActual}"
+									th:value="${paginaActual}"> <input type="hidden"
+									th:field="*{paginaFinal}" th:value="${paginaFinal}">
+
+							</div>
 						</div>
-					</div>
+
+
+					</form>
+
+
+
 				</div>
+				<div class="one wide column"></div>
 			</div>
+
 		</div>
 	</div>
+
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
 	</script>
-	
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+		//toggleSidebar();
+	});
+
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});	  
+</script>
+
+	<script type="text/javascript">
+	$('span').each(function(){
+	    var texto=$(this).text();
+	    //$(this).after('<input id="personeria" type="hidden" name="personeria" value="'+texto+'">');
+	    //$(this).remove(); si descomentas esto borra el span y pone el input en su lugar si el input lo cambias a type="text"
+	});
+	</script>
+
 </body>
 </html>

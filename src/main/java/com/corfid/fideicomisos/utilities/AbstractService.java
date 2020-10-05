@@ -1,137 +1,267 @@
 package com.corfid.fideicomisos.utilities;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.corfid.fideicomisos.component.utilities.CatalogoErrorConverter;
 import com.corfid.fideicomisos.entity.auditoria.Auditoria;
+import com.corfid.fideicomisos.model.utilities.CatalogoErrorModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
+import com.corfid.fideicomisos.service.utilities.CatalogoErrorInterface;
 
 public class AbstractService {
-	protected Long _toLong(Object objeto) {
-		return StringUtil.toLong(objeto);
-	}
 
-	protected Integer _toInteger(Object objeto) {
-		return StringUtil.toInteger(objeto);
-	}
+    @Autowired
+    @Qualifier("catalogoErrorServiceImpl")
+    CatalogoErrorInterface catalogoErrorInterface;
 
-	protected Short _toShort(Object objeto) {
-		return StringUtil.toShort(objeto);
-	}
+    protected Long _toLong(Object objeto) {
+        return StringUtil.toLong(objeto);
+    }
 
-	protected Double _toDouble(Object objeto) {
-		return StringUtil.toDouble(objeto);
-	}
+    protected Integer _toInteger(Object objeto) {
+        return StringUtil.toInteger(objeto);
+    }
 
-	protected Float _toFloat(Object objeto) {
-		return StringUtil.toFloat(objeto);
-	}
+    protected Short _toShort(Object objeto) {
+        return StringUtil.toShort(objeto);
+    }
 
-	protected String _toBlank(String cadena) {
-		return StringUtil.toBlank(cadena);
-	}
+    protected Double _toDouble(Object objeto) {
+        return StringUtil.toDouble(objeto);
+    }
 
-	protected String _toBlankObject(Object object) {
-		return StringUtil.toBlankObject(object);
-	}
+    protected Float _toFloat(Object objeto) {
+        return StringUtil.toFloat(objeto);
+    }
 
-	protected String _toStr(Object object) {
-		return StringUtil.toStr(object);
-	}
+    protected String _toBlank(String cadena) {
+        return StringUtil.toBlank(cadena);
+    }
 
-	protected boolean _isEmpty(Object object) {
-		return StringUtil.isEmpty(object);
-	}
+    protected String _toBlankObject(Object object) {
+        return StringUtil.toBlankObject(object);
+    }
 
-	protected String _subStr(String cadena, int indexFin) {
-		return StringUtil.subStr(cadena, indexFin);
-	}
+    protected String _toStr(Object object) {
+        return StringUtil.toStr(object);
+    }
 
-	protected String _subStr(String cadena, int indexInicio, int indexFin) {
-		return StringUtil.subStr(cadena, indexInicio, indexFin);
-	}
+    protected boolean _isEmpty(Object object) {
+        return StringUtil.isEmpty(object);
+    }
 
-	protected String _isEmpty(String object, String defaultValue) {
-		return _isEmpty(object) ? defaultValue : object;
-	}
+    protected String _subStr(String cadena, int indexFin) {
+        return StringUtil.subStr(cadena, indexFin);
+    }
 
-	protected boolean _equiv(Object cadena1, Object cadena2) {
-		return StringUtil.equiv(cadena1, cadena2);
-	}
+    protected String _subStr(String cadena, int indexInicio, int indexFin) {
+        return StringUtil.subStr(cadena, indexInicio, indexFin);
+    }
 
-	protected boolean _inList(String cadena, String... valores) {
-		return StringUtil.inList(cadena, valores);
-	}
+    protected String _isEmpty(String object, String defaultValue) {
+        return _isEmpty(object) ? defaultValue : object;
+    }
 
-	/**
-	 * Metodo setea los campos de Auditoria de Insercion a una entidad
-	 *
-	 * @param auditable
-	 * @param beanParametrosAuditoria
-	 */
-	protected void setInsercionAuditoria(Auditoria auditoria, ParametrosAuditoriaModel parametrosAuditoriaModel) {
-		Date fechaInsercion;
-		String usuarioInsercion;
-		String ipInsercion;
+    protected boolean _equiv(Object cadena1, Object cadena2) {
+        return StringUtil.equiv(cadena1, cadena2);
+    }
 
-		fechaInsercion = parametrosAuditoriaModel.getFechaInsercion();
-		usuarioInsercion = parametrosAuditoriaModel.getUsuarioInsercion();
-		ipInsercion = parametrosAuditoriaModel.getIpInsercion();
+    protected boolean _inList(String cadena, String... valores) {
+        return StringUtil.inList(cadena, valores);
+    }
 
-		auditoria.setFechaInsercion(fechaInsercion);
-		auditoria.setUsuarioInsercion(usuarioInsercion);
-		auditoria.setIpInsercion(ipInsercion);
-	}
+    /**
+     * Metodo setea los campos de Auditoria de Insercion a una entidad
+     *
+     * @param auditable
+     * @param beanParametrosAuditoria
+     */
+    protected void setInsercionAuditoria(Auditoria auditoria, ParametrosAuditoriaModel parametrosAuditoriaModel) {
+        Date fechaInsercion;
+        String usuarioInsercion;
+        String ipInsercion;
 
-	/**
-	 * Metodo setea los campos de Auditoria de modificacion a una entidad
-	 *
-	 * @param auditable
-	 * @param beanParametrosAuditoria
-	 */
-	protected void setModificacionAuditoria(Auditoria auditoria, ParametrosAuditoriaModel parametrosAuditoriaModel) {
-		Date fechaModificacion;
-		String usuarioModificacion;
-		String ipModificacion;
+        fechaInsercion = parametrosAuditoriaModel.getFechaInsercion();
+        usuarioInsercion = parametrosAuditoriaModel.getUsuarioInsercion();
+        ipInsercion = parametrosAuditoriaModel.getIpInsercion();
 
-		fechaModificacion = parametrosAuditoriaModel.getFechaModificacion();
-		usuarioModificacion = parametrosAuditoriaModel.getUsuarioModificacion();
-		ipModificacion = parametrosAuditoriaModel.getIpModificacion();
+        auditoria.setFechaInsercion(fechaInsercion);
+        auditoria.setUsuarioInsercion(usuarioInsercion);
+        auditoria.setIpInsercion(ipInsercion);
+    }
 
-		auditoria.setFechaModificacion(fechaModificacion);
-		auditoria.setUsuarioModificacion(usuarioModificacion);
-		auditoria.setIpModificacion(ipModificacion);
-	}
+    /**
+     * Metodo setea los campos de Auditoria de modificacion a una entidad
+     *
+     * @param auditable
+     * @param beanParametrosAuditoria
+     */
+    protected void setModificacionAuditoria(Auditoria auditoria, ParametrosAuditoriaModel parametrosAuditoriaModel) {
+        Date fechaModificacion;
+        String usuarioModificacion;
+        String ipModificacion;
 
-	/**
-	 * Este metodo devuelbe una clase Pageable con datos cargados segun parametros
-	 * 
-	 * @param pagina
-	 * @param cantidad
-	 * @param campo
-	 * @param ordenar
-	 * @param descendente
-	 * @return
-	 */
-	protected Pageable obtenerIndexPorPagina(Integer pagina, Integer cantidad, String campo, boolean ordenar,
-			boolean descendente) {
-		Integer index = 0;
-		Pageable pageable;
+        fechaModificacion = parametrosAuditoriaModel.getFechaModificacion();
+        usuarioModificacion = parametrosAuditoriaModel.getUsuarioModificacion();
+        ipModificacion = parametrosAuditoriaModel.getIpModificacion();
 
-		index = (pagina - 1);
+        auditoria.setFechaModificacion(fechaModificacion);
+        auditoria.setUsuarioModificacion(usuarioModificacion);
+        auditoria.setIpModificacion(ipModificacion);
+    }
 
-		if (ordenar) {
-			if (descendente) {
-				pageable = PageRequest.of(index, cantidad, Sort.by(campo).descending());
-			} else {
-				pageable = PageRequest.of(index, cantidad, Sort.by(campo));
-			}
-		} else {
-			pageable = PageRequest.of(index, cantidad);
-		}
-		return pageable;
-	}
+    /**
+     * Este metodo devuelbe una clase Pageable con datos cargados segun parametros
+     * 
+     * @param pagina
+     * @param cantidad
+     * @param campo
+     * @param ordenar
+     * @param descendente
+     * @return
+     */
+    protected Pageable obtenerIndexPorPagina(Integer pagina,
+                                             Integer cantidad,
+                                             String campo,
+                                             boolean ordenar,
+                                             boolean descendente) {
+        Integer index = 0;
+        Pageable pageable;
+
+        index = (pagina - 1);
+
+        if (ordenar) {
+            if (descendente) {
+                pageable = PageRequest.of(index, cantidad, Sort.by(campo).descending());
+            } else {
+                pageable = PageRequest.of(index, cantidad, Sort.by(campo));
+            }
+        } else {
+            pageable = PageRequest.of(index, cantidad);
+        }
+        return pageable;
+    }
+
+    protected String obtenerMensajeError(String codigoError) throws Exception {
+        CatalogoErrorModel catalogoErrorModel = new CatalogoErrorModel();
+
+        catalogoErrorModel = catalogoErrorInterface.obtenerMensajeError(codigoError);
+        return catalogoErrorModel.getMensaje();
+    }
+
+    protected String getPinNumber() {
+        return getPassword(Constante.NUMEROS, 4);
+    }
+
+    protected String getPassword() {
+        return getPassword(8);
+    }
+
+    protected String getPassword(int length) {
+        return getPassword(Constante.NUMEROS + Constante.MAYUSCULAS + Constante.MINUSCULAS + Constante.ESPECIALES,
+                           length);
+    }
+
+    protected String getPassword(String key, int length) {
+        String pswd = "";
+
+        for (int i = 0; i < length; i++) {
+            pswd += (key.charAt((int) (Math.random() * key.length())));
+        }
+
+        return pswd;
+    }
+
+    protected Map<String, String> passwordVerificado(String password, boolean generar, Integer tamanio) {
+        Integer contNumero = 0, contLetraMay = 0, contLetraMin = 0, contEspecialesMin = 0;
+        Map<String, String> output = new HashMap<String, String>();
+        output.put("error", ConstantesError.ERROR_0);
+        String mensaje = "";
+        Integer contador = 0;
+
+        password = _toBlank(password);
+
+        if ((!generar && _isEmpty(password))) {
+            output.put("error", ConstantesError.ERROR_1);
+            output.put("mensaje", "Password vacío");
+        } else if (generar && tamanio < 6) {
+            output.put("error", ConstantesError.ERROR_1);
+            output.put("mensaje", "Tamaño a generar en muy pequeño");
+        } else if (!generar && password.length() < 6) {
+            output.put("error", ConstantesError.ERROR_1);
+            output.put("mensaje", "Password muy pequeño, mínimo de 6 caracteres");
+        } else {
+            do {
+                char clave;
+                contNumero = 0;
+                contLetraMay = 0;
+                contLetraMin = 0;
+                contEspecialesMin = 0;
+                if (_isEmpty(_toBlank(password)) || ((generar && !StringUtil.isEmpty(_toBlank(password))) && contador > 0)) {
+                    password = getPassword(tamanio);
+                }
+                for (byte i = 0; i < password.length(); i++) {
+                    clave = password.charAt(i);
+                    String passValue = String.valueOf(clave);
+                    if (passValue.matches("[A-Z]")) {
+                        contLetraMay++;
+                    } else if (passValue.matches("[a-z]")) {
+                        contLetraMin++;
+                    } else if (passValue.matches("[0-9]")) {
+                        contNumero++;
+                    } else if (passValue.matches("[@#$%^&+=]")) {
+                        contEspecialesMin++;
+                    }
+                }
+                if (!generar) {
+                    if (!(contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0)) {
+                        output.put("error", ConstantesError.ERROR_1);
+
+                        if (contLetraMay <= 0) {
+                            mensaje += "Debe contener Mayúsculas<br>";
+                        }
+                        if (contLetraMin <= 0) {
+                            mensaje += "Debe contener Minúsculas<br>";
+                        }
+                        if (contNumero <= 0) {
+                            mensaje += "Debe contener Números<br>";
+                        }
+                        if (contEspecialesMin <= 0) {
+                            mensaje += "Debe contener Caracteres Especiales<br>";
+                        }
+
+                        output.put("mensaje", mensaje);
+                    }
+                } else {
+                    if (contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0) {
+                        output.put("mensaje", password);
+                    }
+                }
+
+                contador++;
+            } while (!(contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0) && generar);
+
+        }
+        return output;
+    }
+
+    protected Map<String, String> passwordVerificado(String password, boolean generar) {
+        return passwordVerificado(password, generar, 6);
+    }
+
+    protected Map<String, String> passwordVerificado(Integer tamanio) {
+        return passwordVerificado("", true, tamanio);
+    }
+
+    protected Map<String, String> passwordVerificado() {
+        return passwordVerificado("", true, 6);
+    }
 }

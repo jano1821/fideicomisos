@@ -17,11 +17,9 @@
 					Usuario: <span th:text="${usuario}"></span>
 				</h4>
 				<form th:action="@{/logout}" method="POST" id="myForm" name="myForm">
-					<div class="negative ui vertical animated button" tabindex="0">
-						<div class="hidden content" onclick="document.myForm.submit()">Salir</div>
-						<div class="visible content">
-							<i class="power off icon"></i>
-						</div>
+					<div class="ui icon button" onclick="document.myForm.submit()" data-tooltip="Presione para Cerrar Sesión"
+						data-inverted="" data-position="bottom center">
+						<i class="power off icon"></i>
 					</div>
 				</form>
 			</div>

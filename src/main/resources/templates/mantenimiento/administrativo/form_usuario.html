@@ -14,137 +14,181 @@
 </head>
 
 <body>
-	<div class="ui container">
-		<div class="ui segments">
+	<div class="ui one column stackable grid">
+		<div class="column">
 			<div class="ui segment">
 				<div th:replace="~{layout/header :: header}"></div>
 			</div>
 		</div>
-		<div class="ui segments">
-			<div class="ui segment">
-				<div class="ui grid">
-					<div class="row">
-						<div class="three wide column">
-							<div th:replace="~{layout/menu :: menu}"></div>
-						</div>
-						<div class="one wide column"></div>
-						<div class="twelve wide column">
 
-							<div class="ui segments">
-								<div class="ui segment">
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
 
-
-									<form class="ui form" action="#"
-										th:action="@{/usuario/addusuario}" th:object="${usuarioModel}"
-										method="POST" id="frm-usuario">
-										<h4 class="ui dividing header">Formulario de Usuario</h4>
-										<input type="hidden" th:field="*{idUsuario}"
-											th:value="${idUsuario}"></input>
-										<div class="required field">
-											<label>Usuario y Contraseña</label>
-											<div class="two fields">
-												<div class="field">
-													<input type="text" name="usuario" placeholder="Usuario"
-														th:field="*{usuario}" th:value="${usuario}">
-												</div>
-												<div class="field">
-													<input type="password" name="password"
-														placeholder="Contraseña" th:field="*{password}"
-														th:value="${password}">
-												</div>
-											</div>
-										</div>
-										<div class="ui segment">
-											<div class="ui toggle checkbox">
-												<input type="checkbox" name="public"> <label>Es
-													Cliente</label>
-											</div>
-										</div>
-										<div class="field">
-											<label>Cliente</label>
-											<div class="fields">
-												<div class="twelve wide field">
-													<input type="text" name="shipping[address]"
-														placeholder="Nombre del cliente">
-												</div>
-												<div class="four wide field">
-													<a href="#">
-														<div class="ui button" tabindex="0">Buscar</div>
-													</a>
-												</div>
-											</div>
-										</div>
-										<div class="three fields">
-											<div class="required field">
-												<label>Indicador de Actividad</label> <select
-													class="ui fluid dropdown" name="estadoActividad"
-													id="estadoActividad" th:field="*{estadoActividad}">
-													<option value="">Seleccionar...</option>
-													<option th:each="actividad : ${listActividad}"
-														th:value="${actividad.valorConstraint}"
-														th:text="${actividad.descConstraint}"
-														th:selected="${actividad.valorConstraint==estadoActividad}"></option>
-												</select>
-											</div>
-											<div class="required field">
-												<label>Tipo de Usuario</label> <select class="ui dropdown"
-													name="tipoUsuario" id="tipoUsuario"
-													th:field="*{tipoUsuario}">
-													<option value="">Seleccionar...</option>
-													<option th:each="tipo : ${listTipoUsuario}"
-														th:value="${tipo.valorConstraint}"
-														th:text="${tipo.descConstraint}"
-														th:selected="${tipo.valorConstraint==tipoUsuario}"></option>
-												</select>
-											</div>
-											<div class="required field">
-												<label>Estado del Usuario</label> <select
-													class="ui dropdown" name="estadoRegistro"
-													id="estadoRegistro" th:field="*{estadoRegistro}">
-													<option value="">Seleccionar...</option>
-													<option th:each="estado : ${listEstado}"
-														th:value="${estado.valorConstraint}"
-														th:text="${estado.descConstraint}"
-														th:selected="${estado.valorConstraint==estadoRegistro}"></option>
-												</select>
-											</div>
-										</div>
-										<div class="one fields">
-											<div class="ui center aligned field">
-												<div class="ui buttons">
-													<button class="fluid ui primary button active"
-														type="submit" id="saveRow" name="saveRow">Guardar</button>
-													<div class="or" data-text="O"></div>
-													
-													<div class="fluid ui reset button">Limpiar Campos</div>
-												</div>
-											</div>
-										</div>
-										<!-- <button class="fluid ui primary button">Guardar</button> -->
-										<div class="ui error message"></div>
-									</form>
-									<form class="ui form" action="#" th:action="@{/usuario/cancel}"
-										method="POST" id="frm-cancelar">
-										<a href="#" >
-											<button class="fluid ui negative basic button">Cancelar</button>
-										</a>
-									</form>
+					<div class="ui secondary segment">
 
 
+						<form class="ui form" action="#"
+							th:action="@{/usuario/addusuario}" th:object="${usuarioModel}"
+							method="POST" id="frm-usuario">
+							<h4 class="ui dividing header">Formulario de Usuario</h4>
+							<input type="hidden" th:field="*{idUsuario}"
+								th:value="${idUsuario}"></input>
+							<div class="required field">
+								<label>Credenciales</label>
+								<div class="four fields">
+									<div class="field">
+										<input type="text" name="usuario" placeholder="Usuario"
+											th:field="*{usuario}" th:value="${usuario}">
+									</div>
+									<div class="field" th:if="${usuarioModel.edicion == 'S'}">
+										<div class="ui toggle checkbox">
+											<input type="checkbox" value="1" name="activar" id="activar"><label>Cambiar
+												Contraseña</label>
+										</div>
+									</div>
+									<div class="field" th:if="${usuarioModel.edicion == 'S'}">
+										<div class="ui toggle checkbox">
+											<input type="checkbox" value="1" name="generar" id="generar"
+												disabled><label>Generar Contraseña
+												Automática</label>
+										</div>
+									</div>
+									<div class="field" th:if="${usuarioModel.edicion == 'S'}">
+										<input type="password" name="password" id="password"
+											placeholder="Contraseña" th:field="*{password}"
+											th:value="${password}" disabled>
+									</div>
 								</div>
 							</div>
+							<div class="required field">
+								<div class="required field" th:utext="${comboPersonas}"></div>
+							</div>
+							<div class="three fields">
+								<div class="required field">
+									<label>Indicador de Actividad</label> <select
+										class="ui fluid dropdown" name="estadoActividad"
+										id="estadoActividad" th:field="*{estadoActividad}">
+										<option value="">Seleccionar...</option>
+										<option th:each="actividad : ${listActividad}"
+											th:value="${actividad.valorConstraint}"
+											th:text="${actividad.descConstraint}"
+											th:selected="${actividad.valorConstraint==estadoActividad}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Tipo de Usuario</label> <select class="ui dropdown"
+										name="tipoUsuario" id="tipoUsuario" th:field="*{tipoUsuario}">
+										<option value="">Seleccionar...</option>
+										<option th:each="tipo : ${listTipoUsuario}"
+											th:value="${tipo.valorConstraint}"
+											th:text="${tipo.descConstraint}"
+											th:selected="${tipo.valorConstraint==tipoUsuario}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Estado del Usuario</label> <select class="ui dropdown"
+										name="estadoRegistro" id="estadoRegistro"
+										th:field="*{estadoRegistro}">
+										<option value="">Seleccionar...</option>
+										<option th:each="estado : ${listEstado}"
+											th:value="${estado.valorConstraint}"
+											th:text="${estado.descConstraint}"
+											th:selected="${estado.valorConstraint==estadoRegistro}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="required field">
+								<div class="required field" th:utext="${comboRoles}"></div>
+							</div>
+							<div class="one fields">
+								<div class="ui center aligned field">
+									<div class="ui buttons">
+										<button class="fluid ui primary button active" type="submit"
+											id="saveRow" name="saveRow">Guardar</button>
+										<div class="or" data-text="O"></div>
 
-						</div>
+										<div class="fluid ui reset button">Limpiar Campos</div>
+									</div>
+								</div>
+							</div>
+							<div class="ui error message"></div>
+						</form>
+						<form class="ui form" action="#" th:action="@{/usuario/cancel}"
+							method="POST" id="frm-cancelar">
+							<a href="#">
+								<button class="fluid ui negative basic button">Cancelar</button>
+							</a>
+						</form>
+
+
 					</div>
+
 				</div>
+				<div class="one wide column"></div>
 			</div>
+
 		</div>
 	</div>
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+		//toggleSidebar();
+	});
+
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});	
+	$(document).ready(function(){
+		  $('#activar').change(function () {
+			    //check if checkbox is checked
+			    if ($(this).is(':checked')) {
+			        $('#password').removeAttr('disabled'); //enable input
+			        $('#generar').removeAttr('disabled'); //enable check generar
+			        
+			    } else {
+			        $('#password').attr('disabled', true); //disable input
+			        $('#generar').attr('disabled', true); //disable check generar
+			        $('#generar').attr('checked', true); //disable check generar
+			    }
+			});
+	});
+	$(document).ready(function(){
+		  $('#generar').change(function () {
+			    //check if checkbox is checked
+			    if ($(this).is(':checked')) {
+			    	$('#password').attr('disabled', true); //disable input
+			    } else {
+			    	$('#password').removeAttr('disabled'); //enable input
+			    }
+			});
+	});
+	</script>
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
 	</script>
 	<script type="text/javascript">
 		$('.ui.checkbox').checkbox();
+	</script>
+	<script type="text/javascript">
+	
 	</script>
 	<script type="text/javascript">
 		$('#frm-usuario').form({
@@ -155,13 +199,6 @@
 					rules : [ {
 						type : 'empty',
 						prompt : 'Por Favor Ingrese Usuario'
-					} ]
-				},
-				password : {
-					identifier : 'password',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Contraseña'
 					} ]
 				},
 				estadoActividad : {

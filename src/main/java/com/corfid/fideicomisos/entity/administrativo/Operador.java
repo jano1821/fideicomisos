@@ -3,6 +3,7 @@ package com.corfid.fideicomisos.entity.administrativo;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,7 +13,7 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Table(name = "admopera")
 public class Operador extends Auditoria {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "n_idoper", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
 	private Integer idPersona;
 

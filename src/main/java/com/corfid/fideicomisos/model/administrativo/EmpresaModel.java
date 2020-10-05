@@ -1,12 +1,5 @@
 package com.corfid.fideicomisos.model.administrativo;
 
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
-import com.corfid.fideicomisos.entity.administrativo.Persona;
-
 public class EmpresaModel {
 	private Integer idEmpresa;
 
@@ -17,6 +10,8 @@ public class EmpresaModel {
 	private String numeroDocumento;
 
 	private String estadoRegistro;
+
+	private String empresa;
 
 	public Integer getIdEmpresa() {
 		return idEmpresa;
@@ -56,6 +51,14 @@ public class EmpresaModel {
 
 	public void setEstadoRegistro(String estadoRegistro) {
 		this.estadoRegistro = estadoRegistro;
+	}
+
+	public String getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(String empresa) {
+		this.empresa = empresa;
 	}
 
 }

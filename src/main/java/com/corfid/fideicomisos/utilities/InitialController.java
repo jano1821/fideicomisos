@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.corfid.fideicomisos.model.administrativo.MenuModel;
+import com.corfid.fideicomisos.model.utilities.GenericModel;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 
@@ -149,15 +150,82 @@ public class InitialController {
 	}
 
 	protected String construirMenu(List<MenuModel> listMenuModel) {
-		String menu="";
+		String menu = "";
 		for (MenuModel menuModel : listMenuModel) {
-			if (StringUtil.equiv(menuModel.getIdMenu(),menuModel.getIdMenuPadre())){
-				menu+="<div class=\"header item\" ><i class=\"globe icon\"></i>"+ menuModel.getDescripcion() +"</div>";
+			/*if (StringUtil.equiv(menuModel.getIdMenu(), menuModel.getIdMenuPadre())) {
+				menu += "<div class=\"header item\" ><i class=\"globe icon\"></i>" + menuModel.getDescripcion()
+						+ "</div>";
 			} else {
-				menu+="<a class=\"blue inverted item\" href=\""+menuModel.getUrl()+"\">"+menuModel.getDescripcion()+"</a> ";
+				menu += "<a class=\"blue inverted item\" href=\"" + menuModel.getUrl() + "\">"
+						+ menuModel.getDescripcion() + "</a> ";
+			}*/
+			if (StringUtil.equiv(menuModel.getIdMenu(), menuModel.getIdMenuPadre())) {
+				menu += "<a class=\"header item\"> <i class=\"globe icon\"></i>" + menuModel.getDescripcion()
+					+ "</a>";
+			} else {
+			menu += "<a class=\"item\" href=\"" + menuModel.getUrl() + "\">"
+					+ menuModel.getDescripcion() + "</a> ";
 			}
 		}
-		
+
 		return menu;
+	}
+
+	protected String construirComboSearch(String tipoCombo, List<GenericModel> listGenericModel, String idName, String defaultText,
+			List<GenericModel> listGenericModelSeleccionado) {
+		String combo = "";
+		String carga = "";
+		String separador = "";
+
+		if (StringUtil.equiv(tipoCombo,Constante.SELECCION_MULTIPLE)) {
+		    combo += "<div class=\"ui fluid multiple search selection dropdown\">";
+		} else if (StringUtil.equiv(tipoCombo, Constante.SELECCION_SIMPLE)) {
+		    combo += "<div class=\"ui fluid search selection dropdown\">";
+		}
+		if (!StringUtil.isEmpty(listGenericModelSeleccionado)) {
+			for (GenericModel genericModel : listGenericModelSeleccionado) {
+				carga += separador + genericModel.getId();
+				separador = ",";
+			}
+
+			combo += "<input type=\"hidden\" value=\"" + carga + "\" name=\"" + idName + "\" id=\"" + idName + "\">";
+		} else {
+			combo += "<input type=\"hidden\" name=\"" + idName + "\" id=\"" + idName + "\">";
+		}
+		combo += "<i class=\"dropdown icon\"></i>";
+		combo += "<div class=\"default text\">" + defaultText + "</div>";
+		combo += "<div class=\"menu\">";
+		if (!StringUtil.isEmpty(listGenericModel)) {
+			for (GenericModel genericModel : listGenericModel) {
+				combo += "<div class=\"item\" data-value=\"" + genericModel.getId() + "\">"
+						+ genericModel.getDescripcion() + "</div>";
+			}
+		}
+		combo += "</div></div>";
+
+		return combo;
+	}
+
+	protected String construirMensaje(String titulo, String contenido, String tipo) {
+		String mensaje = "";
+
+		if (StringUtil.isEmpty(titulo)) {
+			titulo = "Mensaje";
+		}
+
+		if (StringUtil.equiv(Constante.MENSAJE_ERROR, tipo)) {
+			mensaje += "<div class=\"ui negative message\">";
+		} else if (StringUtil.equiv(Constante.MENSAJE_INFORMATIVO, tipo)) {
+			mensaje += "<div class=\"ui info message\">";
+		} else if (StringUtil.equiv(Constante.MENSAJE_SATISFACTORIO, tipo)) {
+			mensaje += "<div class=\"ui positive message\">";
+		}
+
+		mensaje += "<i class=\"close icon\"></i>";
+		mensaje += "<div class=\"header\">" + titulo + "</div>";
+		mensaje += "<p>" + contenido + "</p>";
+		mensaje += "</div>";
+
+		return mensaje;
 	}
 }

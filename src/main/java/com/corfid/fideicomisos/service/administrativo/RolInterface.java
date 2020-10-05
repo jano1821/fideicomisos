@@ -20,4 +20,7 @@ public interface RolInterface {
 
 	public CrudRolModel listRolByDescripcionPaginado(String descripcion, Integer pagina, Integer cant);
 
+	public boolean updateMenuRol(String[] idMenu, Integer idRol, ParametrosAuditoriaModel parametrosAuditoriaModel);
+	
+	public List<RolModel> listAllRolesByEstadoRegistro(String estadoRegistro) throws Exception;
 }

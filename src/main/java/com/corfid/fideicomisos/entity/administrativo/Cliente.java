@@ -1,16 +1,16 @@
 package com.corfid.fideicomisos.entity.administrativo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,16 +21,16 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 public class Cliente extends Auditoria {
 
 	@Id
-	@GeneratedValue
 	@Column(name = "n_idclie", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
 	private Integer idCliente;
 
-	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "n_idpers", nullable = false, insertable = true, updatable = true)
+	@OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "n_idclie", unique = true, nullable = false, insertable = true, updatable = true)
 	private Persona persona;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "cliente")
-	private List<Empresa> lstEmpresa = new ArrayList<Empresa>(0);
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "admemcli", joinColumns = @JoinColumn(name = "n_idclie"), inverseJoinColumns = @JoinColumn(name = "n_idempr"))
+	private Set<Empresa> empresas = new HashSet<Empresa>();
 
 	public Integer getIdCliente() {
 		return idCliente;
@@ -48,19 +48,19 @@ public class Cliente extends Auditoria {
 		this.persona = persona;
 	}
 
-	public List<Empresa> getLstEmpresa() {
-		return lstEmpresa;
+	public Set<Empresa> getEmpresas() {
+		return empresas;
 	}
 
-	public void setLstEmpresa(List<Empresa> lstEmpresa) {
-		this.lstEmpresa = lstEmpresa;
+	public void setEmpresas(Set<Empresa> empresas) {
+		this.empresas = empresas;
 	}
 
-	public Cliente(Integer idCliente, Persona persona, List<Empresa> lstEmpresa) {
+	public Cliente(Integer idCliente, Persona persona, Set<Empresa> empresas) {
 		super();
 		this.idCliente = idCliente;
 		this.persona = persona;
-		this.lstEmpresa = lstEmpresa;
+		this.empresas = empresas;
 	}
 
 	public Cliente() {

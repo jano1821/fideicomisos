@@ -14,84 +14,105 @@
 </head>
 
 <body>
-	<div class="ui container">
-		<div class="ui segments">
+	<div class="ui one column stackable grid">
+		<div class="column">
 			<div class="ui segment">
 				<div th:replace="~{layout/header :: header}"></div>
 			</div>
 		</div>
-		<div class="ui segments">
-			<div class="ui segment">
-				<div class="ui grid">
-					<div class="row">
-						<div class="three wide column">
-							<div th:replace="~{layout/menu :: menu}"></div>
-						</div>
-						<div class="one wide column"></div>
-						<div class="twelve wide column">
 
-							<div class="ui segments">
-								<div class="ui segment">
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
 
-
-									<form class="ui form" action="#"
-										th:action="@{/rol/addrol}" th:object="${rolModel}"
-										method="POST" id="frm-rol">
-										<h4 class="ui dividing header">Formulario de Rol</h4>
-										<input type="hidden" th:field="*{idRol}"
-											th:value="${idRol}"></input>
-										<div class="required field">
-											<label>Datos</label>
-											<div class="two fields">
-												<div class="required field">
-													<input type="text" name="descripcion" placeholder="Descripcion"
-														th:field="*{descripcion}" th:value="${descripcion}">
-												</div>
-												
-												<div class="required field">
-												<select
-													class="ui dropdown" name="estadoRegistro"
-													id="estadoRegistro" th:field="*{estadoRegistro}">
-													<option value="">Seleccionar...</option>
-													<option th:each="estado : ${listEstado}"
-														th:value="${estado.valorConstraint}"
-														th:text="${estado.descConstraint}"
-														th:selected="${estado.valorConstraint==estadoRegistro}"></option>
-												</select>
-											</div>
-											</div>
-										</div>
-										<div class="one fields">
-											<div class="ui center aligned field">
-												<div class="ui buttons">
-													<button class="fluid ui primary button active"
-														type="submit" id="saveRow" name="saveRow">Guardar</button>
-													<div class="or" data-text="O"></div>
-													
-													<div class="fluid ui reset button">Limpiar Campos</div>
-												</div>
-											</div>
-										</div>
-										<!-- <button class="fluid ui primary button">Guardar</button> -->
-										<div class="ui error message"></div>
-									</form>
-									<form class="ui form" action="#" th:action="@{/rol/cancel}"
-										method="POST" id="frm-cancelar">
-										<a href="#">
-											<button class="fluid ui negative basic button">Cancelar</button>
-										</a>
-									</form>
+					<div class="ui secondary segment">
 
 
+						<form class="ui form" action="#" th:action="@{/rol/addrol}"
+							th:object="${rolModel}" method="POST" id="frm-rol">
+							<h4 class="ui dividing header">Formulario de Rol</h4>
+							<input type="hidden" th:field="*{idRol}" th:value="${idRol}"></input>
+							<div class="required field">
+								<label>Datos</label>
+								<div class="two fields">
+									<div class="required field">
+										<input type="text" name="descripcion"
+											placeholder="Descripcion" th:field="*{descripcion}"
+											th:value="${descripcion}">
+									</div>
+
+									<div class="required field">
+										<select class="ui dropdown" name="estadoRegistro"
+											id="estadoRegistro" th:field="*{estadoRegistro}">
+											<option value="">Seleccionar...</option>
+											<option th:each="estado : ${listEstado}"
+												th:value="${estado.valorConstraint}"
+												th:text="${estado.descConstraint}"></option>
+										</select>
+									</div>
 								</div>
 							</div>
+							<div class="required field">
+								<div class="required field" th:utext="${comboMenus}"></div>
 
-						</div>
+							</div>
+							<div class="one fields">
+								<div class="ui center aligned field">
+									<div class="ui buttons">
+										<button class="fluid ui primary button active" type="submit"
+											id="saveRow" name="saveRow">Guardar</button>
+										<div class="or" data-text="O"></div>
+
+										<div class="fluid ui reset button">Limpiar Campos</div>
+									</div>
+								</div>
+							</div>
+							<!-- <button class="fluid ui primary button">Guardar</button> -->
+							<div class="ui error message"></div>
+						</form>
+						<form class="ui form" action="#" th:action="@{/rol/cancel}"
+							method="POST" id="frm-cancelar">
+							<a href="#">
+								<button class="fluid ui negative basic button">Cancelar</button>
+							</a>
+						</form>
+
+
 					</div>
+
 				</div>
+				<div class="one wide column"></div>
 			</div>
+
 		</div>
 	</div>
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+		//toggleSidebar();
+	});
+
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});	  
+	</script>
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
 	</script>

@@ -1,134 +1,200 @@
 package com.corfid.fideicomisos.model.administrativo;
 
-public class PersonaModel {
-	private Integer idPersona;
+import java.util.ArrayList;
+import java.util.List;
 
-	private String nombres;
+import com.corfid.fideicomisos.model.utilities.GenericModel;
 
-	private String apePat;
+public class PersonaModel extends GenericModel {
 
-	private String apeMat;
+    private Integer idPersona;
 
-	private String nombreCompleto;
+    private String nombres;
 
-	private String razonSocial;
+    private String apePat;
 
-	private String tipoPersona;
+    private String apeMat;
 
-	private String estadoRegistro;
+    private String nombreCompleto;
 
-	private String descEstadoRegistro;
+    private String razonSocial;
 
-	private String descTipoPersona;
+    private String tipoPersona;
 
-	private String tipoDocumento;
+    private String estadoRegistro;
 
-	private String descTipoDocumento;
+    private String descEstadoRegistro;
 
-	private String numeroDocumento;
+    private String descTipoPersona;
 
-	public Integer getIdPersona() {
-		return idPersona;
-	}
+    private String tipoDocumento;
 
-	public void setIdPersona(Integer idPersona) {
-		this.idPersona = idPersona;
-	}
+    private String descTipoDocumento;
 
-	public String getNombres() {
-		return nombres;
-	}
+    private String numeroDocumento;
 
-	public void setNombres(String nombres) {
-		this.nombres = nombres;
-	}
+    private String permiteVinculacion;
 
-	public String getApePat() {
-		return apePat;
-	}
+    private String cliente;
 
-	public void setApePat(String apePat) {
-		this.apePat = apePat;
-	}
+    private String permiteVinculacionCliente;
 
-	public String getApeMat() {
-		return apeMat;
-	}
+    private List<EmpresaModel> listEmpresa = new ArrayList<EmpresaModel>();
 
-	public void setApeMat(String apeMat) {
-		this.apeMat = apeMat;
-	}
+    private String empresa;
 
-	public String getRazonSocial() {
-		return razonSocial;
-	}
+    private Integer idUsuarioRegistro;
 
-	public void setRazonSocial(String razonSocial) {
-		this.razonSocial = razonSocial;
-	}
+    public Integer getIdPersona() {
+        return idPersona;
+    }
 
-	public String getTipoPersona() {
-		return tipoPersona;
-	}
+    public void setIdPersona(Integer idPersona) {
+        this.idPersona = idPersona;
+    }
 
-	public void setTipoPersona(String tipoPersona) {
-		this.tipoPersona = tipoPersona;
-	}
+    public String getNombres() {
+        return nombres;
+    }
 
-	public String getEstadoRegistro() {
-		return estadoRegistro;
-	}
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
 
-	public void setEstadoRegistro(String estadoRegistro) {
-		this.estadoRegistro = estadoRegistro;
-	}
+    public String getApePat() {
+        return apePat;
+    }
 
-	public String getDescEstadoRegistro() {
-		return descEstadoRegistro;
-	}
+    public void setApePat(String apePat) {
+        this.apePat = apePat;
+    }
 
-	public void setDescEstadoRegistro(String descEstadoRegistro) {
-		this.descEstadoRegistro = descEstadoRegistro;
-	}
+    public String getApeMat() {
+        return apeMat;
+    }
 
-	public String getDescTipoPersona() {
-		return descTipoPersona;
-	}
+    public void setApeMat(String apeMat) {
+        this.apeMat = apeMat;
+    }
 
-	public void setDescTipoPersona(String descTipoPersona) {
-		this.descTipoPersona = descTipoPersona;
-	}
+    public String getRazonSocial() {
+        return razonSocial;
+    }
 
-	public String getNombreCompleto() {
-		return nombreCompleto;
-	}
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
+    }
 
-	public void setNombreCompleto(String nombreCompleto) {
-		this.nombreCompleto = nombreCompleto;
-	}
+    public String getTipoPersona() {
+        return tipoPersona;
+    }
 
-	public String getTipoDocumento() {
-		return tipoDocumento;
-	}
+    public void setTipoPersona(String tipoPersona) {
+        this.tipoPersona = tipoPersona;
+    }
 
-	public void setTipoDocumento(String tipoDocumento) {
-		this.tipoDocumento = tipoDocumento;
-	}
+    public String getEstadoRegistro() {
+        return estadoRegistro;
+    }
 
-	public String getDescTipoDocumento() {
-		return descTipoDocumento;
-	}
+    public void setEstadoRegistro(String estadoRegistro) {
+        this.estadoRegistro = estadoRegistro;
+    }
 
-	public void setDescTipoDocumento(String descTipoDocumento) {
-		this.descTipoDocumento = descTipoDocumento;
-	}
+    public String getDescEstadoRegistro() {
+        return descEstadoRegistro;
+    }
 
-	public String getNumeroDocumento() {
-		return numeroDocumento;
-	}
+    public void setDescEstadoRegistro(String descEstadoRegistro) {
+        this.descEstadoRegistro = descEstadoRegistro;
+    }
 
-	public void setNumeroDocumento(String numeroDocumento) {
-		this.numeroDocumento = numeroDocumento;
-	}
+    public String getDescTipoPersona() {
+        return descTipoPersona;
+    }
+
+    public void setDescTipoPersona(String descTipoPersona) {
+        this.descTipoPersona = descTipoPersona;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public String getDescTipoDocumento() {
+        return descTipoDocumento;
+    }
+
+    public void setDescTipoDocumento(String descTipoDocumento) {
+        this.descTipoDocumento = descTipoDocumento;
+    }
+
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
+
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
+    }
+
+    public String getPermiteVinculacion() {
+        return permiteVinculacion;
+    }
+
+    public void setPermiteVinculacion(String permiteVinculacion) {
+        this.permiteVinculacion = permiteVinculacion;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public List<EmpresaModel> getListEmpresa() {
+        return listEmpresa;
+    }
+
+    public void setListEmpresa(List<EmpresaModel> listEmpresa) {
+        this.listEmpresa = listEmpresa;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    public Integer getIdUsuarioRegistro() {
+        return idUsuarioRegistro;
+    }
+
+    public void setIdUsuarioRegistro(Integer idUsuarioRegistro) {
+        this.idUsuarioRegistro = idUsuarioRegistro;
+    }
+
+    public String getPermiteVinculacionCliente() {
+        return permiteVinculacionCliente;
+    }
+
+    public void setPermiteVinculacionCliente(String permiteVinculacionCliente) {
+        this.permiteVinculacionCliente = permiteVinculacionCliente;
+    }
 
 }

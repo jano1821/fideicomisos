@@ -80,5 +80,4 @@ public class MenuModel {
 	public void setDescEstadoRegistro(String descEstadoRegistro) {
 		this.descEstadoRegistro = descEstadoRegistro;
 	}
-
 }

@@ -21,9 +21,12 @@ public interface MenuRepository extends JpaRepository<Menu, Serializable> {
 	public abstract Page<Menu> listMenuByDescripcionPaginado(@Param("descripcion") String descripcion,
 			Pageable pageable);
 
-	@Query(value = "SELECT m FROM Menu m INNER JOIN MenuRol r ON m.idMenu = r.menu.idMenu WHERE r.rol.idRol IN (:roles) AND m.estadoRegistro='S' ORDER BY m.idMenuPadre, m.idMenu ")
+	@Query(value = "SELECT m FROM Menu m INNER JOIN MenuRol r ON m.idMenu = r.menu.idMenu WHERE r.rol.idRol IN (:roles) AND m.estadoRegistro='S' ORDER BY m.idMenuPadre, m.tipoMenu desc, m.idMenu ")
 	public abstract List<Menu> listMenuPorRoles(@Param("roles") Collection<Integer> roles);
+	
+	@Query(value = "SELECT m FROM Menu m INNER JOIN MenuRol r ON m.idMenu = r.menu.idMenu WHERE r.rol.idRol IN (:roles)")
+	public abstract List<Menu> listAllMenuPorRoles(@Param("roles") Collection<Integer> roles);
 
-	@Query(value = "SELECT m FROM Menu m WHERE m.estadoRegistro='S' AND m.tipoMenu = 'P' ORDER BY m.idMenuPadre")
+	@Query(value = "SELECT m FROM Menu m WHERE m.tipoMenu = 'P' ORDER BY m.idMenuPadre")
 	public abstract List<Menu> listMenuPadres();
 }

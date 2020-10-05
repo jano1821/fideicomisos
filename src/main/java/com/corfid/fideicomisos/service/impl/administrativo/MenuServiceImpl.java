@@ -101,6 +101,7 @@ public class MenuServiceImpl extends AbstractService implements MenuInterface {
 		}
 	}
 	
+	//Este método obtienen los menus vigentes en base a una coleccion de id de roles ordenados
 	@Override
 	public List<MenuModel> obtenerMenuByRol(Collection<Integer> roles){
 		List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
@@ -120,6 +121,20 @@ public class MenuServiceImpl extends AbstractService implements MenuInterface {
 		List<Menu> listMenu = new ArrayList<Menu>();
 		
 		listMenu = menuRepository.listMenuPadres();
+		
+		for (Menu menu : listMenu) {
+			listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+		}
+		return listMenuModel;
+	}
+	
+	//Este método obtiene todos los menus en base a una coleccion de id de roles sin importar su estado de registro
+	@Override
+	public List<MenuModel> obtenerAllMenuByRol(Collection<Integer> roles){
+		List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+		List<Menu> listMenu = new ArrayList<Menu>();
+		
+		listMenu = menuRepository.listAllMenuPorRoles(roles);
 		
 		for (Menu menu : listMenu) {
 			listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));

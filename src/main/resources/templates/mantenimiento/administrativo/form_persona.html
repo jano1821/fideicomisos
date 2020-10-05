@@ -14,134 +14,296 @@
 </head>
 
 <body>
-	<div class="ui container">
-		<div class="ui segments">
+	<div class="ui one column stackable grid">
+		<div class="column">
 			<div class="ui segment">
 				<div th:replace="~{layout/header :: header}"></div>
 			</div>
 		</div>
-		<div class="ui segments">
-			<div class="ui segment">
-				<div class="ui grid">
-					<div class="row">
-						<div class="three wide column">
-							<div th:replace="~{layout/menu :: menu}"></div>
-						</div>
-						<div class="one wide column"></div>
-						<div class="twelve wide column">
 
-							<div class="ui segments">
-								<div class="ui segment">
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
 
+					<div class="ui secondary segment">
 
-									<form class="ui form" action="#"
-										th:action="@{/persona/addpersona}" th:object="${personaModel}"
-										method="POST" id="frm-persona">
-										<h4 class="ui dividing header">Formulario de Persona</h4>
-										<input type="hidden" th:field="*{idPersona}"
-											th:value="${idPersona}"></input>
-										<div class="required field">
-											<label>Nombres y Apellidos</label>
-											<div class="three fields">
-												<div class="field">
-													<input type="text" name="nombres" placeholder="Nombres"
-														th:field="*{nombres}" th:value="${nombres}">
-												</div>
-												<div class="field">
-													<input type="text" name="apePat"
-														placeholder="Apellido Paterno" th:field="*{apePat}"
-														th:value="${apePat}">
-												</div>
-												<div class="field">
-													<input type="text" name="apeMaterno"
-														placeholder="Apellido Mat" th:field="*{apeMat}"
-														th:value="${apeMat}">
-												</div>
-											</div>
+						<form class="ui form" action="#"
+							th:action="@{/persona/addpersona}" th:object="${personaModel}"
+							method="POST" id="frm-persona">
+							<h4 class="ui dividing header">Formulario de Persona</h4>
+							<input type="hidden" th:field="*{idPersona}"
+								th:value="${idPersona}"></input> <input type="hidden" id="modo"
+								name="modo" th:value="${personaModel.edicion}"></input>
+
+							<div class="three fields">
+								<div class="required field">
+									<label>Tipo de Documento</label> <select class="ui dropdown"
+										name="tipoDocumento" id="tipoDocumento"
+										th:field="*{tipoDocumento}">
+										<option value="">Seleccionar...</option>
+										<option th:each="doc : ${listTipoDocumento}"
+											th:value="${doc.valorConstraint}"
+											th:text="${doc.descConstraint}"
+											th:selected="${doc.valorConstraint==tipoDocumento}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Numero de Documento</label>
+									<div class="field">
+										<input type="text" name="numeroDocumento" id="numeroDocumento"
+											placeholder="Numero de Documento"
+											th:field="*{numeroDocumento}" th:value="${numeroDocumento}">
+									</div>
+								</div>
+								<div class="required field">
+									<label>Tipo de Persona</label>
+									<div class="ui disabled input">
+										<input type="text" name="descTipoPersona" id="descTipoPersona"
+											placeholder="Tipo de persona" th:field="*{descTipoPersona}"
+											th:value="${descTipoPersona}">
+									</div>
+								</div>
+
+							</div>
+							<div id="datos">
+								<div class="required field">
+									<label>Nombres y Apellidos</label>
+									<div class="three fields">
+										<div class="field">
+											<input type="text" name="nombres" id="nombres"
+												placeholder="Nombres" th:field="*{nombres}"
+												th:value="${nombres}">
 										</div>
-										<div class="two fields">
-											<div class="required field">
-												<label>Tipo de Persona</label> <select
-													class="ui fluid dropdown" name="tipoPersona"
-													id="tipoPersona" th:field="*{tipoPersona}">
-													<option value="">Seleccionar...</option>
-													<option th:each="tipo : ${listTipoPersona}"
-														th:value="${tipo.valorConstraint}"
-														th:text="${tipo.descConstraint}"
-														th:selected="${tipo.valorConstraint==tipoPersona}"></option>
-												</select>
-											</div>
-											<div class="required field">
-												<label>Estado de Registro</label> <select
-													class="ui dropdown" name="estadoRegsitro"
-													id="estadoRegsitro" th:field="*{estadoRegistro}">
-													<option value="">Seleccionar...</option>
-													<option th:each="estado : ${listEstadoRegistro}"
-														th:value="${estado.valorConstraint}"
-														th:text="${estado.descConstraint}"
-														th:selected="${estado.valorConstraint==estadoRegistro}"></option>
-												</select>
-											</div>
+										<div class="field">
+											<input type="text" name="apePat" id="apePat"
+												placeholder="Apellido Paterno" th:field="*{apePat}"
+												th:value="${apePat}">
 										</div>
-
-
-										<div class="two fields">
-											<div class="required field">
-												<label>Tipo de Documento</label> <select class="ui dropdown"
-													name="tipoDocumento" id="tipoDocumento"
-													th:field="*{tipoDocumento}">
-													<option value="">Seleccionar...</option>
-													<option th:each="doc : ${listTipoDocumento}"
-														th:value="${doc.valorConstraint}"
-														th:text="${doc.descConstraint}"
-														th:selected="${doc.valorConstraint==tipoDocumento}"></option>
-												</select>
-											</div>
-											<div class="required field">
-												<label>Numero de Documento</label>
-												<div class="field">
-													<input type="text" name="numeroDocumento"
-														placeholder="Numero de Documento"
-														th:field="*{numeroDocumento}"
-														th:value="${numeroDocumento}">
-												</div>
-											</div>
+										<div class="field">
+											<input type="text" name="apeMat" id="apeMat"
+												placeholder="Apellido Materno" th:field="*{apeMat}"
+												th:value="${apeMat}">
 										</div>
-
-										<div class="one fields">
-											<div class="ui center aligned field">
-												<div class="ui buttons">
-													<button class="fluid ui primary button active"
-														type="submit" id="saveRow" name="saveRow">Guardar</button>
-													<div class="or" data-text="O"></div>
-
-													<div class="fluid ui reset button">Limpiar Campos</div>
-												</div>
-											</div>
-										</div>
-										<!-- <button class="fluid ui primary button">Guardar</button> -->
-										<div class="ui error message"></div>
-									</form>
-									<form class="ui form" action="#" th:action="@{/persona/cancel}"
-										method="POST" id="frm-cancelar">
-										<a href="#">
-											<button class="fluid ui negative basic button">Cancelar</button>
-										</a>
-									</form>
-
-
+									</div>
 								</div>
 							</div>
 
-						</div>
+							<div id="razon">
+								<div class="required field">
+									<label>Razon Social</label>
+									<div class="two fields">
+										<div class="field">
+											<input type="text" name="razonSocial" id="razonSocial"
+												placeholder="Razon Social" th:field="*{razonSocial}"
+												th:value="${razonSocial}">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div id="vinculacion">
+								<div class="three fields">
+									<div class="required field">
+										<label>Permite Vinculacion como Empresa</label> <select
+											class="ui fluid dropdown" name="permiteVinculacion"
+											id="permiteVinculacion" th:field="*{permiteVinculacion}">
+											<option value="">Seleccionar...</option>
+											<option value="S">Si</option>
+											<option value="N">No</option>
+										</select>
+									</div>
+									<div class="required field">
+										<label>Permite Vincular como Usuario</label> <select
+											class="ui fluid dropdown" name="permiteVinculacionCliente"
+											id="permiteVinculacionCliente"
+											th:field="*{permiteVinculacionCliente}">
+											<option value="">Seleccionar...</option>
+											<option value="S">Si</option>
+											<option value="N">No</option>
+										</select>
+									</div>
+									<div class="required field">
+										<label>Estado de Registro</label> <select class="ui dropdown"
+											name="estadoRegistro" id="estadoRegistro"
+											th:field="*{estadoRegistro}">
+											<option value="">Seleccionar...</option>
+											<option th:each="estado : ${listEstadoRegistro}"
+												th:value="${estado.valorConstraint}"
+												th:text="${estado.descConstraint}"
+												th:selected="${estado.valorConstraint==estadoRegistro}"></option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="required field"
+								th:if="${personaModel.edicion == 'S' && personaModel.cliente == 'S'}">
+								<div class="required field" th:utext="${comboEmpresas}"></div>
+
+							</div>
+
+							<div class="one fields">
+								<div class="ui center aligned field">
+									<div class="ui buttons">
+										<button class="fluid ui primary button active" type="submit"
+											id="saveRow" name="saveRow">Guardar</button>
+										<div class="or" data-text="O"></div>
+
+										<div class="fluid ui reset button">Limpiar Campos</div>
+									</div>
+								</div>
+							</div>
+							<div class="ui error message"></div>
+						</form>
+						
+						<div id="feedback"></div>
+						
+						<form class="ui form" action="#" th:action="@{/persona/cancel}"
+							method="POST" id="frm-cancelar">
+							<a href="#">
+								<button class="fluid ui negative basic button">Cancelar</button>
+							</a>
+						</form>
+
 					</div>
+
 				</div>
+				<div class="one wide column"></div>
 			</div>
+
 		</div>
 	</div>
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+		//toggleSidebar();
+	});
+
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});	  
+	</script>
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
 	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			if ($('#modo').val() == 'N'){
+				$('#datos').hide();
+				$('#razon').hide();
+				$('#vinculacion').hide();
+			} else {
+				if ($("#tipoDocumento").val() == 'RUC'){
+					$('#datos').hide();
+				} else {
+					$('#razon').hide();
+				}
+			}
+			/*$("#tipoDocumento").on( "change", function() {
+				if ($(this).val() == 'RUC'){
+					$('#datos').hide();
+					$('#razon').show();
+					$('#vinculacion').show();
+					$('#razonSocial').val('');
+					$('#nombres').val('-');
+					$('#apePat').val('-');
+					$('#apeMat').val('-');
+					$('#descTipoPersona').val('Juridica');
+				} else {
+					$('#datos').show();
+					$('#razon').hide();
+					$('#vinculacion').show();
+					$('#razonSocial').val('-');
+					$('#nombres').val('');
+					$('#apePat').val('');
+					$('#apeMat').val('');
+					$('#descTipoPersona').val('Natural');
+				}
+				
+			});*/
+		});
+	</script>
+	
+	
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+		    $("#numeroDocumento").keypress(function(e) {
+		        var code = (e.keyCode ? e.keyCode : e.which);
+		        if(code==13){
+		            buscarPersonaAjax();
+		        }
+		    });
+		});
+	</script>
+	
+	<script type="text/javascript">
+	function buscarPersonaAjax(){
+		/*$(document).ready(function () {
+		    $("#frm-persona").submit(function (event) {*/
+		 
+		        event.preventDefault();
+		 
+		        var datosPersona = {}
+		        datosPersona["tipoDocumento"] = $("#tipoDocumento").val();
+		        datosPersona["numeroDocumento"] = $("#numeroDocumento").val();
+		 
+		        //$("#btn-login").prop("disabled", true);
+		        
+		        $.ajax({
+		            type: "POST",
+		            contentType: "application/json",
+		            url: "/persona/validarExistencia",
+		            data: JSON.stringify(datosPersona),
+		            dataType: 'json',
+		            cache: false,
+		            timeout: 600000,
+		            success: function (data) {
+		 
+		                var json = "<h4>Ajax Response</h4><pre>"
+		                    + JSON.stringify(data, null, 4) + "</pre>";
+		                $('#feedback').html(json);
+		 
+		                //console.log("SUCCESS : ", data);
+		                //$("#btn-login").prop("disabled", false);
+		 
+		            },
+		            error: function (e) {
+		 
+		                var json = "<h4>Ajax Response Error</h4><pre>"
+		                    + e.responseText + "</pre>";
+		                $('#feedback').html(json);
+		 
+		                //console.log("ERROR : ", e);
+		                //$("#btn-login").prop("disabled", false);
+		 
+		            }
+		        });
+		        
+		  /*  });*/
+		 
+		/*});*/
+	}
+	</script>
+
 	<script type="text/javascript">
 		$('#frm-persona').form({
 			on : 'blur',
@@ -167,6 +329,13 @@
 						prompt : 'Por Favor Ingrese Apellido Materno'
 					} ]
 				},
+				razonSocial : {
+					identifier : 'razonSocial',
+					rules : [ {
+						type : 'empty',
+						prompt : 'Por Favor Ingrese Razón Social'
+					} ]
+				},
 				tipoPersona : {
 					identifier : 'tipoPersona',
 					rules : [ {
@@ -186,6 +355,13 @@
 					rules : [ {
 						type : 'empty',
 						prompt : 'Por Favor Ingrese Tipo de Documento'
+					} ]
+				},
+				numeroDocumento : {
+					identifier : 'numeroDocumento',
+					rules : [ {
+						type : 'empty',
+						prompt : 'Por Favor Ingrese Tipo de Numero de Documento'
 					} ]
 				},
 				numeroDocumento : {

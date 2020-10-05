@@ -1,13 +1,16 @@
 package com.corfid.fideicomisos.entity.administrativo;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -15,19 +18,19 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 
 @Entity
 @Table(name = "admempre")
-public class Empresa extends Auditoria {
+public class Empresa extends Auditoria implements Serializable{
+	
+	private static final long serialVersionUID = 983483323578679849L;
 	@Id
-	@GeneratedValue
 	@Column(name = "n_idempr", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
 	private Integer idEmpresa;
-
-	@OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "n_idpers", nullable = false, insertable = true, updatable = true)
+	
+	@OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "n_idempr", nullable = false, insertable = true, updatable = true)
 	private Persona persona;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "n_idclie", nullable = false, insertable = true, updatable = true)
-	private Cliente cliente;
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "empresas")
+	private Set<Cliente> clientes = new HashSet<Cliente>();
 
 	public Integer getIdEmpresa() {
 		return idEmpresa;
@@ -45,19 +48,19 @@ public class Empresa extends Auditoria {
 		this.persona = persona;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public Set<Cliente> getClientes() {
+		return clientes;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setClientes(Set<Cliente> clientes) {
+		this.clientes = clientes;
 	}
 
-	public Empresa(Integer idEmpresa, Persona persona, Cliente cliente) {
+	public Empresa(Integer idEmpresa, Persona persona, Set<Cliente> clientes) {
 		super();
 		this.idEmpresa = idEmpresa;
 		this.persona = persona;
-		this.cliente = cliente;
+		this.clientes = clientes;
 	}
 
 	public Empresa() {

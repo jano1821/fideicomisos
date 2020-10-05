@@ -14,89 +14,160 @@ import com.corfid.fideicomisos.model.administrativo.RolModel;
 import com.corfid.fideicomisos.model.cruds.CrudRolModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.RolRepository;
+import com.corfid.fideicomisos.service.administrativo.MenuRolInterface;
 import com.corfid.fideicomisos.service.administrativo.RolInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
 
 @Service("rolServiceImpl")
-public class RolServiceImpl  extends AbstractService implements RolInterface {
-	@Autowired
-	@Qualifier("rolRepository")
-	private RolRepository rolRepository;
+public class RolServiceImpl extends AbstractService implements RolInterface {
 
-	@Autowired
-	@Qualifier("rolConverter")
-	private RolConverter rolConverter;
+    @Autowired
+    @Qualifier("rolRepository")
+    private RolRepository rolRepository;
 
-	@Override
-	public List<RolModel> listAllRoles() {
-		List<Rol> listRol = rolRepository.findAll();
-		List<RolModel> listRolModel = new ArrayList<RolModel>();
+    @Autowired
+    @Qualifier("rolConverter")
+    private RolConverter rolConverter;
 
-		for (Rol rol : listRol) {
-			listRolModel.add(rolConverter.convertRolToRolModel(rol));
-		}
+    @Autowired
+    @Qualifier("menuRolServiceImpl")
+    MenuRolInterface menuRolInterface;
 
-		return listRolModel;
-	}
+    @Override
+    public List<RolModel> listAllRoles() {
+        List<Rol> listRol = rolRepository.findAll();
+        List<RolModel> listRolModel = new ArrayList<RolModel>();
 
-	@Override
-	public CrudRolModel listRolByDescripcionPaginado(String descripcion, Integer pagina, Integer cant) {
-		List<Rol> listRol;
-		List<RolModel> listRolModel = new ArrayList<RolModel>();
-		Page<Rol> pageRol;
-		CrudRolModel crudRolModel = new CrudRolModel();
+        for (Rol rol : listRol) {
+            listRolModel.add(rolConverter.convertRolToRolModel(rol));
+        }
 
-		String cadenaRol = Constante.COMODIN_LIKE + descripcion + Constante.COMODIN_LIKE;
+        return listRolModel;
+    }
 
-		pageRol = rolRepository.listRolByDescripcionPaginado(cadenaRol,
-				obtenerIndexPorPagina(pagina, cant, "descripcion", true, false));
+    @Override
+    public CrudRolModel listRolByDescripcionPaginado(String descripcion, Integer pagina, Integer cant) {
+        List<Rol> listRol;
+        List<RolModel> listRolModel = new ArrayList<RolModel>();
+        Page<Rol> pageRol;
+        CrudRolModel crudRolModel = new CrudRolModel();
 
-		listRol = pageRol.getContent();
-		crudRolModel.setPaginaFinal(pageRol.getTotalPages());
-		crudRolModel.setCantidadRegistros(_toInteger(pageRol.getTotalElements()));
+        String cadenaRol = Constante.COMODIN_LIKE + descripcion + Constante.COMODIN_LIKE;
 
-		for (Rol rol : listRol) {
-			listRolModel.add(rolConverter.convertRolToRolModel(rol));
-		}
+        pageRol = rolRepository.listRolByDescripcionPaginado(cadenaRol,
+                                                             obtenerIndexPorPagina(pagina,
+                                                                                   cant,
+                                                                                   "descripcion",
+                                                                                   true,
+                                                                                   false));
 
-		crudRolModel.setRows(listRolModel);
+        listRol = pageRol.getContent();
+        crudRolModel.setPaginaFinal(pageRol.getTotalPages());
+        crudRolModel.setCantidadRegistros(_toInteger(pageRol.getTotalElements()));
 
-		return crudRolModel;
-	}
+        for (Rol rol : listRol) {
+            listRolModel.add(rolConverter.convertRolToRolModel(rol));
+        }
 
-	@Override
-	public Rol findRolById(Integer id) {
-		return rolRepository.findByIdRol(id);
-	}
+        crudRolModel.setRows(listRolModel);
 
-	@Override
-	public RolModel findRolByIdModel(Integer id) {
-		return rolConverter.convertRolToRolModel(findRolById(id));
-	}
+        return crudRolModel;
+    }
 
-	@Override
-	public RolModel addRol(RolModel rolModel, ParametrosAuditoriaModel parametrosAuditoriaModel) {
-		Rol rol = findRolById(rolModel.getIdRol());
+    @Override
+    public Rol findRolById(Integer id) {
+        return rolRepository.findByIdRol(id);
+    }
 
-		if (_isEmpty(rol)) {
-			rol = rolConverter.convertRolModelToRol(rolModel);
-			setInsercionAuditoria(rol, parametrosAuditoriaModel);
-		} else {
-			rol = rolConverter.convertRolModelToRolExistente(rol, rolModel);
-			setModificacionAuditoria(rol, parametrosAuditoriaModel);
-		}
+    @Override
+    public RolModel findRolByIdModel(Integer id) {
+        return rolConverter.convertRolToRolModel(findRolById(id));
+    }
 
-		rol = rolRepository.save(rol);
+    @Override
+    public RolModel addRol(RolModel rolModel, ParametrosAuditoriaModel parametrosAuditoriaModel) {
+        Rol rol = findRolById(rolModel.getIdRol());
 
-		return rolConverter.convertRolToRolModel(rol);
-	}
+        if (_isEmpty(rol)) {
+            rol = rolConverter.convertRolModelToRol(rolModel);
+            setInsercionAuditoria(rol, parametrosAuditoriaModel);
+        } else {
+            rol = rolConverter.convertRolModelToRolExistente(rol, rolModel);
+            setModificacionAuditoria(rol, parametrosAuditoriaModel);
+        }
 
-	@Override
-	public void removeRol(Integer id) {
-		Rol rol = findRolById(id);
-		if (null != rol) {
-			rolRepository.delete(rol);
-		}
-	}
+        rol = rolRepository.save(rol);
+
+        return rolConverter.convertRolToRolModel(rol);
+    }
+
+    @Override
+    public boolean updateMenuRol(String[] idMenu, Integer idRol, ParametrosAuditoriaModel parametrosAuditoriaModel) {
+        List<String> listIdMenuActual = new ArrayList<String>();
+        Integer existeNuevo = 0;
+
+        try {
+
+            listIdMenuActual = menuRolInterface.obtenerMenuByRol(idRol);
+
+            for (int i = 0; i < idMenu.length; i++) {
+                existeNuevo = 0;
+                if (!_isEmpty(listIdMenuActual)) {
+                    for (String idMenuActual : listIdMenuActual) {
+                        if (_equiv(idMenu[i], idMenuActual)) {
+                            existeNuevo++;
+                        }
+                    }
+                }
+                if (existeNuevo == 0) {
+                    menuRolInterface.addMenuRol(idRol, _toInteger(idMenu[i]), parametrosAuditoriaModel);
+                }
+            }
+
+            if (!_isEmpty(listIdMenuActual)) {
+                for (String idMenuActual : listIdMenuActual) {
+                    existeNuevo = 0;
+                    for (int i = 0; i < idMenu.length; i++) {
+                        if (_equiv(idMenuActual, idMenu[i])) {
+                            existeNuevo++;
+                        }
+                    }
+                    if (existeNuevo == 0) {
+                        menuRolInterface.removeMenuRol(idRol, _toInteger(idMenuActual), parametrosAuditoriaModel);
+                    }
+                }
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public void removeRol(Integer id) {
+        Rol rol = findRolById(id);
+        if (null != rol) {
+            rolRepository.delete(rol);
+        }
+    }
+
+    @Override
+    public List<RolModel> listAllRolesByEstadoRegistro(String estadoRegistro) throws Exception {
+        List<RolModel> listRolModel = null;
+        try {
+            List<Rol> listRol = rolRepository.findByEstadoRegistro(estadoRegistro);
+            if (!_isEmpty(listRol)) {
+                listRolModel = new ArrayList<RolModel>();
+                for (Rol rol : listRol) {
+                    listRolModel.add(rolConverter.convertRolToRolModel(rol));
+                }
+            }
+            return listRolModel;
+        } catch (Exception e) {
+            return listRolModel;
+        }
+    }
 }

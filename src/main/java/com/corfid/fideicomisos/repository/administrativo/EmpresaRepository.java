@@ -11,4 +11,10 @@ import com.corfid.fideicomisos.entity.administrativo.Empresa;
 public interface EmpresaRepository extends JpaRepository<Empresa, Serializable> {
 
 	public abstract Empresa findByIdEmpresa(Integer id);
+	
+	/*@Query(value = "SELECT m FROM Empresa m WHERE m.cliente.idCliente = :idCliente ")*/
+	//public abstract List<Empresa> listEmpresasByIdCliente(@Param("idCliente") Integer idCliente);
+	
+	/*@Query(value = "SELECT m FROM Empresa m WHERE m.cliente.idCliente = :idCliente ")*/
+	//public abstract List<Empresa> findEmpresaByIdPersona(@Param("idCliente") Integer idCliente);
 }

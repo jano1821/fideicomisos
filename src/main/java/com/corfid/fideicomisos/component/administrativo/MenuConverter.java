@@ -54,8 +54,6 @@ public class MenuConverter {
 		if (StringUtil.equiv(menu.getTipoMenu(), "P")) {
 			menuModel.setDescTipoMenu("Principal");
 		} else if (StringUtil.equiv(menu.getTipoMenu(), "H")) {
-			menuModel.setDescTipoMenu("Cabecera");
-		} else if (StringUtil.equiv(menu.getTipoMenu(), "C")) {
 			menuModel.setDescTipoMenu("Menu");
 		} else {
 			menuModel.setDescTipoMenu("Desconocido");

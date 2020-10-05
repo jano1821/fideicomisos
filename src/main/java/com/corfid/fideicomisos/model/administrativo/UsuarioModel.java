@@ -1,104 +1,169 @@
 package com.corfid.fideicomisos.model.administrativo;
 
-public class UsuarioModel {
-	private Integer idUsuario;
-	private String usuario;
-	private String password;
-	private String tipoUsuario;
-	private int idPersona;
-	private boolean estadoActividadUsuario;
-	private String estadoActividad;
-	private String descEstadoActividad;
-	private String descTipoUsuario;
-	private String estadoRegistro;
-	private String descEstadoRegistro;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-	public Integer getIdUsuario() {
-		return idUsuario;
-	}
+import com.corfid.fideicomisos.model.utilities.GenericModel;
 
-	public void setIdUsuario(Integer idUsuario) {
-		this.idUsuario = idUsuario;
-	}
+public class UsuarioModel extends GenericModel {
 
-	public String getUsuario() {
-		return usuario;
-	}
+    private Integer idUsuario;
+    private String usuario;
+    private String password;
+    private String tipoUsuario;
+    private Integer idPersona;
+    private Boolean estadoActividadUsuario;
+    private String estadoActividad;
+    private String descEstadoActividad;
+    private String descTipoUsuario;
+    private String estadoRegistro;
+    private String descEstadoRegistro;
+    private Integer idUsuarioRegistro;
+    private String cambiar;
+    private String generar;
+    private String persona;
+    private String rol;
+    private List<RolModel> listRoles = new ArrayList<RolModel>();
 
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getUsuario() {
+        return usuario;
+    }
 
-	public String getTipoUsuario() {
-		return tipoUsuario;
-	}
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
 
-	public void setTipoUsuario(String tipoUsuario) {
-		this.tipoUsuario = tipoUsuario;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public int getIdPersona() {
-		return idPersona;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setIdPersona(int idPersona) {
-		this.idPersona = idPersona;
-	}
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
 
-	public boolean isEstadoActividadUsuario() {
-		return estadoActividadUsuario;
-	}
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
 
-	public void setEstadoActividadUsuario(boolean estadoActividadUsuario) {
-		this.estadoActividadUsuario = estadoActividadUsuario;
-	}
+    public Integer getIdPersona() {
+        return idPersona;
+    }
 
-	public String getEstadoActividad() {
-		return estadoActividad;
-	}
+    public void setIdPersona(Integer idPersona) {
+        this.idPersona = idPersona;
+    }
 
-	public void setEstadoActividad(String estadoActividad) {
-		this.estadoActividad = estadoActividad;
-	}
+    public Boolean isEstadoActividadUsuario() {
+        return estadoActividadUsuario;
+    }
 
-	public String getDescEstadoActividad() {
-		return descEstadoActividad;
-	}
+    public void setEstadoActividadUsuario(Boolean estadoActividadUsuario) {
+        this.estadoActividadUsuario = estadoActividadUsuario;
+    }
 
-	public void setDescEstadoActividad(String descEstadoActividad) {
-		this.descEstadoActividad = descEstadoActividad;
-	}
+    public String getEstadoActividad() {
+        return estadoActividad;
+    }
 
-	public String getDescTipoUsuario() {
-		return descTipoUsuario;
-	}
+    public void setEstadoActividad(String estadoActividad) {
+        this.estadoActividad = estadoActividad;
+    }
 
-	public void setDescTipoUsuario(String descTipoUsuario) {
-		this.descTipoUsuario = descTipoUsuario;
-	}
+    public String getDescEstadoActividad() {
+        return descEstadoActividad;
+    }
 
-	public String getEstadoRegistro() {
-		return estadoRegistro;
-	}
+    public void setDescEstadoActividad(String descEstadoActividad) {
+        this.descEstadoActividad = descEstadoActividad;
+    }
 
-	public void setEstadoRegistro(String estadoRegistro) {
-		this.estadoRegistro = estadoRegistro;
-	}
+    public String getDescTipoUsuario() {
+        return descTipoUsuario;
+    }
 
-	public String getDescEstadoRegistro() {
-		return descEstadoRegistro;
-	}
+    public void setDescTipoUsuario(String descTipoUsuario) {
+        this.descTipoUsuario = descTipoUsuario;
+    }
 
-	public void setDescEstadoRegistro(String descEstadoRegistro) {
-		this.descEstadoRegistro = descEstadoRegistro;
-	}
+    public String getEstadoRegistro() {
+        return estadoRegistro;
+    }
+
+    public void setEstadoRegistro(String estadoRegistro) {
+        this.estadoRegistro = estadoRegistro;
+    }
+
+    public String getDescEstadoRegistro() {
+        return descEstadoRegistro;
+    }
+
+    public void setDescEstadoRegistro(String descEstadoRegistro) {
+        this.descEstadoRegistro = descEstadoRegistro;
+    }
+
+    public Integer getIdUsuarioRegistro() {
+        return idUsuarioRegistro;
+    }
+
+    public void setIdUsuarioRegistro(Integer idUsuarioRegistro) {
+        this.idUsuarioRegistro = idUsuarioRegistro;
+    }
+
+    public String getCambiar() {
+        return cambiar;
+    }
+
+    public void setCambiar(String cambiar) {
+        this.cambiar = cambiar;
+    }
+
+    public String getPersona() {
+        return persona;
+    }
+
+    public void setPersona(String persona) {
+        this.persona = persona;
+    }
+
+    public String getGenerar() {
+        return generar;
+    }
+
+    public void setGenerar(String generar) {
+        this.generar = generar;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public Boolean getEstadoActividadUsuario() {
+        return estadoActividadUsuario;
+    }
+
+    public List<RolModel> getListRoles() {
+        return listRoles;
+    }
+
+    public void setListRoles(List<RolModel> listRoles) {
+        this.listRoles = listRoles;
+    }
 
 }
