@@ -1,83 +1,105 @@
 package com.corfid.fideicomisos.model.administrativo;
 
 public class MenuModel {
-	private Integer idMenu;
 
-	private String descripcion;
+    private Integer idMenu;
 
-	private String url;
+    private String descripcion;
 
-	private String tipoMenu;
+    private String url;
 
-	private String descTipoMenu;
+    private String tipoMenu;
 
-	private Integer idMenuPadre;
+    private String descTipoMenu;
 
-	private String estadoRegistro;
+    private Integer idMenuPadre;
 
-	private String descEstadoRegistro;
+    private String estadoRegistro;
 
-	public Integer getIdMenu() {
-		return idMenu;
-	}
+    private String descEstadoRegistro;
 
-	public void setIdMenu(Integer idMenu) {
-		this.idMenu = idMenu;
-	}
+    private String tipoUsuarioSesion;
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    private Integer idUsuarioRegistro;
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public Integer getIdMenu() {
+        return idMenu;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public void setIdMenu(Integer idMenu) {
+        this.idMenu = idMenu;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public String getTipoMenu() {
-		return tipoMenu;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setTipoMenu(String tipoMenu) {
-		this.tipoMenu = tipoMenu;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public String getDescTipoMenu() {
-		return descTipoMenu;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public void setDescTipoMenu(String descTipoMenu) {
-		this.descTipoMenu = descTipoMenu;
-	}
+    public String getTipoMenu() {
+        return tipoMenu;
+    }
 
-	public Integer getIdMenuPadre() {
-		return idMenuPadre;
-	}
+    public void setTipoMenu(String tipoMenu) {
+        this.tipoMenu = tipoMenu;
+    }
 
-	public void setIdMenuPadre(Integer idMenuPadre) {
-		this.idMenuPadre = idMenuPadre;
-	}
+    public String getDescTipoMenu() {
+        return descTipoMenu;
+    }
 
-	public String getEstadoRegistro() {
-		return estadoRegistro;
-	}
+    public void setDescTipoMenu(String descTipoMenu) {
+        this.descTipoMenu = descTipoMenu;
+    }
 
-	public void setEstadoRegistro(String estadoRegistro) {
-		this.estadoRegistro = estadoRegistro;
-	}
+    public Integer getIdMenuPadre() {
+        return idMenuPadre;
+    }
 
-	public String getDescEstadoRegistro() {
-		return descEstadoRegistro;
-	}
+    public void setIdMenuPadre(Integer idMenuPadre) {
+        this.idMenuPadre = idMenuPadre;
+    }
 
-	public void setDescEstadoRegistro(String descEstadoRegistro) {
-		this.descEstadoRegistro = descEstadoRegistro;
-	}
+    public String getEstadoRegistro() {
+        return estadoRegistro;
+    }
+
+    public void setEstadoRegistro(String estadoRegistro) {
+        this.estadoRegistro = estadoRegistro;
+    }
+
+    public String getDescEstadoRegistro() {
+        return descEstadoRegistro;
+    }
+
+    public void setDescEstadoRegistro(String descEstadoRegistro) {
+        this.descEstadoRegistro = descEstadoRegistro;
+    }
+
+    public String getTipoUsuarioSesion() {
+        return tipoUsuarioSesion;
+    }
+
+    public void setTipoUsuarioSesion(String tipoUsuarioSesion) {
+        this.tipoUsuarioSesion = tipoUsuarioSesion;
+    }
+
+    public Integer getIdUsuarioRegistro() {
+        return idUsuarioRegistro;
+    }
+
+    public void setIdUsuarioRegistro(Integer idUsuarioRegistro) {
+        this.idUsuarioRegistro = idUsuarioRegistro;
+    }
+
 }

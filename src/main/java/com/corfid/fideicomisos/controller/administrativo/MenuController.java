@@ -81,13 +81,17 @@ public class MenuController extends InitialController {
 	}
 
 	@PostMapping("/addmenu")
-	public ModelAndView registrarMenu(@ModelAttribute(name = "menuModel") MenuModel menuModel, Model model) {
+	public ModelAndView registrarMenu(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+	                                  @ModelAttribute(name = "menuModel") MenuModel menuModel, Model model) {
 		Date fechaAndHoraActual = getFechaAndHoraActual();
 		CrudMenuModel crudMenuModel = new CrudMenuModel();
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		setParametrosAuditoriaModel(fechaAndHoraActual, user.getUsername(), obtenerIp(), fechaAndHoraActual,
 				user.getUsername(), obtenerIp());
 
+		menuModel.setIdUsuarioRegistro(datosGenerales.getIdUsuario());
+		menuModel.setTipoUsuarioSesion(datosGenerales.getTipoUsuarioSession());
+		
 		if (!StringUtil.isEmpty(menuInterface.addMenu(menuModel, getParametrosAuditoriaModel()))) {
 			crudMenuModel.setResult(Constante.RESULT_CORRECTO);
 		} else {
