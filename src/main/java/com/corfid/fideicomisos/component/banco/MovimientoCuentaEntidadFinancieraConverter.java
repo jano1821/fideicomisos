@@ -1,0 +1,29 @@
+package com.corfid.fideicomisos.component.banco;
+
+import org.springframework.stereotype.Component;
+
+import com.corfid.fideicomisos.entity.banco.MovimientoCuentaEntidadFinanciera;
+import com.corfid.fideicomisos.model.banco.MovimientoCuentaEntidadFinancieraModel;
+
+@Component("movimientoCuentaEntidadFinancieraConverter")
+public class MovimientoCuentaEntidadFinancieraConverter {
+
+	public MovimientoCuentaEntidadFinancieraModel convertMovimientoCuentaEntidadFinancieraToMovimientoCuentaEntidadFinancieraModel(
+			MovimientoCuentaEntidadFinanciera movimientoCuentaEntidadFinanciera) {
+
+		MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel = new MovimientoCuentaEntidadFinancieraModel();
+		
+		movimientoCuentaEntidadFinancieraModel.setIdentificadorMovimientoCuentaEntidadFinanciera(movimientoCuentaEntidadFinanciera.getIdentificadorMovimientoCuentaEntidadFinanciera());
+		movimientoCuentaEntidadFinancieraModel.setDescripcionMovimiento(movimientoCuentaEntidadFinanciera.getDescripcionMovimiento());
+		movimientoCuentaEntidadFinancieraModel.setAbreviaturaDescripcionMovimiento(movimientoCuentaEntidadFinanciera.getAbreviaturaDescripcionMovimiento());
+		movimientoCuentaEntidadFinancieraModel.setNumeroOperacionMovimiento(movimientoCuentaEntidadFinanciera.getNumeroOperacionMovimiento());
+		movimientoCuentaEntidadFinancieraModel.setDescripcionOficinaMovimiento(movimientoCuentaEntidadFinanciera.getDescripcionOficinaMovimiento());
+		movimientoCuentaEntidadFinancieraModel.setFechaProcesoMovimiento(movimientoCuentaEntidadFinanciera.getFechaProcesoMovimiento());
+		movimientoCuentaEntidadFinancieraModel.setFechaValutaMovimiento(movimientoCuentaEntidadFinanciera.getFechaValutaMovimiento());
+		movimientoCuentaEntidadFinancieraModel.setMontoCargoMovimiento(movimientoCuentaEntidadFinanciera.getMontoCargoMovimiento());
+		movimientoCuentaEntidadFinancieraModel.setMontoAbonoMovimiento(movimientoCuentaEntidadFinanciera.getMontoAbonoMovimiento());
+
+		return movimientoCuentaEntidadFinancieraModel;
+	}
+
+}

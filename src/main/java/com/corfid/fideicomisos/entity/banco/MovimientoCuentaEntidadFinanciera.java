@@ -32,6 +32,9 @@ public class MovimientoCuentaEntidadFinanciera extends Auditoria {
 	@Column(name = "c_desmov", nullable = false, insertable = true, updatable = true, length = 50)
 	private String descripcionMovimiento;
 
+	@Column(name = "c_abrmov", nullable = false, insertable = true, updatable = true, length = 10)
+	private String abreviaturaDescripcionMovimiento;
+
 	@Column(name = "c_numope", nullable = false, insertable = true, updatable = true, length = 20)
 	private String numeroOperacionMovimiento;
 
@@ -75,6 +78,14 @@ public class MovimientoCuentaEntidadFinanciera extends Auditoria {
 
 	public void setDescripcionMovimiento(String descripcionMovimiento) {
 		this.descripcionMovimiento = descripcionMovimiento;
+	}
+
+	public String getAbreviaturaDescripcionMovimiento() {
+		return abreviaturaDescripcionMovimiento;
+	}
+
+	public void setAbreviaturaDescripcionMovimiento(String abreviaturaDescripcionMovimiento) {
+		this.abreviaturaDescripcionMovimiento = abreviaturaDescripcionMovimiento;
 	}
 
 	public String getNumeroOperacionMovimiento() {
@@ -143,12 +154,13 @@ public class MovimientoCuentaEntidadFinanciera extends Auditoria {
 	}
 
 	public MovimientoCuentaEntidadFinanciera(Integer identificadorMovimientoCuentaEntidadFinanciera,
-			String descripcionMovimiento, String numeroOperacionMovimiento, String descripcionOficinaMovimiento,
-			Date fechaProcesoMovimiento, Date fechaValutaMovimiento, Double montoCargoMovimiento,
-			Double montoAbonoMovimiento, CuentaEntidadFinanciera cuentaEntidadFinanciera) {
+			String descripcionMovimiento, String abreviaturaDescripcionMovimiento, String numeroOperacionMovimiento,
+			String descripcionOficinaMovimiento, Date fechaProcesoMovimiento, Date fechaValutaMovimiento,
+			Double montoCargoMovimiento, Double montoAbonoMovimiento, CuentaEntidadFinanciera cuentaEntidadFinanciera) {
 		super();
 		this.identificadorMovimientoCuentaEntidadFinanciera = identificadorMovimientoCuentaEntidadFinanciera;
 		this.descripcionMovimiento = descripcionMovimiento;
+		this.abreviaturaDescripcionMovimiento = abreviaturaDescripcionMovimiento;
 		this.numeroOperacionMovimiento = numeroOperacionMovimiento;
 		this.descripcionOficinaMovimiento = descripcionOficinaMovimiento;
 		this.fechaProcesoMovimiento = fechaProcesoMovimiento;

@@ -1,18 +1,25 @@
 package com.corfid.fideicomisos.model.banco;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class PosicionBancoModel extends PaginacionGeneralModel{
+public class PosicionBancoModel extends PaginacionGeneralModel {
 
 	private Integer identificadorFideicomiso;
+	private Integer identificadorCuentaEntidadFinanciera;
 	private String nombreFideicomiso;
 	private String numeroCuentaEntidadFinanciera;
 	private String nombreEntidadFinanciera;
+	private String acronimoEntidadFinanciera;
+	private String isoMonedaCuentaEntidadFinanciera;
 	private String descripcionMonedaCuentaEntidadFinanciera;
 	private String descripcionCuentaEntidadFinanciera;
 	private Double saldoContableActual;
 	private Double saldoDisponibleActual;
 	private Date fechaUltimaActualizacion;
+
+	public List<PosicionBancoModel> rows = new ArrayList<PosicionBancoModel>();
 
 	public Integer getIdentificadorFideicomiso() {
 		return identificadorFideicomiso;
@@ -20,6 +27,14 @@ public class PosicionBancoModel extends PaginacionGeneralModel{
 
 	public void setIdentificadorFideicomiso(Integer identificadorFideicomiso) {
 		this.identificadorFideicomiso = identificadorFideicomiso;
+	}
+
+	public Integer getIdentificadorCuentaEntidadFinanciera() {
+		return identificadorCuentaEntidadFinanciera;
+	}
+
+	public void setIdentificadorCuentaEntidadFinanciera(Integer identificadorCuentaEntidadFinanciera) {
+		this.identificadorCuentaEntidadFinanciera = identificadorCuentaEntidadFinanciera;
 	}
 
 	public String getNombreFideicomiso() {
@@ -44,6 +59,22 @@ public class PosicionBancoModel extends PaginacionGeneralModel{
 
 	public void setNombreEntidadFinanciera(String nombreEntidadFinanciera) {
 		this.nombreEntidadFinanciera = nombreEntidadFinanciera;
+	}
+
+	public String getAcronimoEntidadFinanciera() {
+		return acronimoEntidadFinanciera;
+	}
+
+	public void setAcronimoEntidadFinanciera(String acronimoEntidadFinanciera) {
+		this.acronimoEntidadFinanciera = acronimoEntidadFinanciera;
+	}
+
+	public String getIsoMonedaCuentaEntidadFinanciera() {
+		return isoMonedaCuentaEntidadFinanciera;
+	}
+
+	public void setIsoMonedaCuentaEntidadFinanciera(String isoMonedaCuentaEntidadFinanciera) {
+		this.isoMonedaCuentaEntidadFinanciera = isoMonedaCuentaEntidadFinanciera;
 	}
 
 	public String getDescripcionMonedaCuentaEntidadFinanciera() {
@@ -84,6 +115,14 @@ public class PosicionBancoModel extends PaginacionGeneralModel{
 
 	public void setFechaUltimaActualizacion(Date fechaUltimaActualizacion) {
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+	}
+
+	public List<PosicionBancoModel> getRows() {
+		return rows;
+	}
+
+	public void setRows(List<PosicionBancoModel> rows) {
+		this.rows = rows;
 	}
 
 }

@@ -14,8 +14,8 @@ import com.corfid.fideicomisos.entity.banco.Fideicomiso;
 @Repository("fideicomisoRepository")
 public interface FideicomisoRepository extends JpaRepository<Fideicomiso, Serializable> {
 
-	@Query(value = "SELECT FICO.n_idfico, FICO.c_nomfid, CUFI.c_desenf, CUFI.c_desmon, CUFI.c_numcta, "
-			+ "CUFI.c_descef, CUFI.n_salcon, CUFI.n_saldis, CUFI.d_ulfeac "
+	@Query(value = "SELECT FICO.n_idfico, FICO.c_nomfid, CUFI.c_acoenf, CUFI.c_isomon, CUFI.c_numcta, "
+			+ "CUFI.c_descef, CUFI.n_salcon, CUFI.n_saldis, CUFI.d_ulfeac, CUFI.n_idcufi "
 			+ "FROM banmfisa FISA INNER JOIN bandfifo FIFO ON FISA.n_idfisa = FIFO.n_idfisa "
 			+ "INNER JOIN banmfico FICO ON FIFO.n_idfico = FICO.n_idfico "
 			+ "INNER JOIN banmcufi CUFI ON FICO.n_idfico = CUFI.n_idfico "
@@ -26,28 +26,61 @@ public interface FideicomisoRepository extends JpaRepository<Fideicomiso, Serial
 					+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND FICO.a_estreg = 'S' AND CUFI.a_estreg = 'S'", 
 		   nativeQuery = true)
 	public abstract Page<Object> getListFideicomisoCuentaEntidadFinancieraByIdFideicomisario(
-			@Param("identificadorFideicomisario") String identificadorFideicomisario, Pageable pageable);
+			@Param("identificadorFideicomisario") Integer identificadorFideicomisario, Pageable pageable);
 	
-	@Query(value = "SELECT FICO.n_idfico, FICO.c_nomfid, CUFI.c_desenf, CUFI.c_desmon, CUFI.c_numcta, "
-			+ "CUFI.c_descef, CUFI.n_salcon, CUFI.n_saldis, CUFI.d_ulfeac "
+	@Query(value = "SELECT FICO.n_idfico, FICO.c_nomfid, CUFI.c_acoenf, CUFI.c_isomon, CUFI.c_numcta, "
+			+ "CUFI.c_descef, CUFI.n_salcon, CUFI.n_saldis, CUFI.d_ulfeac, CUFI.n_idcufi "
 			+ "FROM banmfisa FISA INNER JOIN bandfifo FIFO ON FISA.n_idfisa = FIFO.n_idfisa "
-			+ "INNER JOIN banmfico FICO ON FIFO.n_idfico = FICO.n_idfico "			
-			+ "INNER JOIN bandfife FIFE ON FIFE.n_idfico = FICO.n_idfico "
-			+ "INNER JOIN banmfite FITE ON FITE.n_idfite = FIFE.n_idfite "			
+			+ "INNER JOIN banmfico FICO ON FIFO.n_idfico = FICO.n_idfico "					
 			+ "INNER JOIN banmcufi CUFI ON FICO.n_idfico = CUFI.n_idfico "
-			+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND FITE.n_idfite = :identificadorFideicomitente"
+			+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND FICO.c_nomfid LIKE :nombreFideicomiso "
 			+ "AND FICO.a_estreg = 'S' AND CUFI.a_estreg = 'S' ORDER BY FICO.n_idfico", 
 		   countQuery = "SELECT COUNT(*) FROM banmfisa FISA INNER JOIN bandfifo FIFO ON FISA.n_idfisa = FIFO.n_idfisa "
 					+ "INNER JOIN banmfico FICO ON FIFO.n_idfico = FICO.n_idfico "
-					+ "INNER JOIN bandfife FIFE ON FIFE.n_idfico = FICO.n_idfico "
-					+ "INNER JOIN banmfite FITE ON FITE.n_idfite = FIFE.n_idfite "
 					+ "INNER JOIN banmcufi CUFI ON FICO.n_idfico = CUFI.n_idfico "
-					+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND FITE.n_idfite = :identificadorFideicomitente"
+					+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND FICO.c_nomfid LIKE :nombreFideicomiso "
 					+ "AND FICO.a_estreg = 'S' AND CUFI.a_estreg = 'S'",  
 		   nativeQuery = true)
-	public abstract Page<Object> getListFideicomisoCuentaEntidadFinancieraByIdFideicomisarioIdFideicomitente(
-			@Param("identificadorFideicomisario") String identificadorFideicomisario,
-			@Param("identificadorFideicomitente") String identificadorFideicomitente, 			
+	public abstract Page<Object> getListFideicomisoCuentaEntidadFinancieraByIdFideicomisarioNombreFideicomiso(
+			@Param("identificadorFideicomisario") Integer identificadorFideicomisario,
+			@Param("nombreFideicomiso") String nombreFideicomiso, 			
+			Pageable pageable);
+	
+	@Query(value = "SELECT FICO.n_idfico, FICO.c_nomfid, CUFI.c_acoenf, CUFI.c_isomon, CUFI.c_numcta, "
+			+ "CUFI.c_descef, CUFI.n_salcon, CUFI.n_saldis, CUFI.d_ulfeac, CUFI.n_idcufi "
+			+ "FROM banmfisa FISA INNER JOIN bandfifo FIFO ON FISA.n_idfisa = FIFO.n_idfisa "
+			+ "INNER JOIN banmfico FICO ON FIFO.n_idfico = FICO.n_idfico "					
+			+ "INNER JOIN banmcufi CUFI ON FICO.n_idfico = CUFI.n_idfico "
+			+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND CUFI.c_codmon = :codigoMoneda "
+			+ "AND FICO.a_estreg = 'S' AND CUFI.a_estreg = 'S' ORDER BY FICO.n_idfico",
+		   countQuery = "SELECT COUNT(*) FROM banmfisa FISA INNER JOIN bandfifo FIFO ON FISA.n_idfisa = FIFO.n_idfisa "
+					+ "INNER JOIN banmfico FICO ON FIFO.n_idfico = FICO.n_idfico "
+					+ "INNER JOIN banmcufi CUFI ON FICO.n_idfico = CUFI.n_idfico "
+					+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND CUFI.c_codmon = :codigoMoneda "
+					+ "AND FICO.a_estreg = 'S' AND CUFI.a_estreg = 'S'",
+		   nativeQuery = true)
+	public abstract Page<Object> getListFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMoneda(
+			@Param("identificadorFideicomisario") Integer identificadorFideicomisario,
+			@Param("codigoMoneda") String codigoMoneda, 
+			Pageable pageable);
+	
+	@Query(value = "SELECT FICO.n_idfico, FICO.c_nomfid, CUFI.c_acoenf, CUFI.c_isomon, CUFI.c_numcta, "
+			+ "CUFI.c_descef, CUFI.n_salcon, CUFI.n_saldis, CUFI.d_ulfeac, CUFI.n_idcufi "
+			+ "FROM banmfisa FISA INNER JOIN bandfifo FIFO ON FISA.n_idfisa = FIFO.n_idfisa "
+			+ "INNER JOIN banmfico FICO ON FIFO.n_idfico = FICO.n_idfico "					
+			+ "INNER JOIN banmcufi CUFI ON FICO.n_idfico = CUFI.n_idfico "
+			+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND FICO.c_nomfid LIKE :nombreFideicomiso "
+			+ "AND CUFI.c_codmon = :codigoMoneda AND FICO.a_estreg = 'S' AND CUFI.a_estreg = 'S' ORDER BY FICO.n_idfico",
+		   countQuery = "SELECT COUNT(*) FROM banmfisa FISA INNER JOIN bandfifo FIFO ON FISA.n_idfisa = FIFO.n_idfisa "
+					+ "INNER JOIN banmfico FICO ON FIFO.n_idfico = FICO.n_idfico "
+					+ "INNER JOIN banmcufi CUFI ON FICO.n_idfico = CUFI.n_idfico "
+					+ "WHERE FISA.n_idfisa = :identificadorFideicomisario AND FICO.c_nomfid LIKE :nombreFideicomiso "
+					+ "AND CUFI.c_codmon = :codigoMoneda AND FICO.a_estreg = 'S' AND CUFI.a_estreg = 'S'",
+		   nativeQuery = true)
+	public abstract Page<Object> getListFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
+			@Param("identificadorFideicomisario") Integer identificadorFideicomisario,							
+			@Param("codigoMoneda") String codigoMoneda,
+			@Param("nombreFideicomiso") String nombreFideicomiso,
 			Pageable pageable);
 
 }

@@ -8,8 +8,8 @@ public class PaginacionGeneralModel {
 	private Integer paginaActual;
 	private Integer paginaFinal;
 	private Integer cantidadRegistros;
-
-	public List<PosicionBancoModel> rows = new ArrayList<PosicionBancoModel>();
+	private String result;
+	private String busqueda;
 
 	public Integer getPaginaActual() {
 		return paginaActual;
@@ -35,12 +35,19 @@ public class PaginacionGeneralModel {
 		this.cantidadRegistros = cantidadRegistros;
 	}
 
-	public List<PosicionBancoModel> getRows() {
-		return rows;
+	public String getResult() {
+		return result;
 	}
 
-	public void setRows(List<PosicionBancoModel> rows) {
-		this.rows = rows;
+	public void setResult(String result) {
+		this.result = result;
 	}
 
+	public String getBusqueda() {
+		return busqueda;
+	}
+
+	public void setBusqueda(String busqueda) {
+		this.busqueda = busqueda;
+	}
 }

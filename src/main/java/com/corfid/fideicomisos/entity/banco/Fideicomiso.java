@@ -28,6 +28,9 @@ public class Fideicomiso extends Auditoria {
 
 	@Column(name = "c_codest", nullable = false, insertable = true, updatable = true, length = 2)
 	private String codigoEstado;
+	
+	@Column(name = "c_desest", nullable = false, insertable = true, updatable = true, length = 20)
+	private String descripcionEstado;	
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "fideicomiso")
 	private List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera = new ArrayList<CuentaEntidadFinanciera>(0);
@@ -61,6 +64,14 @@ public class Fideicomiso extends Auditoria {
 	public void setCodigoEstado(String codigoEstado) {
 		this.codigoEstado = codigoEstado;
 	}
+	
+	public String getDescripcionEstado() {
+		return descripcionEstado;
+	}
+
+	public void setDescripcionEstado(String descripcionEstado) {
+		this.descripcionEstado = descripcionEstado;
+	}
 
 	public List<CuentaEntidadFinanciera> getLstCuentaEntidadFinanciera() {
 		return lstCuentaEntidadFinanciera;
@@ -90,7 +101,7 @@ public class Fideicomiso extends Auditoria {
 
 	}
 
-	public Fideicomiso(Integer identificadorFideicomiso, String nombreFideicomiso, String codigoEstado,
+	public Fideicomiso(Integer identificadorFideicomiso, String nombreFideicomiso, String codigoEstado, String descripcionEstado,
 			List<CuentaEntidadFinanciera> lstCuentaEntidadFinanciera,
 			List<FideicomisoFideicomitente> lstFideicomisoFideicomitente,
 			List<FideicomisoFideicomisario> lstFideicomisoFideicomisario) {
@@ -98,6 +109,7 @@ public class Fideicomiso extends Auditoria {
 		this.identificadorFideicomiso = identificadorFideicomiso;
 		this.nombreFideicomiso = nombreFideicomiso;
 		this.codigoEstado = codigoEstado;
+		this.descripcionEstado = descripcionEstado;
 		this.lstCuentaEntidadFinanciera = lstCuentaEntidadFinanciera;
 		this.lstFideicomisoFideicomitente = lstFideicomisoFideicomitente;
 		this.lstFideicomisoFideicomisario = lstFideicomisoFideicomisario;

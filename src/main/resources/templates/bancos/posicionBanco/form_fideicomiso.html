@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Fideicomisos</title>
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" type="text/css"
+		href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+	
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</head>
+
+<body>
+	<div class="ui container">
+		<div class="ui segments">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+		<div class="ui segments">
+			<div class="ui segment">
+				<div class="ui grid">
+					<div class="row">
+						<div class="three wide column">
+							<div th:replace="~{layout/menu :: menu}"></div>
+						</div>
+						
+						<div class="thirteen wide column">
+							<form class="ui form" action="#"
+								th:action="@{/fideicomiso/buscarFideicomiso}"
+								th:object="${posicionBancoModel}" method="POST" id="frm-fideicomiso">								
+								<div class="ui segments">
+									<div class="ui segment">
+										<div class="ui fluid icon input">
+											<input type="text" th:field="*{busqueda}"
+												th:value="${busqueda}" placeholder="Búsqueda por Nombre Fideicomiso...">
+											<button name="findRow" class="ui icon button">
+												<i class="search icon"></i>
+											</button>
+										</div>									
+									</div>
+									<div class="ui secondary segment">
+										<table class="ui selectable celled table">
+											<thead>
+												<tr>
+													<th>Id</th>
+													<th>Fideicomiso</th>
+													<th>Banco</th>
+													<th>Moneda</th>
+													<th>Cuenta</th>
+													<th>Nombre Cuenta</th>
+													<th>Sdo. Contable</th>
+													<th>Sdo. Disponible</th>
+													<th>Fecha/Hora</th>
+													<th>Id Cuenta </th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="posicionBanco : ${posicionBancoModel.rows}">
+													<td th:text="${posicionBanco.identificadorFideicomiso}"></td>
+													<td th:text="${posicionBanco.nombreFideicomiso}"></td>
+													<td th:text="${posicionBanco.acronimoEntidadFinanciera}"></td>
+													<td th:text="${posicionBanco.isoMonedaCuentaEntidadFinanciera}"></td>
+													<td th:text="${posicionBanco.numeroCuentaEntidadFinanciera}"></td>
+													<td th:text="${posicionBanco.descripcionCuentaEntidadFinanciera}"></td>
+													<td class="ui right aligned" th:text="${posicionBanco.saldoContableActual}"></td>
+													<td class="ui right aligned" th:text="${posicionBanco.saldoDisponibleActual}"></td>
+													<td class="ui center aligned" th:text="${posicionBanco.fechaUltimaActualizacion}"></td>
+													<td th:text="${posicionBanco.identificadorCuentaEntidadFinanciera}"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="ui right aligned secondary segment">
+										<div class="ui pagination menu">
+											<button class="button" type="submit" name="leftRow">
+												<a class="icon item"> <i class="left arrow icon"></i></a>
+											</button>
+											<a th:text="${posicionBancoModel.paginaActual}" class="active item"> </a>
+											<div class="disabled item">...</div>
+											<a th:text="${posicionBancoModel.cantidadRegistros + ' reg.'}" class="disabled item"> </a>
+											<div class="disabled item">...</div>
+											<a th:text="${posicionBancoModel.paginaFinal}" class="item"></a>											
+											<button class="button" type="submit" name="rightRow">
+												<a class="icon item"> <i class="right arrow icon"></i></a>
+											</button>
+										</div>
+									</div>
+									<div class="ui secondary segment">
+										<div th:if="${posicionBancoModel.result == '3'}"
+											class="ui info message">
+											<i class="close icon"></i>
+											<div class="header">Mensaje de información</div>
+											<p>No hay más registros a la derecha...</p>
+										</div>
+										<div th:if="${posicionBancoModel.result == '2'}"
+											class="ui info message">
+											<i class="close icon"></i>
+											<div class="header">Mensaje de información</div>
+											<p>No hay más registros a la izquierda...</p>
+										</div>																				
+										<input type="hidden" th:field="*{paginaActual}"
+											th:value="${paginaActual}"> 
+										<input type="hidden"
+											th:field="*{paginaFinal}" th:value="${paginaFinal}">
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>		

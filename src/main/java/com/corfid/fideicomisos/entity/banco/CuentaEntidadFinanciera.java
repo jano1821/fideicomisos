@@ -35,11 +35,20 @@ public class CuentaEntidadFinanciera extends Auditoria {
 	@Column(name = "c_desenf", nullable = false, insertable = true, updatable = true, length = 100)
 	private String nombreEntidadFinanciera;
 
+	@Column(name = "c_acoenf", nullable = false, insertable = true, updatable = true, length = 10)
+	private String acronimoEntidadFinanciera;
+
 	@Column(name = "c_destef", nullable = false, insertable = true, updatable = true, length = 25)
 	private String tipoEntidadFinanciera;
 
 	@Column(name = "c_descef", nullable = false, insertable = true, updatable = true, length = 100)
 	private String descripcionCuentaEntidadFinanciera;
+
+	@Column(name = "c_codmon", nullable = false, insertable = true, updatable = true, length = 1)
+	private String codigoMoneda;
+
+	@Column(name = "c_isomon", nullable = false, insertable = true, updatable = true, length = 3)
+	private String isoMonedaCuentaEntidadFinanciera;
 
 	@Column(name = "c_desmon", nullable = false, insertable = true, updatable = true, length = 8)
 	private String descripcionMonedaCuentaEntidadFinanciera;
@@ -52,6 +61,9 @@ public class CuentaEntidadFinanciera extends Auditoria {
 
 	@Column(name = "c_codest", nullable = false, insertable = true, updatable = true, length = 2)
 	private String codigoEstado;
+
+	@Column(name = "c_desest", nullable = false, insertable = true, updatable = true, length = 20)
+	private String descripcionEstado;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "d_ulfeac", nullable = false, insertable = true, updatable = true, length = 7)
@@ -89,6 +101,14 @@ public class CuentaEntidadFinanciera extends Auditoria {
 		this.nombreEntidadFinanciera = nombreEntidadFinanciera;
 	}
 
+	public String getAcronimoEntidadFinanciera() {
+		return acronimoEntidadFinanciera;
+	}
+
+	public void setAcronimoEntidadFinanciera(String acronimoEntidadFinanciera) {
+		this.acronimoEntidadFinanciera = acronimoEntidadFinanciera;
+	}
+
 	public String getTipoEntidadFinanciera() {
 		return tipoEntidadFinanciera;
 	}
@@ -103,6 +123,22 @@ public class CuentaEntidadFinanciera extends Auditoria {
 
 	public void setDescripcionCuentaEntidadFinanciera(String descripcionCuentaEntidadFinanciera) {
 		this.descripcionCuentaEntidadFinanciera = descripcionCuentaEntidadFinanciera;
+	}
+
+	public String getCodigoMoneda() {
+		return codigoMoneda;
+	}
+
+	public void setCodigoMoneda(String codigoMoneda) {
+		this.codigoMoneda = codigoMoneda;
+	}
+
+	public String getIsoMonedaCuentaEntidadFinanciera() {
+		return isoMonedaCuentaEntidadFinanciera;
+	}
+
+	public void setIsoMonedaCuentaEntidadFinanciera(String isoMonedaCuentaEntidadFinanciera) {
+		this.isoMonedaCuentaEntidadFinanciera = isoMonedaCuentaEntidadFinanciera;
 	}
 
 	public String getDescripcionMonedaCuentaEntidadFinanciera() {
@@ -137,6 +173,14 @@ public class CuentaEntidadFinanciera extends Auditoria {
 		this.codigoEstado = codigoEstado;
 	}
 
+	public String getDescripcionEstado() {
+		return descripcionEstado;
+	}
+
+	public void setDescripcionEstado(String descripcionEstado) {
+		this.descripcionEstado = descripcionEstado;
+	}
+
 	public Date getFechaUltimaActualizacion() {
 		return fechaUltimaActualizacion;
 	}
@@ -163,25 +207,30 @@ public class CuentaEntidadFinanciera extends Auditoria {
 	}
 
 	public CuentaEntidadFinanciera(Integer identificadorCuentaEntidadFinanciera, String numeroCuentaEntidadFinanciera,
-			String nombreEntidadFinanciera, String tipoEntidadFinanciera, String descripcionCuentaEntidadFinanciera,
+			String nombreEntidadFinanciera, String acronimoEntidadFinanciera, String tipoEntidadFinanciera,
+			String descripcionCuentaEntidadFinanciera, String codigoMoneda, String isoMonedaCuentaEntidadFinanciera,
 			String descripcionMonedaCuentaEntidadFinanciera, Double saldoContableActual, Double saldoDisponibleActual,
-			String codigoEstado, Date fechaUltimaActualizacion, Fideicomiso fideicomiso,
+			String codigoEstado, String descripcionEstado, Date fechaUltimaActualizacion, Fideicomiso fideicomiso,
 			List<MovimientoCuentaEntidadFinanciera> lstMovimientoCuentaEntidadFinanciera) {
 		super();
 		this.identificadorCuentaEntidadFinanciera = identificadorCuentaEntidadFinanciera;
 		this.numeroCuentaEntidadFinanciera = numeroCuentaEntidadFinanciera;
 		this.nombreEntidadFinanciera = nombreEntidadFinanciera;
+		this.acronimoEntidadFinanciera = acronimoEntidadFinanciera;
 		this.tipoEntidadFinanciera = tipoEntidadFinanciera;
 		this.descripcionCuentaEntidadFinanciera = descripcionCuentaEntidadFinanciera;
+		this.codigoMoneda = codigoMoneda;
+		this.isoMonedaCuentaEntidadFinanciera = isoMonedaCuentaEntidadFinanciera;
 		this.descripcionMonedaCuentaEntidadFinanciera = descripcionMonedaCuentaEntidadFinanciera;
 		this.saldoContableActual = saldoContableActual;
 		this.saldoDisponibleActual = saldoDisponibleActual;
 		this.codigoEstado = codigoEstado;
+		this.descripcionEstado = descripcionEstado;
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
 		this.fideicomiso = fideicomiso;
 		this.lstMovimientoCuentaEntidadFinanciera = lstMovimientoCuentaEntidadFinanciera;
 	}
-	
+
 	public CuentaEntidadFinanciera() {
 
 	}

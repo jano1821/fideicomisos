@@ -1,7 +1,7 @@
 package com.corfid.fideicomisos.utilities;
 
 public class Constante {
-	//URL's
+	// URL's
 	public static final String MENU = "principal";
 	public static final String LOGIN = "login";
 	public static final String SITIO_EN_CONSTRUCCION = "mantenimiento/administrativo/construccion";
@@ -18,25 +18,26 @@ public class Constante {
 	public static final String FORM_MENU = "mantenimiento/administrativo/form_menu";
 	public static final String LISTA_PERSONAS = "mantenimiento/administrativo/lista_personas";
 	public static final String FORM_PERSONA = "mantenimiento/administrativo/form_persona";
-	public static final String URL_LISTA_FIDEICOMISO = "";
-	
-	//TABLAS
+	public static final String URL_LISTA_FIDEICOMISO = "bancos/posicionBanco/form_fideicomiso";
+
+	// TABLAS
 	public static final String TABLA_USUARIO = "admusuar";
 	public static final String TABLA_ROLES = "admroles";
 	public static final String TABLA_MENU = "admcmenu";
 	public static final String TABLA_PERSONA = "admperso";
-	
-	//CONSTRAINTS
+
+	// CONSTRAINTS
 	public static final String ESTADO_REGISTRO = "c_estreg";
 	public static final String INDICADOR_ACTIVIDAD = "b_estusu";
 	public static final String TIPO_USUARIO = "c_tiusad";
 	public static final String TIPO_MENU = "c_tipmen";
 	public static final String TIPO_PERSONA = "c_tipper";
 	public static final String TIPO_DOC = "c_tipdoc";
-	
-	//VALORES
+
+	// VALORES
+	public static final Integer PAGINADO_5_ROWS = 5;
+	public static final Integer PAGINADO_20_ROWS = 20;
 	public static final String CONST_VACIA = "";
-	public static final Integer PAGINADO_5_ROWS= 5;
 	public static final String COMODIN_LIKE = "%";
 	public static final String IZQUIERDA = "1";
 	public static final String DERECHA = "1";
@@ -46,5 +47,5 @@ public class Constante {
 	public static final String NO_HAY_REGISTROS_A_LA_DERECHA = "2";
 	public static final String FIDEICOMISARIO = "F";
 	public static final String FIDEICOMITENTE = "C";
-	
+
 }

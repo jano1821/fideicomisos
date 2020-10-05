@@ -1,17 +1,22 @@
 package com.corfid.fideicomisos.model.banco;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class MovimientoCuentaEntidadFinancieraModel {
+public class MovimientoCuentaEntidadFinancieraModel extends PaginacionGeneralModel {
 
 	private Integer identificadorMovimientoCuentaEntidadFinanciera;
 	private String descripcionMovimiento;
+	private String abreviaturaDescripcionMovimiento;
 	private String numeroOperacionMovimiento;
 	private String descripcionOficinaMovimiento;
 	private Date fechaProcesoMovimiento;
 	private Date fechaValutaMovimiento;
 	private Double montoCargoMovimiento;
 	private Double montoAbonoMovimiento;
+
+	public List<MovimientoCuentaEntidadFinancieraModel> rows = new ArrayList<MovimientoCuentaEntidadFinancieraModel>();
 
 	public Integer getIdentificadorMovimientoCuentaEntidadFinanciera() {
 		return identificadorMovimientoCuentaEntidadFinanciera;
@@ -28,6 +33,14 @@ public class MovimientoCuentaEntidadFinancieraModel {
 
 	public void setDescripcionMovimiento(String descripcionMovimiento) {
 		this.descripcionMovimiento = descripcionMovimiento;
+	}
+
+	public String getAbreviaturaDescripcionMovimiento() {
+		return abreviaturaDescripcionMovimiento;
+	}
+
+	public void setAbreviaturaDescripcionMovimiento(String abreviaturaDescripcionMovimiento) {
+		this.abreviaturaDescripcionMovimiento = abreviaturaDescripcionMovimiento;
 	}
 
 	public String getNumeroOperacionMovimiento() {
@@ -76,6 +89,14 @@ public class MovimientoCuentaEntidadFinancieraModel {
 
 	public void setMontoAbonoMovimiento(Double montoAbonoMovimiento) {
 		this.montoAbonoMovimiento = montoAbonoMovimiento;
+	}
+
+	public List<MovimientoCuentaEntidadFinancieraModel> getRows() {
+		return rows;
+	}
+
+	public void setRows(List<MovimientoCuentaEntidadFinancieraModel> rows) {
+		this.rows = rows;
 	}
 
 }

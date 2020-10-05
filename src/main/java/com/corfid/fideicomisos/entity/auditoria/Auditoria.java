@@ -15,7 +15,7 @@ public class Auditoria {
 	@Column(name = "a_usuins", nullable = false, length = 100, insertable = true, updatable = true)
 	protected String usuarioInsercion;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "a_fecins", nullable = false, insertable = true, updatable = true, length = 7)
 	protected Date fechaInsercion;
 
@@ -25,7 +25,7 @@ public class Auditoria {
 	@Column(name = "a_usumod", nullable = true, length = 100, insertable = true, updatable = true)
 	protected String usuarioModificacion;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "a_fecmod", nullable = true, insertable = true, updatable = true, length = 7)
 	protected Date fechaModificacion;
 

@@ -1,5 +1,6 @@
 package com.corfid.fideicomisos.component.banco;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -18,13 +19,14 @@ public class PosicionBancoConverter {
 
 		posicionBancoModel.setIdentificadorFideicomiso((Integer) objectPosicionBanco[0]);
 		posicionBancoModel.setNombreFideicomiso((String) objectPosicionBanco[1]);
-		posicionBancoModel.setNombreEntidadFinanciera((String) objectPosicionBanco[2]);
-		posicionBancoModel.setDescripcionMonedaCuentaEntidadFinanciera((String) objectPosicionBanco[3]);
+		posicionBancoModel.setAcronimoEntidadFinanciera((String) objectPosicionBanco[2]);
+		posicionBancoModel.setIsoMonedaCuentaEntidadFinanciera((String) objectPosicionBanco[3]);
 		posicionBancoModel.setNumeroCuentaEntidadFinanciera((String) objectPosicionBanco[4]);
 		posicionBancoModel.setDescripcionCuentaEntidadFinanciera((String) objectPosicionBanco[5]);
-		posicionBancoModel.setSaldoContableActual((Double) objectPosicionBanco[6]);
-		posicionBancoModel.setSaldoDisponibleActual((Double) objectPosicionBanco[7]);
+		posicionBancoModel.setSaldoContableActual(((BigDecimal) objectPosicionBanco[6]).doubleValue());
+		posicionBancoModel.setSaldoDisponibleActual(((BigDecimal) objectPosicionBanco[7]).doubleValue());
 		posicionBancoModel.setFechaUltimaActualizacion((Date) objectPosicionBanco[8]);
+		posicionBancoModel.setIdentificadorCuentaEntidadFinanciera((Integer) objectPosicionBanco[9]);
 
 		return posicionBancoModel;
 	}

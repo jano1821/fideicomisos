@@ -19,9 +19,6 @@ public class FideicomisoFideicomisario extends Auditoria {
 	@EmbeddedId
 	private FideicomisoFideicomisarioId fideicomisoFideicomisarioId;
 
-	@Column(name = "c_codest", nullable = false, insertable = true, updatable = true)
-	private String codigoEstado;
-
 	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@MapsId("identificadorFideicomiso")
 	@JoinColumn(name = "n_idfico", nullable = false, insertable = false, updatable = false)
@@ -40,14 +37,6 @@ public class FideicomisoFideicomisario extends Auditoria {
 		this.fideicomisoFideicomisarioId = fideicomisoFideicomisarioId;
 	}
 
-	public String getCodigoEstado() {
-		return codigoEstado;
-	}
-
-	public void setCodigoEstado(String codigoEstado) {
-		this.codigoEstado = codigoEstado;
-	}
-
 	public Fideicomiso getFideicomiso() {
 		return fideicomiso;
 	}
@@ -64,11 +53,10 @@ public class FideicomisoFideicomisario extends Auditoria {
 		this.fideicomisario = fideicomisario;
 	}
 
-	public FideicomisoFideicomisario(FideicomisoFideicomisarioId fideicomisoFideicomisarioId, String codigoEstado,
-			Fideicomiso fideicomiso, Fideicomisario fideicomisario) {
+	public FideicomisoFideicomisario(FideicomisoFideicomisarioId fideicomisoFideicomisarioId, Fideicomiso fideicomiso,
+			Fideicomisario fideicomisario) {
 		super();
 		this.fideicomisoFideicomisarioId = fideicomisoFideicomisarioId;
-		this.codigoEstado = codigoEstado;
 		this.fideicomiso = fideicomiso;
 		this.fideicomisario = fideicomisario;
 	}
