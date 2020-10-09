@@ -18,6 +18,7 @@ import com.corfid.fideicomisos.service.administrativo.MenuRolInterface;
 import com.corfid.fideicomisos.service.administrativo.RolInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
+import com.corfid.fideicomisos.utilities.StringUtil;
 
 @Service("rolServiceImpl")
 public class RolServiceImpl extends AbstractService implements RolInterface {
@@ -47,32 +48,51 @@ public class RolServiceImpl extends AbstractService implements RolInterface {
     }
 
     @Override
-    public CrudRolModel listRolByDescripcionPaginado(String descripcion, Integer pagina, Integer cant) {
+    public CrudRolModel listRolByDescripcionPaginado(String descripcion,
+                                                     Integer idEmpresaSesion,
+                                                     String tipoUsuarioSesion,
+                                                     Integer pagina,
+                                                     Integer cant) throws Exception {
         List<Rol> listRol;
         List<RolModel> listRolModel = new ArrayList<RolModel>();
         Page<Rol> pageRol;
-        CrudRolModel crudRolModel = new CrudRolModel();
+        CrudRolModel crudRolModel = null;
 
-        String cadenaRol = Constante.COMODIN_LIKE + descripcion + Constante.COMODIN_LIKE;
+        try {
+            crudRolModel = new CrudRolModel();
+            String cadenaRol = Constante.COMODIN_LIKE + descripcion + Constante.COMODIN_LIKE;
 
-        pageRol = rolRepository.listRolByDescripcionPaginado(cadenaRol,
-                                                             obtenerIndexPorPagina(pagina,
-                                                                                   cant,
-                                                                                   "descripcion",
-                                                                                   true,
-                                                                                   false));
+            if (StringUtil.equiv(tipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                pageRol = rolRepository.listRolByDescripcionPaginado(cadenaRol,
+                                                                     obtenerIndexPorPagina(pagina,
+                                                                                           cant,
+                                                                                           "descripcion",
+                                                                                           true,
+                                                                                           false));
+            } else {
+                pageRol = rolRepository.listRolByDescripcionAndUsuarioSesionPaginado(cadenaRol,
+                                                                                     idEmpresaSesion,
+                                                                                     obtenerIndexPorPagina(pagina,
+                                                                                                           cant,
+                                                                                                           "descripcion",
+                                                                                                           true,
+                                                                                                           false));
+            }
 
-        listRol = pageRol.getContent();
-        crudRolModel.setPaginaFinal(pageRol.getTotalPages());
-        crudRolModel.setCantidadRegistros(_toInteger(pageRol.getTotalElements()));
+            listRol = pageRol.getContent();
+            crudRolModel.setPaginaFinal(pageRol.getTotalPages());
+            crudRolModel.setCantidadRegistros(_toInteger(pageRol.getTotalElements()));
 
-        for (Rol rol : listRol) {
-            listRolModel.add(rolConverter.convertRolToRolModel(rol));
+            for (Rol rol : listRol) {
+                listRolModel.add(rolConverter.convertRolToRolModel(rol));
+            }
+
+            crudRolModel.setRows(listRolModel);
+
+            return crudRolModel;
+        } catch (Exception e) {
+            return crudRolModel;
         }
-
-        crudRolModel.setRows(listRolModel);
-
-        return crudRolModel;
     }
 
     @Override
@@ -86,29 +106,35 @@ public class RolServiceImpl extends AbstractService implements RolInterface {
     }
 
     @Override
-    public RolModel addRol(RolModel rolModel, ParametrosAuditoriaModel parametrosAuditoriaModel) {
-        Rol rol = findRolById(rolModel.getIdRol());
+    public RolModel addRol(RolModel rolModel, ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception {
+        try {
+            Rol rol = findRolById(rolModel.getIdRol());
 
-        if (_isEmpty(rol)) {
-            rol = rolConverter.convertRolModelToRol(rolModel);
-            setInsercionAuditoria(rol, parametrosAuditoriaModel);
-        } else {
-            rol = rolConverter.convertRolModelToRolExistente(rol, rolModel);
-            setModificacionAuditoria(rol, parametrosAuditoriaModel);
+            if (_isEmpty(rol)) {
+                rol = rolConverter.convertRolModelToRol(rolModel);
+                setInsercionAuditoria(rol, parametrosAuditoriaModel);
+            } else {
+                rol = rolConverter.convertRolModelToRolExistente(rol, rolModel);
+                setModificacionAuditoria(rol, parametrosAuditoriaModel);
+            }
+
+            rol = rolRepository.save(rol);
+
+            return rolConverter.convertRolToRolModel(rol);
+        } catch (Exception e) {
+            return rolModel;
         }
-
-        rol = rolRepository.save(rol);
-
-        return rolConverter.convertRolToRolModel(rol);
     }
 
     @Override
-    public boolean updateMenuRol(String[] idMenu, Integer idRol, ParametrosAuditoriaModel parametrosAuditoriaModel) {
+    public boolean updateMenuRol(String[] idMenu,
+                                 Integer idRol,
+                                 ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception {
         List<String> listIdMenuActual = new ArrayList<String>();
         Integer existeNuevo = 0;
 
         try {
-
+            //flush();
             listIdMenuActual = menuRolInterface.obtenerMenuByRol(idRol);
 
             for (int i = 0; i < idMenu.length; i++) {

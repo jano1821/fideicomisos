@@ -15,7 +15,7 @@ public class TipoUsuarioServiceImpl  extends AbstractService implements TipoUsua
     private TipoUsuarioRepository tipoUsuarioRepository;
     
     @Override
-    public TipoUsuario findRolById(String id) {
+    public TipoUsuario findTipoUsuarioById(String id) {
         return tipoUsuarioRepository.findByIdTipoUsuario(id);
     }
 }

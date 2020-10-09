@@ -68,6 +68,9 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
     @Override
     public CrudPersonaModel listPersonaByNombrePaginado(String nombres,
                                                         String busquedaTipoPersona,
+                                                        String usuarioSesion,
+                                                        String tipoUsuarioSesion,
+                                                        Integer idEmpresaSeleccionadaSesion,
                                                         Integer pagina,
                                                         Integer cant) throws Exception {
         List<Persona> listPersona;
@@ -78,13 +81,25 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
             String cadenaPersona = Constante.COMODIN_LIKE + nombres + Constante.COMODIN_LIKE;
             String tipoPersona = Constante.COMODIN_LIKE + busquedaTipoPersona;
 
-            pagePersona = personaRepository.listPersonaByNombrePaginado(cadenaPersona,
-                                                                        tipoPersona,
-                                                                        obtenerIndexPorPagina(pagina,
-                                                                                              cant,
-                                                                                              "nombres",
-                                                                                              true,
-                                                                                              false));
+            if (_equiv(tipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                pagePersona = personaRepository.listPersonaByNombrePaginado(cadenaPersona,
+                                                                            tipoPersona,
+                                                                            obtenerIndexPorPagina(pagina,
+                                                                                                  cant,
+                                                                                                  "nombreCompleto",
+                                                                                                  true,
+                                                                                                  false));
+            } else {
+                pagePersona = personaRepository.listPersonaByNombreAndUsuarioVinculadoPaginado(cadenaPersona,
+                                                                                               tipoPersona,
+                                                                                               usuarioSesion,
+                                                                                               idEmpresaSeleccionadaSesion,
+                                                                                               obtenerIndexPorPagina(pagina,
+                                                                                                                     cant,
+                                                                                                                     "nombreCompleto",
+                                                                                                                     true,
+                                                                                                                     false));
+            }
 
             listPersona = pagePersona.getContent();
             crudPersonaModel.setPaginaFinal(pagePersona.getTotalPages());
@@ -125,13 +140,28 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
         try {
             persona = findPersonaById(personaModel.getIdPersona());
 
+            if (_isEmpty(personaModel.getPermiteVinculacion())) {
+                personaModel.setPermiteVinculacion(Constante.ESTADO_REGISTRO_NO_VIGENTE);
+            }
+            if (_isEmpty(personaModel.getEstadoRegistro())) {
+                personaModel.setEstadoRegistro(Constante.ESTADO_REGISTRO_VIGENTE);
+            }
+
             if (_isEmpty(persona)) {
+                if (_isEmpty(personaModel.getPermiteVinculacionCliente())) {
+                    personaModel.setPermiteVinculacionCliente(Constante.ESTADO_REGISTRO_NO_VIGENTE);
+                }
                 persona = personaConverter.convertPersonaModelToPersona(personaModel);
                 setInsercionAuditoria(persona, parametrosAuditoriaModel);
             } else {
+                if (_isEmpty(personaModel.getPermiteVinculacionCliente())) {
+                    personaModel.setPermiteVinculacionCliente(Constante.ESTADO_REGISTRO_VIGENTE);
+                    //personaModel.setCliente(Constante.ESTADO_REGISTRO_VIGENTE);
+                }
+
                 usuarioModel = usuarioInterface.findUsuarioByIdPersona(persona);
 
-                if (!_isEmpty(usuarioModel) && _equiv(personaModel.getCliente(), Constante.SI_ES_CLIENTE)) {
+                if (!_isEmpty(usuarioModel) && _equiv(personaModel.getPermiteVinculacionCliente(), Constante.SI_ES_CLIENTE)) {
                     if (_equiv(usuarioModel.getTipoUsuario(), Constante.TIPO_USUARIO_SUPER_ADMIN)) {
                         throw new ErrorControladoException(ConstantesError.ERROR_3);
                     }
@@ -154,7 +184,7 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
             personaModelActual.setEmpresa(personaModel.getEmpresa());
 
             if (!_isEmpty(persona)) {
-                if (_equiv(personaModel.getCliente(), Constante.SI_ES_CLIENTE)) {
+                if (_equiv(personaModel.getPermiteVinculacionCliente(), Constante.SI_ES_CLIENTE)) {
                     if (StringUtil.isEmpty(clienteInterface.findByIdCliente(persona.getIdPersona()))) {
                         clienteInterface.registrarCliente(persona.getIdPersona(), parametrosAuditoriaModel);
                     }
@@ -172,7 +202,7 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
                         empresaInterface.removerEmpresa(persona.getIdPersona());
                     }
                 }
-                if (!_isEmpty(personaModel.getEmpresa()) && _equiv(personaModel.getCliente(),
+                if (!_isEmpty(personaModel.getEmpresa()) && _equiv(personaModel.getPermiteVinculacionCliente(),
                                                                    Constante.SI_ES_CLIENTE)) {
                     empresaInterface.registrarEmpresasOfCadena(personaModelActual.getEmpresa(),
                                                                personaModelActual.getListEmpresa(),
@@ -226,11 +256,15 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
     }
 
     @Override
-    public List<PersonaModel> obtenerAllEmpresas() throws Exception {
+    public List<PersonaModel> obtenerAllEmpresas(String tipoUsuarioSesion, Integer idEmpresaSesion) throws Exception {
         List<PersonaModel> listPersonaModel = new ArrayList<PersonaModel>();
         List<Persona> listPersona;
         try {
-            listPersona = personaRepository.listAllEmpresas();
+            if (_equiv(tipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                listPersona = personaRepository.listAllEmpresas();
+            } else {
+                listPersona = personaRepository.listEmpresasParaAdminLocal(idEmpresaSesion);
+            }
 
             for (Persona persona : listPersona) {
                 listPersonaModel.add(personaConverter.convertPersonaToPersonaModel(persona));
@@ -265,7 +299,7 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
         List<PersonaModel> listPersonaModel = new ArrayList<PersonaModel>();
         List<Persona> listPersona;
         try {
-            listPersona = personaRepository.listPersonasByNumeroDocumento(tipoDocumento,numeroDocumento);
+            listPersona = personaRepository.listPersonasByNumeroDocumento(tipoDocumento, numeroDocumento);
 
             for (Persona persona : listPersona) {
                 listPersonaModel.add(personaConverter.convertPersonaToPersonaModel(persona));
@@ -275,5 +309,42 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
         } catch (Exception e) {
             return listPersonaModel;
         }
+    }
+
+    @Override
+    public PersonaModel validarFormulario(PersonaModel personaModel) throws Exception {
+
+        if (_isEmpty(personaModel.getNombres())) {
+            personaModel.setCodigoError(ConstantesError.ERROR_11);
+            personaModel.setDescripcionError(obtenerMensajeError(ConstantesError.ERROR_11));
+            return personaModel;
+        }
+        if (_isEmpty(personaModel.getApePat())) {
+            personaModel.setCodigoError(ConstantesError.ERROR_12);
+            personaModel.setDescripcionError(obtenerMensajeError(ConstantesError.ERROR_11));
+            return personaModel;
+        }
+        if (_isEmpty(personaModel.getApeMat())) {
+            personaModel.setCodigoError(ConstantesError.ERROR_13);
+            personaModel.setDescripcionError(obtenerMensajeError(ConstantesError.ERROR_11));
+            return personaModel;
+        }
+        if (_isEmpty(personaModel.getNumeroDocumento())) {
+            personaModel.setCodigoError(ConstantesError.ERROR_14);
+            personaModel.setDescripcionError(obtenerMensajeError(ConstantesError.ERROR_11));
+            return personaModel;
+        }
+        if (_isEmpty(personaModel.getTipoDocumento())) {
+            personaModel.setCodigoError(ConstantesError.ERROR_15);
+            personaModel.setDescripcionError(obtenerMensajeError(ConstantesError.ERROR_11));
+            return personaModel;
+        }
+        if (_isEmpty(personaModel.getEstadoRegistro())) {
+            personaModel.setCodigoError(ConstantesError.ERROR_16);
+            personaModel.setDescripcionError(obtenerMensajeError(ConstantesError.ERROR_11));
+            return personaModel;
+        }
+
+        return personaModel;
     }
 }

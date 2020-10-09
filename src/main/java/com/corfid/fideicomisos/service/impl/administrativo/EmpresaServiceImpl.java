@@ -52,6 +52,17 @@ public class EmpresaServiceImpl extends AbstractService implements EmpresaInterf
         }
     }
 
+    public Empresa findEmpresaEntityById(Integer id) throws Exception {
+        Empresa empresa = null;
+        try {
+            empresa = empresaRepository.findByIdEmpresa(id);
+
+            return empresa;
+        } catch (Exception e) {
+            return empresa;
+        }
+    }
+
     public Boolean registrarEmpresasOfCadena(String empresasActualizar,
                                              List<EmpresaModel> listEmpresasDelClienteGestionado,
                                              Integer idUsuarioSesion,
@@ -97,6 +108,9 @@ public class EmpresaServiceImpl extends AbstractService implements EmpresaInterf
                 }
             } else {
                 empresasNueva = empresasActualizar.split(",");
+                clienteEmpresaInterface.registrarClienteEmpresa(idPersonaDelClienteGestionado,
+                                                                _toInteger(empresasNueva[0]),
+                                                                parametrosAuditoriaModel);
             }
 
             return true;

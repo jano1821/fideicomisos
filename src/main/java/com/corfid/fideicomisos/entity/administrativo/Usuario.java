@@ -37,11 +37,11 @@ public class Usuario extends Auditoria {
     @Column(name = "c_contra", nullable = false, length = 100, insertable = true, updatable = true)
     private String password;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "c_idtius", nullable = false, insertable = true, updatable = true)
     private TipoUsuario tipoUsuario;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "n_idpers", nullable = true, insertable = true, updatable = true)
     private Persona persona;
 

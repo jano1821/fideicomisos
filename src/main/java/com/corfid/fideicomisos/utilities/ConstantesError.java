@@ -12,4 +12,10 @@ public class ConstantesError {
 	public static String ERROR_8 = "8";// No puede usar la misma contraseña de los 2 ultimos cambios.
 	public static String ERROR_9 = "9";// Error al generar Contraseña
 	public static String ERROR_10 = "10";// Un Usuario de tipo Super Admin no Puede ser Vinculado como Empresa
+	public static String ERROR_11 = "11";// Ingrese Nombre de Persona
+	public static String ERROR_12 = "12";// Ingrese Apellido Paterno
+	public static String ERROR_13 = "13";// Ingrese Apellido Materno
+	public static String ERROR_14 = "14";// Ingrese Numero de Documento
+	public static String ERROR_15 = "15";// Ingrese Tipo de Documento
+	public static String ERROR_16 = "16";// Ingrese Estado de Registro
 }

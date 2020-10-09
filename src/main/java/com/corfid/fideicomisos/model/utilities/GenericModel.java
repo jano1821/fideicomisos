@@ -8,6 +8,7 @@ public class GenericModel {
     private String descripcionError;
     private String tipoUsuarioSesion;
     private String edicion;
+    private Integer idEmpresaSesion;
 
     public String getId() {
         return id;
@@ -55,6 +56,14 @@ public class GenericModel {
 
     public void setEdicion(String edicion) {
         this.edicion = edicion;
+    }
+
+    public Integer getIdEmpresaSesion() {
+        return idEmpresaSesion;
+    }
+
+    public void setIdEmpresaSesion(Integer idEmpresaSesion) {
+        this.idEmpresaSesion = idEmpresaSesion;
     }
 
 }

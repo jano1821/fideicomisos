@@ -2,7 +2,6 @@ package com.corfid.fideicomisos.controller.administrativo;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,15 +19,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 import com.corfid.fideicomisos.model.administrativo.MenuModel;
+import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.administrativo.RolModel;
 import com.corfid.fideicomisos.model.cruds.CrudRolModel;
+import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.GenericModel;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.service.administrativo.MenuInterface;
+import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
 import com.corfid.fideicomisos.service.administrativo.RolInterface;
 import com.corfid.fideicomisos.service.utilities.CatalogoConstraintInterface;
 import com.corfid.fideicomisos.utilities.Constante;
@@ -52,6 +55,10 @@ public class RolController extends InitialController {
     private CatalogoConstraintInterface catalogoConstraintInterface;
 
     @Autowired
+    @Qualifier("personaServiceImpl")
+    private PersonaInterface personaInterface;
+
+    @Autowired
     private Environment environment;
 
     public String obtenerIp() {
@@ -65,9 +72,14 @@ public class RolController extends InitialController {
     }
 
     @GetMapping("/lista_roles")
-    public ModelAndView showListaRoles(Model model, @RequestParam(name = "result", required = false) String result) {
+    public ModelAndView showListaRoles(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                       Model model,
+                                       @RequestParam(name = "result", required = false) String result) throws Exception {
         CrudRolModel crudRolModel = new CrudRolModel();
         crudRolModel.setResult(result);
+        crudRolModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+        crudRolModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+
         return busqueda(Constante.CONST_VACIA,
                         Constante.CONST_CERO,
                         Constante.CONST_CERO,
@@ -87,9 +99,12 @@ public class RolController extends InitialController {
     }
 
     @PostMapping("/addrol")
-    public ModelAndView registrarRol(@ModelAttribute(name = "rolModel") RolModel rolModel, Model model) {
+    public ModelAndView registrarRol(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                     @ModelAttribute(name = "rolModel") RolModel rolModel,
+                                     Model model) throws Exception {
         Date fechaAndHoraActual = getFechaAndHoraActual();
         CrudRolModel crudRolModel = new CrudRolModel();
+        RolModel rolModelActualizado = null;
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         setParametrosAuditoriaModel(fechaAndHoraActual,
                                     user.getUsername(),
@@ -98,17 +113,27 @@ public class RolController extends InitialController {
                                     user.getUsername(),
                                     obtenerIp());
 
-        if (!StringUtil.isEmpty(rolInterface.addRol(rolModel, getParametrosAuditoriaModel()))) {
-            if (rolInterface.updateMenuRol(rolModel.getMenu().split(","),
-                                           rolModel.getIdRol(),
-                                           getParametrosAuditoriaModel())) {
-                crudRolModel.setResult(Constante.RESULT_CORRECTO);
-            } else {
-                crudRolModel.setResult(Constante.RESULT_ERROR);
+        if (StringUtil.isEmpty(rolModel.getIdEmpresa())) {
+            rolModel.setIdEmpresa(datosGenerales.getIdEmpresa());
+        }
+        rolModel.setTipoUsuarioSesion(datosGenerales.getTipoUsuarioSession());
+        rolModelActualizado = rolInterface.addRol(rolModel, getParametrosAuditoriaModel());
+        if (!StringUtil.isEmpty(rolModelActualizado)) {
+            if (!StringUtil.isEmpty(rolModel.getMenu())) {
+                if (rolInterface.updateMenuRol(rolModel.getMenu().split(","),
+                                               rolModel.getIdRol(),
+                                               getParametrosAuditoriaModel())) {
+                    crudRolModel.setResult(Constante.RESULT_CORRECTO);
+                } else {
+                    crudRolModel.setResult(Constante.RESULT_ERROR);
+                }
             }
         } else {
             crudRolModel.setResult(Constante.RESULT_ERROR);
         }
+
+        crudRolModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+        crudRolModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
         return busqueda(Constante.CONST_VACIA,
                         Constante.CONST_CERO,
                         Constante.CONST_CERO,
@@ -118,10 +143,13 @@ public class RolController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaRoles", params = { "findRow", "busqueda" })
-    public ModelAndView buscarRol(CrudRolModel crudRolModel,
+    public ModelAndView buscarRol(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                  CrudRolModel crudRolModel,
                                   final BindingResult bindingResult,
-                                  final HttpServletRequest req) {
+                                  final HttpServletRequest req) throws Exception {
         String caja = req.getParameter("busqueda");
+        crudRolModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+        crudRolModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
 
         return busqueda(caja,
                         Constante.CONST_CERO,
@@ -132,44 +160,55 @@ public class RolController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaRoles", params = { "rightRow", "busqueda", "paginaActual", "paginaFinal" })
-    public ModelAndView paginaDerecha(CrudRolModel crudRolModel,
+    public ModelAndView paginaDerecha(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                      CrudRolModel crudRolModel,
                                       final BindingResult bindingResult,
-                                      final HttpServletRequest req) {
+                                      final HttpServletRequest req) throws Exception {
         String caja = req.getParameter("busqueda");
         String paginaActual = req.getParameter("paginaActual");
         String paginaFinal = req.getParameter("paginaFinal");
+        crudRolModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+        crudRolModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
 
         return busqueda(caja, Constante.CONST_CERO, Constante.DERECHA, paginaActual, paginaFinal, crudRolModel);
     }
 
     @PostMapping(value = "/crudAccionesListaRoles", params = { "leftRow", "busqueda", "paginaActual", "paginaFinal" })
-    public ModelAndView paginaIzquierda(CrudRolModel crudRolModel,
+    public ModelAndView paginaIzquierda(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                        CrudRolModel crudRolModel,
                                         final BindingResult bindingResult,
-                                        final HttpServletRequest req) {
+                                        final HttpServletRequest req) throws Exception {
         String caja = req.getParameter("busqueda");
         String paginaActual = req.getParameter("paginaActual");
         String paginaFinal = req.getParameter("paginaFinal");
+        crudRolModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+        crudRolModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
 
         return busqueda(caja, Constante.IZQUIERDA, Constante.CONST_CERO, paginaActual, paginaFinal, crudRolModel);
     }
 
     @PostMapping(value = "/crudAccionesListaRoles", params = { "addRow" })
-    public ModelAndView addRol(final CrudRolModel crudRolModel, final BindingResult bindingResult) {
-        return preparingFormRol(null);
+    public ModelAndView addRol(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                               final CrudRolModel crudRolModel,
+                               final BindingResult bindingResult) throws Exception {
+        return preparingFormRol(null, datosGenerales.getTipoUsuarioSession(), datosGenerales.getIdEmpresa());
     }
 
     @PostMapping(value = "/crudAccionesListaRoles", params = { "editRow" })
-    public ModelAndView editRol(final CrudRolModel crudRolModel,
+    public ModelAndView editRol(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                final CrudRolModel crudRolModel,
                                 final BindingResult bindingResult,
-                                final HttpServletRequest req) {
+                                final HttpServletRequest req) throws Exception {
 
-        return preparingFormRol(req.getParameter("editRow"));
+        return preparingFormRol(req.getParameter("editRow"),
+                                datosGenerales.getTipoUsuarioSession(),
+                                datosGenerales.getIdEmpresa());
     }
 
     @PostMapping(value = "/crudAccionesListaRoles", params = { "removeRow" })
     public ModelAndView removeRol(final CrudRolModel crudRolModel,
                                   final BindingResult bindingResult,
-                                  final HttpServletRequest req) {
+                                  final HttpServletRequest req) throws Exception {
 
         if (!StringUtil.isEmpty(req.getParameter("removeRow"))) {
             rolInterface.removeRol(StringUtil.toInteger(req.getParameter("removeRow")));
@@ -185,17 +224,23 @@ public class RolController extends InitialController {
                         crudRolModel);
     }
 
-    private ModelAndView preparingFormRol(Object id) {
+    private ModelAndView preparingFormRol(Object id,
+                                          String tipoUsuarioSesion,
+                                          Integer idEmpresaSesion) throws Exception {
         ModelAndView model = new ModelAndView(Constante.FORM_ROL);
         List<CatalogoConstraintModel> listCatalogoConstraintModelEstadoRegistro;
         List<MenuModel> listAllMenus;
         List<GenericModel> listGenericModel = null;
         List<GenericModel> listGenericModelVinculados = null;
+        List<PersonaModel> listPersonaModel = null;
+        List<GenericModel> listGenericPersonaModelVinculado = null;
+        List<GenericModel> listGenericPersonaModel = null;
+        PersonaModel personaModel = null;
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         RolModel rolModel = new RolModel();
         if (!StringUtil.isEmpty(id)) {
-            final Integer idRol = StringUtil.toInteger(id);
+            Integer idRol = StringUtil.toInteger(id);
             rolModel = rolInterface.findRolByIdModel(idRol);
             if (!StringUtil.isEmpty(rolModel.getListMenu())) {
                 listGenericModelVinculados = new ArrayList<GenericModel>();
@@ -209,7 +254,7 @@ public class RolController extends InitialController {
             }
         }
 
-        listAllMenus = menuInterface.listAllMenus();
+        listAllMenus = menuInterface.listAllMenus(tipoUsuarioSesion);
 
         if (!StringUtil.isEmpty(listAllMenus)) {
             listGenericModel = new ArrayList<GenericModel>();
@@ -228,6 +273,40 @@ public class RolController extends InitialController {
                                             "Seleccione Menu..",
                                             listGenericModelVinculados);
 
+        //esta lista es para mostrar las empresas disponibles
+        listPersonaModel = personaInterface.obtenerAllEmpresas(tipoUsuarioSesion, idEmpresaSesion);
+
+        if (!StringUtil.isEmpty(listPersonaModel)) {
+            listGenericPersonaModel = new ArrayList<GenericModel>();
+
+            for (PersonaModel personaModelTemp : listPersonaModel) {
+                GenericModel genericModel = new GenericModel();
+                genericModel.setId(StringUtil.toStr(personaModelTemp.getIdPersona()));
+                genericModel.setDescripcion(personaModelTemp.getNombreCompleto());
+                listGenericPersonaModel.add(genericModel);
+            }
+        }
+        if (!StringUtil.isEmpty(id)) {
+            if (!StringUtil.isEmpty(rolModel.getIdEmpresa())) {
+                personaModel = personaInterface.findPersonaByIdModel(rolModel.getIdEmpresa());
+                if (!StringUtil.isEmpty(personaModel)) {
+                    listGenericPersonaModelVinculado = new ArrayList<GenericModel>();
+
+                    GenericModel genericModel = new GenericModel();
+                    genericModel.setId(StringUtil.toStr(personaModel.getIdPersona()));
+                    genericModel.setDescripcion(personaModel.getNombreCompleto());
+                    listGenericPersonaModelVinculado.add(genericModel);
+                    listGenericPersonaModel.add(genericModel);
+                }
+            }
+        }
+
+        String comboEmpresa = construirComboSearch(Constante.SELECCION_SIMPLE,
+                                                   listGenericPersonaModel,
+                                                   "idEmpresa",
+                                                   "Seleccione Empresa...",
+                                                   listGenericPersonaModelVinculado);
+
         listCatalogoConstraintModelEstadoRegistro = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_ROLES,
                                                                                                                 Constante.ESTADO_REGISTRO);
 
@@ -235,6 +314,8 @@ public class RolController extends InitialController {
         model.addObject("usuario", user.getUsername());
         model.addObject("listEstado", listCatalogoConstraintModelEstadoRegistro);
         model.addObject("comboMenus", combo);
+        model.addObject("comboEmpresa", comboEmpresa);
+
         return model;
     }
 
@@ -243,12 +324,14 @@ public class RolController extends InitialController {
                                   String derecha,
                                   String pagina,
                                   String fin,
-                                  CrudRolModel crudRolModel) {
+                                  CrudRolModel crudRolModel) throws Exception {
         ModelAndView mav = new ModelAndView(Constante.LISTA_ROLES);
         String result = crudRolModel.getResult();
         PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
         crudRolModel = rolInterface.listRolByDescripcionPaginado(busqueda,
+                                                                 crudRolModel.getIdEmpresaSession(),
+                                                                 crudRolModel.getTipoUsuarioSession(),
                                                                  paginadoModel.getPaginaActual(),
                                                                  Constante.PAGINADO_5_ROWS);
 

@@ -13,6 +13,9 @@ public interface PersonaInterface {
 
     public CrudPersonaModel listPersonaByNombrePaginado(String nombres,
                                                         String busquedaTipoPersona,
+                                                        String usuarioSesion,
+                                                        String tipoUsuarioSesion,
+                                                        Integer idEmpresaSeleccionadaSesion,
                                                         Integer pagina,
                                                         Integer cant) throws Exception;
 
@@ -27,9 +30,11 @@ public interface PersonaInterface {
 
     public CrudPersonaModel obtenerEmpresaByPersona(Integer id) throws Exception;
 
-    public List<PersonaModel> obtenerAllEmpresas() throws Exception;
+    public List<PersonaModel> obtenerAllEmpresas(String tipoUsuarioSesion, Integer idEmpresaSesion) throws Exception;
 
     List<PersonaModel> obtenerPersonasNoVinculadasUsuarios() throws Exception;
 
     List<PersonaModel> obtenerPersonasPorNumeroDocumento(String tipoDocumento, String numeroDocumento) throws Exception;
+
+    PersonaModel validarFormulario(PersonaModel personaModel) throws Exception;
 }

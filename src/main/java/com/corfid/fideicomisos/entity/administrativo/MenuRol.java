@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.entity.administrativo;
 
-import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,12 +16,12 @@ public class MenuRol extends Auditoria {
 	@EmbeddedId
 	private MenuRolId menuRolId;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@MapsId("idMenu")
 	@JoinColumn(name = "n_idmenu", nullable = false, insertable = false, updatable = false)
 	private Menu menu;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@MapsId("idRol")
 	@JoinColumn(name = "n_iderol", nullable = false, insertable = false, updatable = false)
 	private Rol rol;

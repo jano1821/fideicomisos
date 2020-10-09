@@ -52,6 +52,7 @@ public class PersonaConverter extends GenericConverter {
 
         if (StringUtil.equiv(persona.getTipoPersona(), Constante.TIPO_PERSONA_NATURAL)) {
             persona.setNombreCompleto(StringUtil.toUpperBlank(personaModel.getNombres() + " " + personaModel.getApePat() + " " + personaModel.getApeMat()));
+            persona.setRazonSocial(StringUtil.toUpperBlank(personaModel.getNombres() + " " + personaModel.getApePat() + " " + personaModel.getApeMat()));
         } else {
             persona.setNombreCompleto(StringUtil.toUpperBlank(personaModel.getRazonSocial()));
         }
@@ -83,6 +84,7 @@ public class PersonaConverter extends GenericConverter {
 
         if (StringUtil.equiv(persona.getTipoPersona(), Constante.TIPO_PERSONA_NATURAL)) {
             persona.setNombreCompleto(personaModel.getNombres().toUpperCase() + " " + personaModel.getApePat().toUpperCase() + " " + personaModel.getApeMat().toUpperCase());
+            persona.setRazonSocial(StringUtil.toUpperBlank(personaModel.getNombres() + " " + personaModel.getApePat() + " " + personaModel.getApeMat()));
         } else {
             persona.setNombreCompleto(personaModel.getRazonSocial().toUpperCase());
         }
@@ -109,6 +111,8 @@ public class PersonaConverter extends GenericConverter {
             personaModel.setApeMat(persona.getApeMat().toUpperCase());
             if (!StringUtil.isEmpty(persona.getRazonSocial())) {
                 personaModel.setRazonSocial(persona.getRazonSocial().toUpperCase());
+            } else {
+                personaModel.setRazonSocial("-");
             }
             personaModel.setTipoPersona(persona.getTipoPersona().toUpperCase());
             personaModel.setEstadoRegistro(persona.getEstadoRegistro());
@@ -128,11 +132,11 @@ public class PersonaConverter extends GenericConverter {
 
             personaModel.setListEmpresa(listEmpresaModel);
 
-            if (!StringUtil.isEmpty(clienteInterface.findByIdCliente(persona.getIdPersona()))) {
+            /*if (!StringUtil.isEmpty(clienteInterface.findByIdCliente(persona.getIdPersona()))) {
                 personaModel.setCliente(Constante.SI_ES_CLIENTE);
             } else {
                 personaModel.setCliente(Constante.NO_ES_CLIENTE);
-            }
+            }*/
 
             if (StringUtil.equiv(persona.getTipoPersona(), "N")) {
                 personaModel.setDescTipoPersona("Natural");

@@ -56,6 +56,9 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
 
     @Override
     public CrudUsuarioModel listUsuarioByUsernamePaginado(String userName,
+                                                          String tipoUsuarioSesion,
+                                                          String usuarioSession,
+                                                          Integer idEmpresaSesion,
                                                           Integer pagina,
                                                           Integer cant) throws Exception {
         List<Usuario> listUsuario;
@@ -65,12 +68,23 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
 
         String cadenaUsuario = Constante.COMODIN_LIKE + userName + Constante.COMODIN_LIKE;
 
-        pageUsuario = usuarioRepository.listUsuarioByUserNamePaginado(cadenaUsuario,
-                                                                      obtenerIndexPorPagina(pagina,
-                                                                                            cant,
-                                                                                            "usuario",
-                                                                                            true,
-                                                                                            false));
+        if (_equiv(tipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+            pageUsuario = usuarioRepository.listUsuarioByUserNamePaginado(cadenaUsuario,
+                                                                          obtenerIndexPorPagina(pagina,
+                                                                                                cant,
+                                                                                                "usuario",
+                                                                                                true,
+                                                                                                false));
+        } else {
+            pageUsuario = usuarioRepository.listUsuarioByUserNameAndEmpresaVinculadaPaginado(cadenaUsuario,
+                                                                                             usuarioSession,
+                                                                                             idEmpresaSesion,
+                                                                                             obtenerIndexPorPagina(pagina,
+                                                                                                                   cant,
+                                                                                                                   "usuario",
+                                                                                                                   true,
+                                                                                                                   false));
+        }
 
         listUsuario = pageUsuario.getContent();
         crudUsuarioModel.setPaginaFinal(pageUsuario.getTotalPages());

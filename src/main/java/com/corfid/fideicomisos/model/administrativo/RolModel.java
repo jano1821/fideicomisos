@@ -3,65 +3,79 @@ package com.corfid.fideicomisos.model.administrativo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RolModel {
-	private Integer idRol;
+import com.corfid.fideicomisos.entity.administrativo.Empresa;
+import com.corfid.fideicomisos.model.utilities.GenericModel;
 
-	private String descripcion;
+public class RolModel extends GenericModel {
 
-	private String estadoRegistro;
+    private Integer idRol;
 
-	private String descEstadoRegistro;
+    private String descripcion;
 
-	private String menu;
+    private String estadoRegistro;
 
-	private List<MenuModel> listMenu = new ArrayList<MenuModel>();
+    private String descEstadoRegistro;
 
-	public Integer getIdRol() {
-		return idRol;
-	}
+    private String menu;
 
-	public void setIdRol(Integer idRol) {
-		this.idRol = idRol;
-	}
+    private List<MenuModel> listMenu = new ArrayList<MenuModel>();
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    private Integer idEmpresa;
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public Integer getIdRol() {
+        return idRol;
+    }
 
-	public String getEstadoRegistro() {
-		return estadoRegistro;
-	}
+    public void setIdRol(Integer idRol) {
+        this.idRol = idRol;
+    }
 
-	public void setEstadoRegistro(String estadoRegistro) {
-		this.estadoRegistro = estadoRegistro;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public String getDescEstadoRegistro() {
-		return descEstadoRegistro;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setDescEstadoRegistro(String descEstadoRegistro) {
-		this.descEstadoRegistro = descEstadoRegistro;
-	}
+    public String getEstadoRegistro() {
+        return estadoRegistro;
+    }
 
-	public String getMenu() {
-		return menu;
-	}
+    public void setEstadoRegistro(String estadoRegistro) {
+        this.estadoRegistro = estadoRegistro;
+    }
 
-	public void setMenu(String menu) {
-		this.menu = menu;
-	}
+    public String getDescEstadoRegistro() {
+        return descEstadoRegistro;
+    }
 
-	public List<MenuModel> getListMenu() {
-		return listMenu;
-	}
+    public void setDescEstadoRegistro(String descEstadoRegistro) {
+        this.descEstadoRegistro = descEstadoRegistro;
+    }
 
-	public void setListMenu(List<MenuModel> listMenu) {
-		this.listMenu = listMenu;
-	}
+    public String getMenu() {
+        return menu;
+    }
+
+    public void setMenu(String menu) {
+        this.menu = menu;
+    }
+
+    public List<MenuModel> getListMenu() {
+        return listMenu;
+    }
+
+    public void setListMenu(List<MenuModel> listMenu) {
+        this.listMenu = listMenu;
+    }
+
+    public Integer getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Integer idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
 
 }

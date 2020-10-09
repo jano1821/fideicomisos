@@ -23,5 +23,12 @@ public interface RolRepository extends JpaRepository<Rol, Serializable> {
 		      @Param("descripcion") String descripcion, 
 		      Pageable pageable);
 	
+	@Query(value = "select r from Rol r where r.descripcion like :descripcion and r.empresa.idEmpresa = :idEmpresaSeleccionada",
+	                countQuery = "select count(r) from Rol r where r.descripcion like :descripcion  and r.empresa.idEmpresa = :idEmpresaSeleccionada")
+	        public abstract Page<Rol> listRolByDescripcionAndUsuarioSesionPaginado (
+	                  @Param("descripcion") String descripcion, 
+	                  @Param("idEmpresaSeleccionada") Integer idEmpresaSeleccionada, 
+	                  Pageable pageable);
+	
 	public abstract List<Rol> findByEstadoRegistro(String estado);
 }

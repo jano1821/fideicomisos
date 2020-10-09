@@ -53,7 +53,7 @@ public class ClienteEmpresaServiceimpl extends AbstractService implements Client
 
             clienteEmpresa = clienteEmpresaRepository.findByClienteEmpresaId(clienteEmpresaId);
 
-            clienteEmpresaRepository.save(clienteEmpresa);
+            clienteEmpresaRepository.delete(clienteEmpresa);
             return true;
         } catch (Exception e) {
             return false;

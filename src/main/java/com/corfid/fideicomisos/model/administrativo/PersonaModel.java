@@ -35,7 +35,7 @@ public class PersonaModel extends GenericModel {
 
     private String permiteVinculacion;
 
-    private String cliente;
+    //private String cliente;
 
     private String permiteVinculacionCliente;
 
@@ -157,13 +157,13 @@ public class PersonaModel extends GenericModel {
         this.permiteVinculacion = permiteVinculacion;
     }
 
-    public String getCliente() {
+    /*public String getCliente() {
         return cliente;
     }
 
     public void setCliente(String cliente) {
         this.cliente = cliente;
-    }
+    }*/
 
     public List<EmpresaModel> getListEmpresa() {
         return listEmpresa;

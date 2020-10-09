@@ -56,7 +56,7 @@
 								</div>
 							</div>
 
-							<div class="three fields">
+							<div class="four fields">
 								<div class="required field">
 									<label>Tipo de menu</label> <select class="ui dropdown"
 										name="tipoMenu" id="tipoMenu" th:field="*{tipoMenu}">
@@ -76,6 +76,17 @@
 											th:value="${estado.valorConstraint}"
 											th:text="${estado.descConstraint}"
 											th:selected="${estado.valorConstraint==estadoRegistro}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Tipo de Usuario para Seleccion</label> <select class="ui dropdown"
+										name="tipoUsuario" id="tipoUsuario"
+										th:field="*{tipoUsuario}">
+										<option value="">Seleccionar...</option>
+										<option th:each="tipoUsuario : ${listTipoUsuario}"
+											th:value="${tipoUsuario.valorConstraint}"
+											th:text="${tipoUsuario.descConstraint}"
+											th:selected="${tipoUsuario.valorConstraint==tipoUsuario}"></option>
 									</select>
 								</div>
 								<div class="required field">

@@ -19,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,29 +67,37 @@ public class PersonaController extends InitialController {
     }
 
     @GetMapping("/lista_personas")
-    public ModelAndView showListaUsuario(Model model, @RequestParam(name = "result", required = false) String result) {
-        CrudPersonaModel crudUsuarioModel = new CrudPersonaModel();
+    public ModelAndView showListaUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                         Model model,
+                                         @RequestParam(name = "result", required = false) String result) {
+        CrudPersonaModel crudPersonaModel = new CrudPersonaModel();
         try {
-            crudUsuarioModel.setResult(result);
+            crudPersonaModel.setResult(result);
+            crudPersonaModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+            crudPersonaModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+
             return busqueda(Constante.CONST_VACIA,
                             Constante.CONST_VACIA,
                             Constante.CONST_CERO,
                             Constante.CONST_CERO,
                             Constante.PAGINA_INICIAL,
                             Constante.CONST_CERO,
-                            crudUsuarioModel);
+                            crudPersonaModel);
         } catch (Exception e) {
             return new ModelAndView();
         }
     }
 
     @PostMapping(value = "/crudAccionesListaPersonas", params = { "findRow", "busqueda", "busquedaTipoPersona" })
-    public ModelAndView buscarUsuario(CrudPersonaModel crudPersonaModel,
+    public ModelAndView buscarUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                      CrudPersonaModel crudPersonaModel,
                                       final BindingResult bindingResult,
                                       final HttpServletRequest req) {
         try {
             String caja = req.getParameter("busqueda");
             String busquedaTipoPersona = req.getParameter("busquedaTipoPersona");
+            crudPersonaModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+            crudPersonaModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
 
             return busqueda(caja,
                             busquedaTipoPersona,
@@ -105,7 +112,8 @@ public class PersonaController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaPersonas", params = { "rightRow", "busqueda", "busquedaTipoPersona", "paginaActual", "paginaFinal" })
-    public ModelAndView paginaDerecha(CrudPersonaModel crudPersonaModel,
+    public ModelAndView paginaDerecha(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                      CrudPersonaModel crudPersonaModel,
                                       final BindingResult bindingResult,
                                       final HttpServletRequest req) {
         try {
@@ -113,6 +121,8 @@ public class PersonaController extends InitialController {
             String busquedaTipoPersona = req.getParameter("busquedaTipoPersona");
             String paginaActual = req.getParameter("paginaActual");
             String paginaFinal = req.getParameter("paginaFinal");
+            crudPersonaModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+            crudPersonaModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
 
             return busqueda(caja,
                             busquedaTipoPersona,
@@ -127,7 +137,8 @@ public class PersonaController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaPersonas", params = { "leftRow", "busqueda", "busquedaTipoPersona", "paginaActual", "paginaFinal" })
-    public ModelAndView paginaIzquierda(CrudPersonaModel crudPersonaModel,
+    public ModelAndView paginaIzquierda(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                        CrudPersonaModel crudPersonaModel,
                                         final BindingResult bindingResult,
                                         final HttpServletRequest req) {
         try {
@@ -135,6 +146,8 @@ public class PersonaController extends InitialController {
             String busquedaTipoPersona = req.getParameter("busquedaTipoPersona");
             String paginaActual = req.getParameter("paginaActual");
             String paginaFinal = req.getParameter("paginaFinal");
+            crudPersonaModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+            crudPersonaModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
 
             return busqueda(caja,
                             busquedaTipoPersona,
@@ -148,13 +161,23 @@ public class PersonaController extends InitialController {
         }
     }
 
-    @PostMapping("/addpersona")
+    @PostMapping(value = "/addpersona", params = { "cancelar" })
+    public String cancelar(final CrudPersonaModel crudPersonaModel,
+                           final BindingResult bindingResult,
+                           final HttpServletRequest req) throws Exception {
+        return "redirect:" + Constante.URL_LISTA_PERSONAS;
+    }
+
+    @PostMapping(value = "/addpersona", params = { "saveRow" })
     public ModelAndView registrarPersona(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
-                                         @ModelAttribute(name = "personaModel") PersonaModel personaModel,
-                                         Model model) {
+                                         PersonaModel personaModel,
+                                         Model model,
+                                         final BindingResult bindingResult,
+                                         final HttpServletRequest req) {
 
         CrudPersonaModel crudPersonaModel = new CrudPersonaModel();
         try {
+
             Date fechaAndHoraActual = getFechaAndHoraActual();
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             setParametrosAuditoriaModel(fechaAndHoraActual,
@@ -164,7 +187,21 @@ public class PersonaController extends InitialController {
                                         user.getUsername(),
                                         obtenerIp());
 
-            personaModel.setCliente(personaModel.getPermiteVinculacionCliente());
+            switch (personaModel.getDescTipoPersona()) {
+                case "todos":
+                    personaModel.setTipoPersona("%");
+                    break;
+                case "persona natural":
+                    personaModel.setTipoPersona("N");
+                    break;
+                case "empresa":
+                    personaModel.setTipoPersona("J");
+                    break;
+                default:
+                    break;
+            }
+            
+            //personaModel.setCliente(personaModel.getPermiteVinculacionCliente());
             personaModel.setIdUsuarioRegistro(datosGenerales.getIdUsuario());
 
             personaModel = personaInterface.addPersona(personaModel, getParametrosAuditoriaModel());
@@ -178,6 +215,8 @@ public class PersonaController extends InitialController {
                 crudPersonaModel.setMensajeError(personaModel.getDescripcionError());
             }
 
+            crudPersonaModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+            crudPersonaModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
             return busqueda(Constante.CONST_VACIA,
                             Constante.CONST_VACIA,
                             Constante.CONST_CERO,
@@ -191,23 +230,27 @@ public class PersonaController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaPersonas", params = { "addRow" })
-    public ModelAndView addUsuario(final CrudPersonaModel crudPersonaModel,
+    public ModelAndView addUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                   final CrudPersonaModel crudPersonaModel,
                                    final BindingResult bindingResult) throws Exception {
         try {
-            return preparingFormUsuario(null);
+            return preparingFormUsuario(null, datosGenerales.getTipoUsuarioSession(), datosGenerales.getIdEmpresa());
         } catch (Exception e) {
-            return new ModelAndView();
+            return new ModelAndView(Constante.LISTA_PERSONAS);
         }
     }
 
     @PostMapping(value = "/crudAccionesListaPersonas", params = { "editRow" })
-    public ModelAndView editUsuario(final CrudPersonaModel crudPersonaModel,
+    public ModelAndView editUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                    final CrudPersonaModel crudPersonaModel,
                                     final BindingResult bindingResult,
                                     final HttpServletRequest req) throws Exception {
         try {
-            return preparingFormUsuario(req.getParameter("editRow"));
+            return preparingFormUsuario(req.getParameter("editRow"),
+                                        datosGenerales.getTipoUsuarioSession(),
+                                        datosGenerales.getIdEmpresa());
         } catch (Exception e) {
-            return new ModelAndView();
+            return new ModelAndView(Constante.LISTA_PERSONAS);
         }
     }
 
@@ -235,7 +278,9 @@ public class PersonaController extends InitialController {
         }
     }
 
-    private ModelAndView preparingFormUsuario(Object id) throws Exception {
+    private ModelAndView preparingFormUsuario(Object id,
+                                              String tipoUsuarioSesion,
+                                              Integer idEmpresaSesion) throws Exception {
         ModelAndView model = new ModelAndView(Constante.FORM_PERSONA);
         try {
             List<CatalogoConstraintModel> listCatalogoConstraintModelEstadoRegistro;
@@ -245,9 +290,6 @@ public class PersonaController extends InitialController {
             List<PersonaModel> listPersonaModel = new ArrayList<PersonaModel>();
 
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-            // listar todas las empresas
-            listPersonaModel = personaInterface.obtenerAllEmpresas();
 
             PersonaModel personaModel = new PersonaModel();
             if (!StringUtil.isEmpty(id)) {
@@ -262,12 +304,23 @@ public class PersonaController extends InitialController {
                         GenericModel genericModel = new GenericModel();
                         genericModel.setId(StringUtil.toStr(empresaModel.getIdPersona()));
                         genericModel.setDescripcion(empresaModel.getRazonSocial());
-                        listGenericModelVinculados.add(genericModel);
+                        if (StringUtil.equiv(tipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                            listGenericModelVinculados.add(genericModel);
+                        } else {
+                            if (StringUtil.equiv(empresaModel.getIdEmpresa(), idEmpresaSesion)) {
+                                listGenericModelVinculados.add(genericModel);
+                            }
+                        }
                     }
                 }
             } else {
                 personaModel.setEdicion(Constante.MODO_NUEVO);
             }
+            personaModel.setTipoUsuarioSesion(tipoUsuarioSesion);
+            personaModel.setIdEmpresaSesion(idEmpresaSesion);
+
+            // listar todas las empresas
+            listPersonaModel = personaInterface.obtenerAllEmpresas(tipoUsuarioSesion, idEmpresaSesion);
 
             if (!StringUtil.isEmpty(listPersonaModel)) {
                 listGenericModel = new ArrayList<GenericModel>();
@@ -334,10 +387,14 @@ public class PersonaController extends InitialController {
                 default:
                     break;
             }
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             //personeria = crudPersonaModel.getBusquedaTipoPersona();
 
             crudPersonaModel = personaInterface.listPersonaByNombrePaginado(busqueda,
                                                                             personeria,
+                                                                            user.getUsername(),
+                                                                            crudPersonaModel.getTipoUsuarioSession(),
+                                                                            crudPersonaModel.getIdEmpresaSession(),
                                                                             paginadoModel.getPaginaActual(),
                                                                             Constante.PAGINADO_5_ROWS);
             crudPersonaModel.setBusqueda(busqueda);
@@ -366,8 +423,6 @@ public class PersonaController extends InitialController {
                 crudPersonaModel.setResult(Constante.RESULT_ERROR);
             }
 
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
             crudPersonaModel.setPaginaActual(paginadoModel.getPaginaActual());
             crudPersonaModel.setUsuario(user.getUsername());
 
@@ -385,7 +440,6 @@ public class PersonaController extends InitialController {
 
         AjaxResponseBody result = new AjaxResponseBody();
         try {
-            //If error, just return a 400 bad request, along with the error message
             if (errors.hasErrors()) {
 
                 result.setMsg(errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.joining(",")));
@@ -396,16 +450,16 @@ public class PersonaController extends InitialController {
             List<PersonaModel> personaModelResponse = new ArrayList<PersonaModel>();//userService.login(loginForm);
 
             personaModelResponse = personaInterface.obtenerPersonasPorNumeroDocumento(personaModel.getTipoDocumento(),
-                                                               personaModel.getNumeroDocumento());
+                                                                                      personaModel.getNumeroDocumento());
 
             if (personaModelResponse.isEmpty()) {
-                result.setMsg("persona no encontrada");
+                result.setMsg("N");
             } else {
-                result.setMsg("encontrado");
+                result.setMsg("S");
             }
             result.setResult(personaModelResponse);
         } catch (Exception e) {
-            // TODO: handle exception
+            result.setMsg("N");
         }
         return ResponseEntity.ok(result);
 

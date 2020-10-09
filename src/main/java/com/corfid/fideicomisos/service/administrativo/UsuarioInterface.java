@@ -9,22 +9,26 @@ import com.corfid.fideicomisos.model.cruds.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 
 public interface UsuarioInterface {
-	public abstract UsuarioModel addUsuario(UsuarioModel usuarioModel,
-			ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
 
-	public abstract List<UsuarioModel> listAllUsuarios() throws Exception;
+    public abstract UsuarioModel addUsuario(UsuarioModel usuarioModel,
+                                            ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
 
-	public CrudUsuarioModel listUsuarioByUsernamePaginado(String userName, Integer pagina, Integer cant)
-			throws Exception;
+    public abstract List<UsuarioModel> listAllUsuarios() throws Exception;
 
-	public Usuario findUsuarioById(Integer id);
+    public CrudUsuarioModel listUsuarioByUsernamePaginado(String userName,
+                                                          String tipoUsuarioSesion,
+                                                          String usuarioSession,
+                                                          Integer idEmpresaSesion,
+                                                          Integer pagina,
+                                                          Integer cant) throws Exception;
 
-	public UsuarioModel findUsuarioByUsuario(String userName) throws Exception;
+    public Usuario findUsuarioById(Integer id);
 
-	public abstract UsuarioModel findUsuarioByIdModel(Integer id) throws Exception;
+    public UsuarioModel findUsuarioByUsuario(String userName) throws Exception;
 
-	public abstract void removeUsuario(Integer id);
+    public abstract UsuarioModel findUsuarioByIdModel(Integer id) throws Exception;
 
-	public UsuarioModel findUsuarioByIdPersona(Persona persona)
-			throws Exception;
+    public abstract void removeUsuario(Integer id);
+
+    public UsuarioModel findUsuarioByIdPersona(Persona persona) throws Exception;
 }

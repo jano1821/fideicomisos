@@ -1,113 +1,132 @@
 package com.corfid.fideicomisos.model.utilities;
 
 public class CrudModel {
-	private String id;
-	private String descripcion;
-	private String usuario;
-	private String tipo;
-	private String acciones;
-	private String result;
-	private Integer paginaActual;
-	private Integer paginaFinal;
-	private Integer cantidadRegistros;
-	private String mensaje;
-	private String codigoError;
-	private String mensajeError;
 
-	public String getId() {
-		return id;
-	}
+    private String id;
+    private String descripcion;
+    private String usuario;
+    private String tipo;
+    private String acciones;
+    private String result;
+    private Integer paginaActual;
+    private Integer paginaFinal;
+    private Integer cantidadRegistros;
+    private String mensaje;
+    private String codigoError;
+    private String mensajeError;
+    private String tipoUsuarioSession;
+    private Integer idEmpresaSession;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public String getUsuario() {
-		return usuario;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
+    public String getUsuario() {
+        return usuario;
+    }
 
-	public String getTipo() {
-		return tipo;
-	}
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
+    public String getTipo() {
+        return tipo;
+    }
 
-	public String getAcciones() {
-		return acciones;
-	}
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
-	public void setAcciones(String acciones) {
-		this.acciones = acciones;
-	}
+    public String getAcciones() {
+        return acciones;
+    }
 
-	public String getResult() {
-		return result;
-	}
+    public void setAcciones(String acciones) {
+        this.acciones = acciones;
+    }
 
-	public void setResult(String result) {
-		this.result = result;
-	}
+    public String getResult() {
+        return result;
+    }
 
-	public Integer getPaginaActual() {
-		return paginaActual;
-	}
+    public void setResult(String result) {
+        this.result = result;
+    }
 
-	public void setPaginaActual(Integer paginaActual) {
-		this.paginaActual = paginaActual;
-	}
+    public Integer getPaginaActual() {
+        return paginaActual;
+    }
 
-	public Integer getPaginaFinal() {
-		return paginaFinal;
-	}
+    public void setPaginaActual(Integer paginaActual) {
+        this.paginaActual = paginaActual;
+    }
 
-	public void setPaginaFinal(Integer paginaFinal) {
-		this.paginaFinal = paginaFinal;
-	}
+    public Integer getPaginaFinal() {
+        return paginaFinal;
+    }
 
-	public Integer getCantidadRegistros() {
-		return cantidadRegistros;
-	}
+    public void setPaginaFinal(Integer paginaFinal) {
+        this.paginaFinal = paginaFinal;
+    }
 
-	public void setCantidadRegistros(Integer cantidadRegistros) {
-		this.cantidadRegistros = cantidadRegistros;
-	}
+    public Integer getCantidadRegistros() {
+        return cantidadRegistros;
+    }
 
-	public String getMensaje() {
-		return mensaje;
-	}
+    public void setCantidadRegistros(Integer cantidadRegistros) {
+        this.cantidadRegistros = cantidadRegistros;
+    }
 
-	public void setMensaje(String mensaje) {
-		this.mensaje = mensaje;
-	}
+    public String getMensaje() {
+        return mensaje;
+    }
 
-	public String getCodigoError() {
-		return codigoError;
-	}
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
 
-	public void setCodigoError(String codigoError) {
-		this.codigoError = codigoError;
-	}
+    public String getCodigoError() {
+        return codigoError;
+    }
 
-	public String getMensajeError() {
-		return mensajeError;
-	}
+    public void setCodigoError(String codigoError) {
+        this.codigoError = codigoError;
+    }
 
-	public void setMensajeError(String mensajeError) {
-		this.mensajeError = mensajeError;
-	}
+    public String getMensajeError() {
+        return mensajeError;
+    }
+
+    public void setMensajeError(String mensajeError) {
+        this.mensajeError = mensajeError;
+    }
+
+    public String getTipoUsuarioSession() {
+        return tipoUsuarioSession;
+    }
+
+    public void setTipoUsuarioSession(String tipoUsuarioSession) {
+        this.tipoUsuarioSession = tipoUsuarioSession;
+    }
+
+    public Integer getIdEmpresaSession() {
+        return idEmpresaSession;
+    }
+
+    public void setIdEmpresaSession(Integer idEmpresaSession) {
+        this.idEmpresaSession = idEmpresaSession;
+    }
 
 }

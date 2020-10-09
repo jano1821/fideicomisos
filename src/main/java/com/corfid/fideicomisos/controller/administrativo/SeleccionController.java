@@ -66,24 +66,24 @@ public class SeleccionController extends InitialController {
             Collection<Integer> rolesSesion = new ArrayList<Integer>();
             UsuarioModel usuarioModel = new UsuarioModel();
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
-
-            for (String rol : roles) {
-                rolesSesion.add(StringUtil.toInteger(rol));
-            }
-
-            listMenuModel = menuInterface.obtenerMenuByRol(rolesSesion);
-            datosGenerales.setListMenuModel(listMenuModel);
-            datosGenerales.setMenu(construirMenu(listMenuModel));
             usuarioModel = usuarioInterface.findUsuarioByUsuario(user.getUsername());
 
             datosGenerales.setIdUsuario(usuarioModel.getIdUsuario());
             datosGenerales.setTipoUsuarioSession(usuarioModel.getTipoUsuario());
 
             if (StringUtil.equiv(usuarioModel.getTipoUsuario(), Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
+                for (String rol : roles) {
+                    rolesSesion.add(StringUtil.toInteger(rol));
+                }
+
+                listMenuModel = menuInterface.obtenerMenuByRol(rolesSesion);
+                datosGenerales.setListMenuModel(listMenuModel);
+                datosGenerales.setMenu(construirMenu(listMenuModel));
+
                 mav = new ModelAndView(Constante.MENU);
                 mav.addObject("usuario", user.getUsername());
             } else {
@@ -107,6 +107,9 @@ public class SeleccionController extends InitialController {
                                    final BindingResult bindingResult,
                                    final HttpServletRequest req) {
         ModelAndView model;
+        Collection<Integer> rolesSesion = new ArrayList<Integer>();
+        Set<String> roles;
+        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
 
         if (StringUtil.equiv(req.getParameter("modo"), Constante.FIDEICOMISARIO)) {
             model = new ModelAndView(Constante.MENU);
@@ -114,10 +117,23 @@ public class SeleccionController extends InitialController {
             model = new ModelAndView(Constante.SITIO_EN_CONSTRUCCION);
         }
 
-        datosGenerales.setModo(req.getParameter("modo"));
-        datosGenerales.setRucEmpresa(req.getParameter("selectRow"));
+        String[] datos = req.getParameter("selectRow").split("-");
 
+        datosGenerales.setModo(req.getParameter("modo"));
+        datosGenerales.setRucEmpresa(datos[0]);
+        datosGenerales.setIdEmpresa(StringUtil.toInteger(datos[1]));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
+        for (String rol : roles) {
+            rolesSesion.add(StringUtil.toInteger(rol));
+        }
+
+        listMenuModel = menuInterface.obtenerMenuByRolAndEmpresaSeleccionada(rolesSesion,
+                                                                             StringUtil.toInteger(datos[1]));
+        datosGenerales.setListMenuModel(listMenuModel);
+        datosGenerales.setMenu(construirMenu(listMenuModel));
 
         model.addObject("usuario", user.getUsername());
         return model;

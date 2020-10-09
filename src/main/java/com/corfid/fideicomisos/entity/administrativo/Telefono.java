@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.entity.administrativo;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,63 +15,64 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Entity
 @Table(name = "admtelef")
 public class Telefono extends Auditoria {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "n_idtele", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
-	private Integer idTelefono;
 
-	@Column(name = "c_numero", nullable = false, length = 200, insertable = true, updatable = true)
-	private String numero;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "n_idtele", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
+    private Integer idTelefono;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "n_idpers", nullable = false, insertable = true, updatable = true)
-	private Persona persona;
+    @Column(name = "c_numero", nullable = false, length = 200, insertable = true, updatable = true)
+    private String numero;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "n_idoper", nullable = false, insertable = true, updatable = true)
-	private Operador operador;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "n_idpers", nullable = false, insertable = true, updatable = true)
+    private Persona persona;
 
-	public Integer getIdTelefono() {
-		return idTelefono;
-	}
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "n_idoper", nullable = false, insertable = true, updatable = true)
+    private Operador operador;
 
-	public void setIdTelefono(Integer idTelefono) {
-		this.idTelefono = idTelefono;
-	}
+    public Integer getIdTelefono() {
+        return idTelefono;
+    }
 
-	public String getNumero() {
-		return numero;
-	}
+    public void setIdTelefono(Integer idTelefono) {
+        this.idTelefono = idTelefono;
+    }
 
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
+    public String getNumero() {
+        return numero;
+    }
 
-	public Persona getPersona() {
-		return persona;
-	}
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
 
-	public void setPersona(Persona persona) {
-		this.persona = persona;
-	}
+    public Persona getPersona() {
+        return persona;
+    }
 
-	public Operador getOperador() {
-		return operador;
-	}
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
 
-	public void setOperador(Operador operador) {
-		this.operador = operador;
-	}
+    public Operador getOperador() {
+        return operador;
+    }
 
-	public Telefono(Integer idTelefono, String numero, Persona persona, Operador operador) {
-		super();
-		this.idTelefono = idTelefono;
-		this.numero = numero;
-		this.persona = persona;
-		this.operador = operador;
-	}
+    public void setOperador(Operador operador) {
+        this.operador = operador;
+    }
 
-	public Telefono() {
-	}
+    public Telefono(Integer idTelefono, String numero, Persona persona, Operador operador) {
+        super();
+        this.idTelefono = idTelefono;
+        this.numero = numero;
+        this.persona = persona;
+        this.operador = operador;
+    }
+
+    public Telefono() {
+    }
 
 }

@@ -83,9 +83,15 @@ public class UsuarioController extends InitialController {
     }
 
     @GetMapping("/lista_usuarios")
-    public ModelAndView showListaUsuario(Model model, @RequestParam(name = "result", required = false) String result) {
+    public ModelAndView showListaUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                         Model model,
+                                         @RequestParam(name = "result", required = false) String result) {
         CrudUsuarioModel crudUsuarioModel = new CrudUsuarioModel();
+
         crudUsuarioModel.setResult(result);
+        crudUsuarioModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+        crudUsuarioModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+
         return busqueda(Constante.CONST_VACIA,
                         Constante.CONST_CERO,
                         Constante.CONST_CERO,
@@ -95,10 +101,13 @@ public class UsuarioController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaUsuarios", params = { "findRow", "busqueda" })
-    public ModelAndView buscarUsuario(CrudUsuarioModel crudUsuarioModel,
+    public ModelAndView buscarUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                      CrudUsuarioModel crudUsuarioModel,
                                       final BindingResult bindingResult,
                                       final HttpServletRequest req) {
         String caja = req.getParameter("busqueda");
+        crudUsuarioModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+        crudUsuarioModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
 
         return busqueda(caja,
                         Constante.CONST_CERO,
@@ -109,23 +118,29 @@ public class UsuarioController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaUsuarios", params = { "rightRow", "busqueda", "paginaActual", "paginaFinal" })
-    public ModelAndView paginaDerecha(CrudUsuarioModel crudUsuarioModel,
+    public ModelAndView paginaDerecha(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                      CrudUsuarioModel crudUsuarioModel,
                                       final BindingResult bindingResult,
                                       final HttpServletRequest req) {
         String caja = req.getParameter("busqueda");
         String paginaActual = req.getParameter("paginaActual");
         String paginaFinal = req.getParameter("paginaFinal");
+        crudUsuarioModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+        crudUsuarioModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
 
         return busqueda(caja, Constante.CONST_CERO, Constante.DERECHA, paginaActual, paginaFinal, crudUsuarioModel);
     }
 
     @PostMapping(value = "/crudAccionesListaUsuarios", params = { "leftRow", "busqueda", "paginaActual", "paginaFinal" })
-    public ModelAndView paginaIzquierda(CrudUsuarioModel crudUsuarioModel,
+    public ModelAndView paginaIzquierda(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                        CrudUsuarioModel crudUsuarioModel,
                                         final BindingResult bindingResult,
                                         final HttpServletRequest req) {
         String caja = req.getParameter("busqueda");
         String paginaActual = req.getParameter("paginaActual");
         String paginaFinal = req.getParameter("paginaFinal");
+        crudUsuarioModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+        crudUsuarioModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
 
         return busqueda(caja, Constante.IZQUIERDA, Constante.CONST_CERO, paginaActual, paginaFinal, crudUsuarioModel);
     }
@@ -274,19 +289,17 @@ public class UsuarioController extends InitialController {
                 }
             }
             if (StringUtil.equiv(usuarioModel.getEdicion(), Constante.MODO_EDICION)) {
-                //if (!StringUtil.isEmpty(usuarioModel.getIdPersona())) {
                 listRolModelVinculado = usuarioModel.getListRoles();
                 if (!StringUtil.isEmpty(listRolModelVinculado)) {
                     listGenericRolModelVinculado = new ArrayList<GenericModel>();
 
                     for (RolModel rolModelVinculado : listRolModelVinculado) {
-                    genericModel = new GenericModel();
-                    genericModel.setId(StringUtil.toStr(rolModelVinculado.getIdRol()));
-                    genericModel.setDescripcion(rolModelVinculado.getDescripcion());
-                    listGenericRolModelVinculado.add(genericModel);
+                        genericModel = new GenericModel();
+                        genericModel.setId(StringUtil.toStr(rolModelVinculado.getIdRol()));
+                        genericModel.setDescripcion(rolModelVinculado.getDescripcion());
+                        listGenericRolModelVinculado.add(genericModel);
                     }
                 }
-                //}
             }
 
             String comboRoles = construirComboSearch(Constante.SELECCION_MULTIPLE,
@@ -327,13 +340,18 @@ public class UsuarioController extends InitialController {
             String result, mensajeError;
 
             PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
             result = crudUsuarioModel.getResult();
             mensajeError = crudUsuarioModel.getMensajeError();
 
             crudUsuarioModel = usuarioInterface.listUsuarioByUsernamePaginado(busqueda,
+                                                                              crudUsuarioModel.getTipoUsuarioSession(),
+                                                                              user.getUsername(),
+                                                                              crudUsuarioModel.getIdEmpresaSession(),
                                                                               paginadoModel.getPaginaActual(),
                                                                               Constante.PAGINADO_5_ROWS);
+
             crudUsuarioModel.setBusqueda(busqueda);
 
             if (StringUtil.equiv(result, Constante.RESULT_ERROR)) {
@@ -357,8 +375,6 @@ public class UsuarioController extends InitialController {
                                                              Constante.MENSAJE_INFORMATIVO));
                 crudUsuarioModel.setResult(Constante.RESULT_ERROR);
             }
-
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
             crudUsuarioModel.setPaginaActual(paginadoModel.getPaginaActual());
             crudUsuarioModel.setUsuario(user.getUsername());

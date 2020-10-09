@@ -1,6 +1,8 @@
 package com.corfid.fideicomisos.model.administrativo;
 
-public class MenuModel {
+import com.corfid.fideicomisos.model.utilities.GenericModel;
+
+public class MenuModel extends GenericModel {
 
     private Integer idMenu;
 
@@ -18,9 +20,9 @@ public class MenuModel {
 
     private String descEstadoRegistro;
 
-    private String tipoUsuarioSesion;
-
     private Integer idUsuarioRegistro;
+
+    private String tipoUsuario;
 
     public Integer getIdMenu() {
         return idMenu;
@@ -86,20 +88,20 @@ public class MenuModel {
         this.descEstadoRegistro = descEstadoRegistro;
     }
 
-    public String getTipoUsuarioSesion() {
-        return tipoUsuarioSesion;
-    }
-
-    public void setTipoUsuarioSesion(String tipoUsuarioSesion) {
-        this.tipoUsuarioSesion = tipoUsuarioSesion;
-    }
-
     public Integer getIdUsuarioRegistro() {
         return idUsuarioRegistro;
     }
 
     public void setIdUsuarioRegistro(Integer idUsuarioRegistro) {
         this.idUsuarioRegistro = idUsuarioRegistro;
+    }
+
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 
 }

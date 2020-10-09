@@ -40,9 +40,17 @@
 							th:action="@{/persona/addpersona}" th:object="${personaModel}"
 							method="POST" id="frm-persona">
 							<h4 class="ui dividing header">Formulario de Persona</h4>
+							
 							<input type="hidden" th:field="*{idPersona}"
-								th:value="${idPersona}"></input> <input type="hidden" id="modo"
-								name="modo" th:value="${personaModel.edicion}"></input>
+								th:value="${idPersona}"></input> 
+							<input type="hidden" id="modo"
+								name="modo" th:value="${personaModel.edicion}"></input> 
+							<input
+								type="hidden" id="tipoUsuarioSesion" name="tipoUsuarioSesion"
+								th:value="${personaModel.tipoUsuarioSesion}"></input> 
+							<input
+								type="hidden" id="idEmpresaSesion" name="idEmpresaSesion"
+								th:value="${personaModel.idEmpresaSesion}"></input>
 
 							<div class="three fields">
 								<div class="required field">
@@ -110,27 +118,8 @@
 								</div>
 							</div>
 
-							<div id="vinculacion">
+							<div id="divEstadoRegistro">
 								<div class="three fields">
-									<div class="required field">
-										<label>Permite Vinculacion como Empresa</label> <select
-											class="ui fluid dropdown" name="permiteVinculacion"
-											id="permiteVinculacion" th:field="*{permiteVinculacion}">
-											<option value="">Seleccionar...</option>
-											<option value="S">Si</option>
-											<option value="N">No</option>
-										</select>
-									</div>
-									<div class="required field">
-										<label>Permite Vincular como Usuario</label> <select
-											class="ui fluid dropdown" name="permiteVinculacionCliente"
-											id="permiteVinculacionCliente"
-											th:field="*{permiteVinculacionCliente}">
-											<option value="">Seleccionar...</option>
-											<option value="S">Si</option>
-											<option value="N">No</option>
-										</select>
-									</div>
 									<div class="required field">
 										<label>Estado de Registro</label> <select class="ui dropdown"
 											name="estadoRegistro" id="estadoRegistro"
@@ -144,35 +133,65 @@
 									</div>
 								</div>
 							</div>
+							<div>
+								<div class="three fields">
+									<div class="required field" id="vincularComoUsuario">
+										<label>Permite Vincular como Usuario</label> <select
+											class="ui fluid dropdown" name="permiteVinculacionCliente"
+											id="permiteVinculacionCliente"
+											th:field="*{permiteVinculacionCliente}">
+											<option value="">Seleccionar...</option>
+											<option value="S">Si</option>
+											<option value="N">No</option>
+										</select>
+									</div>
+									<div class="required field" id="vincularComoEmpresa">
+										<label>Permite Vinculacion como Empresa</label> <select
+											class="ui fluid dropdown" name="permiteVinculacion"
+											id="permiteVinculacion" th:field="*{permiteVinculacion}">
+											<option value="">Seleccionar...</option>
+											<option value="S">Si</option>
+											<option value="N">No</option>
+										</select>
+									</div>
+								</div>
+							</div>
 
-							<div class="required field"
-								th:if="${personaModel.edicion == 'S' && personaModel.cliente == 'S'}">
+							<div class="required field" id="empresa">
 								<div class="required field" th:utext="${comboEmpresas}"></div>
 
 							</div>
 
-							<div class="one fields">
-								<div class="ui center aligned field">
-									<div class="ui buttons">
-										<button class="fluid ui primary button active" type="submit"
-											id="saveRow" name="saveRow">Guardar</button>
-										<div class="or" data-text="O"></div>
+							<div class="ui center aligned field">
+								<div class="ui buttons">
+									<button class="fluid ui primary button active" type="submit"
+										id="saveRow" name="saveRow">Guardar</button>
+									<div class="or" data-text="O"></div>
 
-										<div class="fluid ui reset button">Limpiar Campos</div>
-									</div>
+									<button class="fluid ui negative basic button" type="submit"
+										id="cancelar" name="cancelar">Cancelar</button>
 								</div>
 							</div>
 							<div class="ui error message"></div>
+							<div class="ui secondary segment" id="mensajeDePara">
+								<div class="ui info message">
+									<i class="close icon"></i>
+									<div class="header">Mensaje de información</div>
+									<p>Registro de persona ya existe, buscarla en la lista de
+										Personas</p>
+								</div>
+							</div>
+							<div class="ui secondary segment" id="mensajeDeConfirmacion">
+								<div class="ui info message">
+									<i class="close icon"></i>
+									<div class="header">Mensaje de información</div>
+									<p>Persona ya se encuentra registrada, puede vincularla a
+										la empresa de su elección</p>
+								</div>
+							</div>
 						</form>
-						
+
 						<div id="feedback"></div>
-						
-						<form class="ui form" action="#" th:action="@{/persona/cancel}"
-							method="POST" id="frm-cancelar">
-							<a href="#">
-								<button class="fluid ui negative basic button">Cancelar</button>
-							</a>
-						</form>
 
 					</div>
 
@@ -206,173 +225,235 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
+			$('#mensajeDePara').hide();
+			$('#mensajeDeConfirmacion').hide();
+
 			if ($('#modo').val() == 'N'){
 				$('#datos').hide();
 				$('#razon').hide();
-				$('#vinculacion').hide();
+				$('#divEstadoRegistro').hide();
+				$('#empresa').hide();
+				$('#saveRow'). attr("disabled", true);
+				$('#vincularComoEmpresa').hide();
+				$('#vincularComoUsuario').hide();
 			} else {
 				if ($("#tipoDocumento").val() == 'RUC'){
 					$('#datos').hide();
 				} else {
 					$('#razon').hide();
 				}
-			}
-			/*$("#tipoDocumento").on( "change", function() {
-				if ($(this).val() == 'RUC'){
-					$('#datos').hide();
-					$('#razon').show();
-					$('#vinculacion').show();
-					$('#razonSocial').val('');
-					$('#nombres').val('-');
-					$('#apePat').val('-');
-					$('#apeMat').val('-');
-					$('#descTipoPersona').val('Juridica');
-				} else {
-					$('#datos').show();
-					$('#razon').hide();
-					$('#vinculacion').show();
-					$('#razonSocial').val('-');
-					$('#nombres').val('');
-					$('#apePat').val('');
-					$('#apeMat').val('');
-					$('#descTipoPersona').val('Natural');
-				}
 				
-			});*/
-		});
-	</script>
-	
-	
-	
-	<script type="text/javascript">
-		$(document).ready(function(){
+				if ($('#tipoUsuarioSesion').val() == 'S'){
+					$('#divEstadoRegistro').show();
+					$('#vincularComoEmpresa').show();
+					$('#vincularComoUsuario').show();
+					
+				} else {
+					$('#divEstadoRegistro').hide();
+					$('#vincularComoEmpresa').hide();
+					$('#vincularComoUsuario').hide();
+				}
+
+				$('#empresa').show();
+			}
+			
+			
+			$("#tipoDocumento").on( "change", function() {
+				$('#datos').hide();
+				$('#razon').hide();
+				$('#vinculacionCliente').hide();
+				$('#razonSocial').val('');
+				$('#nombres').val('');
+				$('#apePat').val('');
+				$('#apeMat').val('');
+				$('#descTipoPersona').val('');
+				
+			});
+
 		    $("#numeroDocumento").keypress(function(e) {
 		        var code = (e.keyCode ? e.keyCode : e.which);
 		        if(code==13){
 		            buscarPersonaAjax();
 		        }
 		    });
+
+		    $("#permiteVinculacionCliente").on( "change", function() {
+		    	if ($(this).val() == 'S'){
+		    		$('#empresa').show();
+				} else {
+					$('#empresa').hide();
+				}
+		    });
+
+		    $("#saveRow").click(function(e) {
+		    	$('#frm-persona').form({
+					on : 'blur',
+					fields : {
+						nombres : {
+							identifier : 'nombres',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Ingrese Nombres'
+							} ]
+						},
+						apePat : {
+							identifier : 'apePat',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Ingrese Apellido Paterno'
+							} ]
+						},
+						apeMat : {
+							identifier : 'apeMat',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Ingrese Apellido Materno'
+							} ]
+						},
+						razonSocial : {
+							identifier : 'razonSocial',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Ingrese Razón Social'
+							} ]
+						},
+						tipoPersona : {
+							identifier : 'tipoPersona',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor seleccione Tipo de Persona'
+							} ]
+						},
+						tipoDocumento : {
+							identifier : 'tipoDocumento',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Ingrese Tipo de Documento'
+							} ]
+						},
+						numeroDocumento : {
+							identifier : 'numeroDocumento',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Ingrese Tipo de Numero de Documento'
+							} ]
+						}
+					}
+				});
+		    });
 		});
 	</script>
-	
+
 	<script type="text/javascript">
-	function buscarPersonaAjax(){
-		/*$(document).ready(function () {
-		    $("#frm-persona").submit(function (event) {*/
-		 
-		        event.preventDefault();
-		 
-		        var datosPersona = {}
-		        datosPersona["tipoDocumento"] = $("#tipoDocumento").val();
-		        datosPersona["numeroDocumento"] = $("#numeroDocumento").val();
-		 
-		        //$("#btn-login").prop("disabled", true);
-		        
-		        $.ajax({
-		            type: "POST",
-		            contentType: "application/json",
-		            url: "/persona/validarExistencia",
-		            data: JSON.stringify(datosPersona),
-		            dataType: 'json',
-		            cache: false,
-		            timeout: 600000,
-		            success: function (data) {
-		 
-		                var json = "<h4>Ajax Response</h4><pre>"
-		                    + JSON.stringify(data, null, 4) + "</pre>";
-		                $('#feedback').html(json);
-		 
-		                //console.log("SUCCESS : ", data);
-		                //$("#btn-login").prop("disabled", false);
-		 
-		            },
-		            error: function (e) {
-		 
-		                var json = "<h4>Ajax Response Error</h4><pre>"
-		                    + e.responseText + "</pre>";
-		                $('#feedback').html(json);
-		 
-		                //console.log("ERROR : ", e);
-		                //$("#btn-login").prop("disabled", false);
-		 
-		            }
-		        });
-		        
-		  /*  });*/
-		 
-		/*});*/
+	function buscarPersonaAjax(){		 
+		event.preventDefault();
+		
+		var datosPersona = {}
+		datosPersona["tipoDocumento"] = $("#tipoDocumento").val();
+		datosPersona["numeroDocumento"] = $("#numeroDocumento").val();
+		
+		$.ajax({
+		    type: "POST",
+		    contentType: "application/json",
+		    url: "/persona/validarExistencia",
+		    data: JSON.stringify(datosPersona),
+		    dataType: 'json',
+		    cache: false,
+		    timeout: 600000,
+		    success: function (data) {
+
+		    	/*var json = "<h4>Ajax Response</h4>&lt;pre&gt;"
+	                + JSON.stringify(data, null, 4) + "&lt;/pre&gt;";
+	            $('#feedback').html(json);*/
+		    	
+		        var respuesta = data['msg'];
+
+		        if (respuesta == 'S'){
+		        	if ($('#tipoDocumento').val() == 'RUC'){
+						$('#datos').hide();
+						$('#razon').show();
+						$('#razonSocial').val('');
+						$('#nombres').val('-');
+						$('#apePat').val('-');
+						$('#apeMat').val('-');
+						$('#descTipoPersona').val('Juridica');
+					} else {
+						$('#datos').show();
+						$('#razon').hide();
+						$('#razonSocial').val('-');
+						$('#nombres').val('');
+						$('#apePat').val('');
+						$('#apeMat').val('');
+						$('#descTipoPersona').val('Natural');
+					}
+		        	$('#nombres').val(data['result'][0]['nombres']);
+		        	$('#apePat').val(data['result'][0]['apePat']);
+		        	$('#apeMat').val(data['result'][0]['apeMat']);
+		        	$('#razonSocial').val(data['result'][0]['razonSocial']);
+		        	$('#idPersona').val(data['result'][0]['idPersona']);
+
+		        	if ($('#tipoUsuarioSesion').val() == 'S'){
+		        		$('#mensajeDePara').show();
+		        		$('#mensajeDeConfirmacion').hide();
+				    } else {
+				    	var myArray = data['result'][0]['listEmpresa'];
+				    	var contador=0;
+				    	for(var i=0;i<myArray.length;i++){
+				    		if(myArray[i]["idEmpresa"] == $('#idEmpresaSesion').val()){
+								contador++;
+    						}
+				    	}
+					    if (contador > 0){
+					    	$('#mensajeDePara').show();
+					    	$('#saveRow'). attr("disabled", true);
+					    }else{
+					    	$('#mensajeDePara').hide();
+					    	$('#mensajeDeConfirmacion').show();
+					    	if(data['result'][0]['permiteVinculacionCliente']=='N'){
+								$('#vincularComoUsuario').show();
+						    } else {
+						    	$('#empresa').show();
+							}
+					    	$('#saveRow'). attr("disabled", false);
+					    }
+					}
+		        } else {
+					if ($("#tipoDocumento").val() == 'RUC'){
+						$('#datos').hide();
+						$('#razon').show();
+						$('#razonSocial').val('');
+						$('#nombres').val('-');
+						$('#apePat').val('-');
+						$('#apeMat').val('-');
+						$('#descTipoPersona').val('Juridica');
+					} else {
+						$('#datos').show();
+						$('#razon').hide();
+						$('#razonSocial').val('-');
+						$('#nombres').val('');
+						$('#apePat').val('');
+						$('#apeMat').val('');
+						$('#descTipoPersona').val('Natural')
+					}
+
+					$('#divEstadoRegistro').show();
+					$('#vincularComoUsuario').show();
+					
+					if ($('#tipoUsuarioSesion').val() == 'S'){
+						$('#vincularComoEmpresa').show();
+					} 
+					$('#saveRow'). attr("disabled", false);
+			    }
+		    },
+		    error: function (e) {
+			    
+		    }
+		});
 	}
 	</script>
 
 	<script type="text/javascript">
-		$('#frm-persona').form({
-			on : 'blur',
-			fields : {
-				nombres : {
-					identifier : 'nombres',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Nombres'
-					} ]
-				},
-				apePat : {
-					identifier : 'apePat',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Apellido Paterno'
-					} ]
-				},
-				apeMat : {
-					identifier : 'apeMat',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Apellido Materno'
-					} ]
-				},
-				razonSocial : {
-					identifier : 'razonSocial',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Razón Social'
-					} ]
-				},
-				tipoPersona : {
-					identifier : 'tipoPersona',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Tipo de Persona'
-					} ]
-				},
-				estadoRegistro : {
-					identifier : 'estadoRegistro',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Estado de Registro'
-					} ]
-				},
-				tipoDocumento : {
-					identifier : 'tipoDocumento',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Tipo de Documento'
-					} ]
-				},
-				numeroDocumento : {
-					identifier : 'numeroDocumento',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Tipo de Numero de Documento'
-					} ]
-				},
-				numeroDocumento : {
-					identifier : 'numeroDocumento',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Tipo de Numero de Documento'
-					} ]
-				}
-			}
-		});
+		
 	</script>
 </body>
 

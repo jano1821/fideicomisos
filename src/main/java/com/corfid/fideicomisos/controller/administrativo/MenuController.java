@@ -37,193 +37,239 @@ import com.corfid.fideicomisos.utilities.StringUtil;
 @RequestMapping("/menu")
 public class MenuController extends InitialController {
 
-	@Autowired
-	@Qualifier("menuServiceImpl")
-	private MenuInterface menuInterface;
+    @Autowired
+    @Qualifier("menuServiceImpl")
+    private MenuInterface menuInterface;
 
-	@Autowired
-	@Qualifier("catalogoConstraintServiceImpl")
-	private CatalogoConstraintInterface catalogoConstraintInterface;
+    @Autowired
+    @Qualifier("catalogoConstraintServiceImpl")
+    private CatalogoConstraintInterface catalogoConstraintInterface;
 
-	@Autowired
-	private Environment environment;
+    @Autowired
+    private Environment environment;
 
-	public String obtenerIp() {
-		return environment.getProperty("local.server.port");
-	}
+    public String obtenerIp() {
+        return environment.getProperty("local.server.port");
+    }
 
-	@PostMapping("/cancel")
-	public String cancel() {
+    @PostMapping("/cancel")
+    public String cancel() {
 
-		return "redirect:/menu/lista_menus";
-	}
+        return "redirect:/menu/lista_menus";
+    }
 
-	@PostMapping("/showmenu")
-	public ModelAndView showMenu() {
-		ModelAndView mav = new ModelAndView(Constante.MENU);
+    @PostMapping("/showmenu")
+    public ModelAndView showMenu() {
+        ModelAndView mav = new ModelAndView(Constante.MENU);
 
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		mav.addObject("usuario", user.getUsername());
+        mav.addObject("usuario", user.getUsername());
 
-		return mav;
+        return mav;
 
-	}
+    }
 
-	@GetMapping("/lista_menus")
-	public ModelAndView showListaMenus(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, Model model,
-			@RequestParam(name = "result", required = false) String result) {
-		CrudMenuModel crudMenuModel = new CrudMenuModel();
-		// String empresa = datosGenerales.getRucEmpresa();
-		crudMenuModel.setResult(result);
-		return busqueda(Constante.CONST_VACIA, Constante.CONST_CERO, Constante.CONST_CERO, Constante.PAGINA_INICIAL,
-				Constante.CONST_CERO, crudMenuModel);
-	}
+    @GetMapping("/lista_menus")
+    public ModelAndView showListaMenus(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                       Model model,
+                                       @RequestParam(name = "result", required = false) String result) {
+        CrudMenuModel crudMenuModel = new CrudMenuModel();
+        // String empresa = datosGenerales.getRucEmpresa();
+        crudMenuModel.setResult(result);
+        return busqueda(Constante.CONST_VACIA,
+                        Constante.CONST_CERO,
+                        Constante.CONST_CERO,
+                        Constante.PAGINA_INICIAL,
+                        Constante.CONST_CERO,
+                        crudMenuModel);
+    }
 
-	@PostMapping("/addmenu")
-	public ModelAndView registrarMenu(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
-	                                  @ModelAttribute(name = "menuModel") MenuModel menuModel, Model model) {
-		Date fechaAndHoraActual = getFechaAndHoraActual();
-		CrudMenuModel crudMenuModel = new CrudMenuModel();
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		setParametrosAuditoriaModel(fechaAndHoraActual, user.getUsername(), obtenerIp(), fechaAndHoraActual,
-				user.getUsername(), obtenerIp());
+    @PostMapping("/addmenu")
+    public ModelAndView registrarMenu(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                      @ModelAttribute(name = "menuModel") MenuModel menuModel,
+                                      Model model) {
+        Date fechaAndHoraActual = getFechaAndHoraActual();
+        CrudMenuModel crudMenuModel = new CrudMenuModel();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        setParametrosAuditoriaModel(fechaAndHoraActual,
+                                    user.getUsername(),
+                                    obtenerIp(),
+                                    fechaAndHoraActual,
+                                    user.getUsername(),
+                                    obtenerIp());
 
-		menuModel.setIdUsuarioRegistro(datosGenerales.getIdUsuario());
-		menuModel.setTipoUsuarioSesion(datosGenerales.getTipoUsuarioSession());
-		
-		if (!StringUtil.isEmpty(menuInterface.addMenu(menuModel, getParametrosAuditoriaModel()))) {
-			crudMenuModel.setResult(Constante.RESULT_CORRECTO);
-		} else {
-			crudMenuModel.setResult(Constante.RESULT_ERROR);
-		}
-		return busqueda(Constante.CONST_VACIA, Constante.CONST_CERO, Constante.CONST_CERO, Constante.PAGINA_INICIAL,
-				Constante.CONST_CERO, crudMenuModel);
-	}
+        menuModel.setIdUsuarioRegistro(datosGenerales.getIdUsuario());
+        menuModel.setTipoUsuarioSesion(datosGenerales.getTipoUsuarioSession());
 
-	@GetMapping("/crudAccionesListaMenus")
-	public String intercepcion() {
-		return "redirect:/seleccion/seleccion";
-	}
+        if (!StringUtil.isEmpty(menuInterface.addMenu(menuModel, getParametrosAuditoriaModel()))) {
+            crudMenuModel.setResult(Constante.RESULT_CORRECTO);
+        } else {
+            crudMenuModel.setResult(Constante.RESULT_ERROR);
+        }
+        return busqueda(Constante.CONST_VACIA,
+                        Constante.CONST_CERO,
+                        Constante.CONST_CERO,
+                        Constante.PAGINA_INICIAL,
+                        Constante.CONST_CERO,
+                        crudMenuModel);
+    }
 
-	@PostMapping(value = "/crudAccionesListaMenus", params = { "findRow", "busqueda" })
-	public ModelAndView buscarMenu(CrudMenuModel crudMenuModel, final BindingResult bindingResult,
-			final HttpServletRequest req) {
-		String caja = req.getParameter("busqueda");
+    @GetMapping("/crudAccionesListaMenus")
+    public String intercepcion() {
+        return "redirect:/seleccion/seleccion";
+    }
 
-		return busqueda(caja, Constante.CONST_CERO, Constante.CONST_CERO, Constante.PAGINA_INICIAL,
-				Constante.CONST_CERO, crudMenuModel);
-	}
+    @PostMapping(value = "/crudAccionesListaMenus", params = { "findRow", "busqueda" })
+    public ModelAndView buscarMenu(CrudMenuModel crudMenuModel,
+                                   final BindingResult bindingResult,
+                                   final HttpServletRequest req) {
+        String caja = req.getParameter("busqueda");
 
-	@PostMapping(value = "/crudAccionesListaMenus", params = { "rightRow", "busqueda", "paginaActual", "paginaFinal" })
-	public ModelAndView paginaDerecha(CrudMenuModel crudMenuModel, final BindingResult bindingResult,
-			final HttpServletRequest req) {
-		String caja = req.getParameter("busqueda");
-		String paginaActual = req.getParameter("paginaActual");
-		String paginaFinal = req.getParameter("paginaFinal");
+        return busqueda(caja,
+                        Constante.CONST_CERO,
+                        Constante.CONST_CERO,
+                        Constante.PAGINA_INICIAL,
+                        Constante.CONST_CERO,
+                        crudMenuModel);
+    }
 
-		return busqueda(caja, Constante.CONST_CERO, Constante.DERECHA, paginaActual, paginaFinal, crudMenuModel);
-	}
+    @PostMapping(value = "/crudAccionesListaMenus", params = { "rightRow", "busqueda", "paginaActual", "paginaFinal" })
+    public ModelAndView paginaDerecha(CrudMenuModel crudMenuModel,
+                                      final BindingResult bindingResult,
+                                      final HttpServletRequest req) {
+        String caja = req.getParameter("busqueda");
+        String paginaActual = req.getParameter("paginaActual");
+        String paginaFinal = req.getParameter("paginaFinal");
 
-	@PostMapping(value = "/crudAccionesListaMenus", params = { "leftRow", "busqueda", "paginaActual", "paginaFinal" })
-	public ModelAndView paginaIzquierda(CrudMenuModel crudMenuModel, final BindingResult bindingResult,
-			final HttpServletRequest req) {
-		String caja = req.getParameter("busqueda");
-		String paginaActual = req.getParameter("paginaActual");
-		String paginaFinal = req.getParameter("paginaFinal");
+        return busqueda(caja, Constante.CONST_CERO, Constante.DERECHA, paginaActual, paginaFinal, crudMenuModel);
+    }
 
-		return busqueda(caja, Constante.IZQUIERDA, Constante.CONST_CERO, paginaActual, paginaFinal, crudMenuModel);
-	}
+    @PostMapping(value = "/crudAccionesListaMenus", params = { "leftRow", "busqueda", "paginaActual", "paginaFinal" })
+    public ModelAndView paginaIzquierda(CrudMenuModel crudMenuModel,
+                                        final BindingResult bindingResult,
+                                        final HttpServletRequest req) {
+        String caja = req.getParameter("busqueda");
+        String paginaActual = req.getParameter("paginaActual");
+        String paginaFinal = req.getParameter("paginaFinal");
 
-	@PostMapping(value = "/crudAccionesListaMenus", params = { "addRow" })
-	public ModelAndView addRol(final CrudMenuModel crudMenuModel, final BindingResult bindingResult) {
-		return preparingFormMenu(null);
-	}
+        return busqueda(caja, Constante.IZQUIERDA, Constante.CONST_CERO, paginaActual, paginaFinal, crudMenuModel);
+    }
 
-	@PostMapping(value = "/crudAccionesListaMenus", params = { "editRow" })
-	public ModelAndView editRol(final CrudMenuModel crudMenuModel, final BindingResult bindingResult,
-			final HttpServletRequest req) {
+    @PostMapping(value = "/crudAccionesListaMenus", params = { "addRow" })
+    public ModelAndView addMenu(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                final CrudMenuModel crudMenuModel,
+                                final BindingResult bindingResult) {
+        return preparingFormMenu(null, datosGenerales.getTipoUsuarioSession());
+    }
 
-		return preparingFormMenu(req.getParameter("editRow"));
-	}
+    @PostMapping(value = "/crudAccionesListaMenus", params = { "editRow" })
+    public ModelAndView editMenu(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                 final CrudMenuModel crudMenuModel,
+                                 final BindingResult bindingResult,
+                                 final HttpServletRequest req) {
 
-	@PostMapping(value = "/crudAccionesListaMenus", params = { "removeRow" })
-	public ModelAndView removeRol(final CrudMenuModel crudMenuModel, final BindingResult bindingResult,
-			final HttpServletRequest req) {
+        return preparingFormMenu(req.getParameter("editRow"), datosGenerales.getTipoUsuarioSession());
+    }
 
-		if (!StringUtil.isEmpty(req.getParameter("removeRow"))) {
-			menuInterface.removeMenu(StringUtil.toInteger(req.getParameter("removeRow")));
-			crudMenuModel.setResult(Constante.RESULT_CORRECTO);
-		} else {
-			crudMenuModel.setResult(Constante.RESULT_ERROR);
-		}
-		return busqueda(Constante.CONST_VACIA, Constante.CONST_CERO, Constante.CONST_CERO, Constante.PAGINA_INICIAL,
-				Constante.CONST_CERO, crudMenuModel);
-	}
+    @PostMapping(value = "/crudAccionesListaMenus", params = { "removeRow" })
+    public ModelAndView removeMenu(final CrudMenuModel crudMenuModel,
+                                   final BindingResult bindingResult,
+                                   final HttpServletRequest req) throws Exception {
 
-	private ModelAndView preparingFormMenu(Object id) {
-		ModelAndView model = new ModelAndView(Constante.FORM_MENU);
-		List<CatalogoConstraintModel> listCatalogoConstraintModelEstadoRegistro;
-		List<CatalogoConstraintModel> listCatalogoConstraintModelTipoMenu;
-		MenuModel menuModel = new MenuModel();
-		List<MenuModel> listMenuModelPadre = new ArrayList<MenuModel>();
+        if (!StringUtil.isEmpty(req.getParameter("removeRow"))) {
+            menuInterface.removeMenu(StringUtil.toInteger(req.getParameter("removeRow")));
+            crudMenuModel.setResult(Constante.RESULT_CORRECTO);
+        } else {
+            crudMenuModel.setResult(Constante.RESULT_ERROR);
+        }
+        return busqueda(Constante.CONST_VACIA,
+                        Constante.CONST_CERO,
+                        Constante.CONST_CERO,
+                        Constante.PAGINA_INICIAL,
+                        Constante.CONST_CERO,
+                        crudMenuModel);
+    }
 
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private ModelAndView preparingFormMenu(Object id, String tipoUsuarioSesion) {
+        ModelAndView model = new ModelAndView(Constante.FORM_MENU);
+        List<CatalogoConstraintModel> listCatalogoConstraintModelEstadoRegistro;
+        List<CatalogoConstraintModel> listCatalogoConstraintModelTipoMenu;
+        List<CatalogoConstraintModel> listCatalogoConstraintModelTipoUsuario;
+        MenuModel menuModel = new MenuModel();
+        List<MenuModel> listMenuModelPadre = new ArrayList<MenuModel>();
 
-		if (!StringUtil.isEmpty(id)) {
-			final Integer idMenu = StringUtil.toInteger(id);
-			menuModel = menuInterface.findMenuByIdModel(idMenu);
-		}
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		listMenuModelPadre = menuInterface.obtenerMenusPadre();
+        if (!StringUtil.isEmpty(id)) {
+            final Integer idMenu = StringUtil.toInteger(id);
+            menuModel = menuInterface.findMenuByIdModel(idMenu);
+        }
 
-		listCatalogoConstraintModelEstadoRegistro = catalogoConstraintInterface
-				.findByNombreTablaAndNombreCampo(Constante.TABLA_MENU, Constante.ESTADO_REGISTRO);
-		listCatalogoConstraintModelTipoMenu = catalogoConstraintInterface
-				.findByNombreTablaAndNombreCampo(Constante.TABLA_MENU, Constante.TIPO_MENU);
+        listMenuModelPadre = menuInterface.obtenerMenusPadre(tipoUsuarioSesion);
 
-		model.addObject("listMenuModelPadre", listMenuModelPadre);
-		model.addObject("menuModel", menuModel);
-		model.addObject("usuario", user.getUsername());
-		model.addObject("listEstado", listCatalogoConstraintModelEstadoRegistro);
-		model.addObject("listTipoMenu", listCatalogoConstraintModelTipoMenu);
-		return model;
-	}
+        listCatalogoConstraintModelEstadoRegistro = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_MENU,
+                                                                                                                Constante.ESTADO_REGISTRO);
+        listCatalogoConstraintModelTipoMenu = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_MENU,
+                                                                                                          Constante.TIPO_MENU);
+        listCatalogoConstraintModelTipoUsuario = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_USUARIO,
+                                                                                                             Constante.TIPO_USUARIO);
 
-	private ModelAndView busqueda(String busqueda, String izquierda, String derecha, String pagina, String fin,
-			CrudMenuModel crudMenuModel) {
-		ModelAndView mav = new ModelAndView(Constante.LISTA_MENUS);
-		String result = crudMenuModel.getResult();
-		PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
+        model.addObject("listMenuModelPadre", listMenuModelPadre);
+        model.addObject("menuModel", menuModel);
+        model.addObject("usuario", user.getUsername());
+        model.addObject("listEstado", listCatalogoConstraintModelEstadoRegistro);
+        model.addObject("listTipoMenu", listCatalogoConstraintModelTipoMenu);
+        model.addObject("listTipoUsuario", listCatalogoConstraintModelTipoUsuario);
+        return model;
+    }
 
-		crudMenuModel = menuInterface.listMenuByDescripcionPaginado(busqueda, paginadoModel.getPaginaActual(),
-				Constante.PAGINADO_5_ROWS);
-		
+    private ModelAndView busqueda(String busqueda,
+                                  String izquierda,
+                                  String derecha,
+                                  String pagina,
+                                  String fin,
+                                  CrudMenuModel crudMenuModel) {
+        ModelAndView mav = new ModelAndView(Constante.LISTA_MENUS);
+        String result = crudMenuModel.getResult();
+        PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
-		if (StringUtil.equiv(result,Constante.RESULT_ERROR)) {
-			crudMenuModel.setMensaje(construirMensaje("Aviso", "Ocurrió un Problema con la Operación", Constante.MENSAJE_ERROR));
-		} else if (StringUtil.equiv(result,Constante.RESULT_CORRECTO)) {
-			crudMenuModel.setMensaje(construirMensaje("Aviso", "La Operacion se Realizó Satisfactoriamente", Constante.MENSAJE_SATISFACTORIO));
-		}
-		
-		if (paginadoModel.isMovIzquierda()) {
-			crudMenuModel.setMensaje(construirMensaje("Aviso", "No hay más Registros a la Izquierda", Constante.MENSAJE_INFORMATIVO));
-			crudMenuModel.setResult(Constante.RESULT_ERROR);
-		} else if (paginadoModel.isMovDerecha()) {
-			crudMenuModel.setMensaje(construirMensaje("Aviso", "No hay más Registros a la Derecha", Constante.MENSAJE_INFORMATIVO));
-			crudMenuModel.setResult(Constante.RESULT_ERROR);
-		}
-		crudMenuModel.setResult(result);
-		
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        crudMenuModel = menuInterface.listMenuByDescripcionPaginado(busqueda,
+                                                                    paginadoModel.getPaginaActual(),
+                                                                    Constante.PAGINADO_5_ROWS);
 
-		crudMenuModel.setBusqueda(busqueda);
-		crudMenuModel.setPaginaActual(paginadoModel.getPaginaActual());
-		crudMenuModel.setUsuario(user.getUsername());
+        if (StringUtil.equiv(result, Constante.RESULT_ERROR)) {
+            crudMenuModel.setMensaje(construirMensaje("Aviso",
+                                                      "Ocurrió un Problema con la Operación",
+                                                      Constante.MENSAJE_ERROR));
+        } else if (StringUtil.equiv(result, Constante.RESULT_CORRECTO)) {
+            crudMenuModel.setMensaje(construirMensaje("Aviso",
+                                                      "La Operacion se Realizó Satisfactoriamente",
+                                                      Constante.MENSAJE_SATISFACTORIO));
+        }
 
-		mav.addObject("crudMenuModel", crudMenuModel);
-		mav.addObject("usuario", user.getUsername());
+        if (paginadoModel.isMovIzquierda()) {
+            crudMenuModel.setMensaje(construirMensaje("Aviso",
+                                                      "No hay más Registros a la Izquierda",
+                                                      Constante.MENSAJE_INFORMATIVO));
+            crudMenuModel.setResult(Constante.RESULT_ERROR);
+        } else if (paginadoModel.isMovDerecha()) {
+            crudMenuModel.setMensaje(construirMensaje("Aviso",
+                                                      "No hay más Registros a la Derecha",
+                                                      Constante.MENSAJE_INFORMATIVO));
+            crudMenuModel.setResult(Constante.RESULT_ERROR);
+        }
+        crudMenuModel.setResult(result);
 
-		return mav;
-	}
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        crudMenuModel.setBusqueda(busqueda);
+        crudMenuModel.setPaginaActual(paginadoModel.getPaginaActual());
+        crudMenuModel.setUsuario(user.getUsername());
+
+        mav.addObject("crudMenuModel", crudMenuModel);
+        mav.addObject("usuario", user.getUsername());
+
+        return mav;
+    }
 }

@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.entity.administrativo;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class Menu extends Auditoria {
 	@Column(name = "n_idmede", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
 	private Integer idMenuPadre;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "c_idtius", nullable = false, insertable = true, updatable = true)
 	private TipoUsuario tipoUsuario;
 

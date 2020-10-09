@@ -52,7 +52,7 @@ public class UsuarioConverter extends GenericConverter {
             usuario.setPersona(persona);
         }
 
-        tipoUsuario = tipoUsuarioInterface.findRolById(usuarioModel.getTipoUsuario());
+        tipoUsuario = tipoUsuarioInterface.findTipoUsuarioById(usuarioModel.getTipoUsuario());
 
         usuario.setTipoUsuario(tipoUsuario);
         usuario.setIdUsuarioRegistro(usuarioModel.getIdUsuarioRegistro());
@@ -83,7 +83,7 @@ public class UsuarioConverter extends GenericConverter {
             persona = personaInterface.findPersonaById(StringUtil.toInteger(usuarioModel.getPersona()));
             usuario.setPersona(persona);
         }
-        tipoUsuario = tipoUsuarioInterface.findRolById(usuarioModel.getTipoUsuario());
+        tipoUsuario = tipoUsuarioInterface.findTipoUsuarioById(usuarioModel.getTipoUsuario());
 
         usuario.setTipoUsuario(tipoUsuario);
         usuario.setEstadoRegistro(usuarioModel.getEstadoRegistro());

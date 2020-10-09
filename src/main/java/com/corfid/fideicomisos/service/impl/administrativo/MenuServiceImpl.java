@@ -21,124 +21,158 @@ import com.corfid.fideicomisos.utilities.Constante;
 
 @Service("menuServiceImpl")
 public class MenuServiceImpl extends AbstractService implements MenuInterface {
-	@Autowired
-	@Qualifier("menuRepository")
-	private MenuRepository menuRepository;
 
-	@Autowired
-	@Qualifier("menuConverter")
-	private MenuConverter menuConverter;
+    @Autowired
+    @Qualifier("menuRepository")
+    private MenuRepository menuRepository;
 
-	@Override
-	public List<MenuModel> listAllMenus() {
-		List<Menu> listMenu = menuRepository.findAll();
-		List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+    @Autowired
+    @Qualifier("menuConverter")
+    private MenuConverter menuConverter;
 
-		for (Menu menu : listMenu) {
-			listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
-		}
+    @Override
+    public List<MenuModel> listAllMenus(String idTipoUsuarioSesion) throws Exception {
 
-		return listMenuModel;
-	}
+        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+        List<Menu> listMenu = null;
 
-	@Override
-	public CrudMenuModel listMenuByDescripcionPaginado(String descripcion, Integer pagina, Integer cant) {
-		List<Menu> listMenu;
-		List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
-		Page<Menu> pageMenu;
-		CrudMenuModel crudMenuModel = new CrudMenuModel();
+        if (_equiv(idTipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+            listMenu = menuRepository.findAll();
+        } else {
+            listMenu = menuRepository.listAllMenuByNivel(idTipoUsuarioSesion);
+        }
 
-		String cadenaMenu = Constante.COMODIN_LIKE + descripcion + Constante.COMODIN_LIKE;
+        for (Menu menu : listMenu) {
+            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+        }
 
-		pageMenu = menuRepository.listMenuByDescripcionPaginado(cadenaMenu,
-				obtenerIndexPorPagina(pagina, cant, "descripcion", true, false));
+        return listMenuModel;
+    }
 
-		listMenu = pageMenu.getContent();
-		crudMenuModel.setPaginaFinal(pageMenu.getTotalPages());
-		crudMenuModel.setCantidadRegistros(_toInteger(pageMenu.getTotalElements()));
+    @Override
+    public CrudMenuModel listMenuByDescripcionPaginado(String descripcion, Integer pagina, Integer cant) {
+        List<Menu> listMenu;
+        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+        Page<Menu> pageMenu;
+        CrudMenuModel crudMenuModel = new CrudMenuModel();
 
-		for (Menu menu : listMenu) {
-			listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
-		}
+        String cadenaMenu = Constante.COMODIN_LIKE + descripcion + Constante.COMODIN_LIKE;
 
-		crudMenuModel.setRows(listMenuModel);
+        pageMenu = menuRepository.listMenuByDescripcionPaginado(cadenaMenu,
+                                                                obtenerIndexPorPagina(pagina,
+                                                                                      cant,
+                                                                                      "descripcion",
+                                                                                      true,
+                                                                                      false));
 
-		return crudMenuModel;
-	}
+        listMenu = pageMenu.getContent();
+        crudMenuModel.setPaginaFinal(pageMenu.getTotalPages());
+        crudMenuModel.setCantidadRegistros(_toInteger(pageMenu.getTotalElements()));
 
-	@Override
-	public Menu findMenuById(Integer id) {
-		return menuRepository.findByIdMenu(id);
-	}
+        for (Menu menu : listMenu) {
+            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+        }
 
-	@Override
-	public MenuModel findMenuByIdModel(Integer id) {
-		return menuConverter.convertMenuToMenuModel(findMenuById(id));
-	}
+        crudMenuModel.setRows(listMenuModel);
 
-	@Override
-	public MenuModel addMenu(MenuModel menuModel, ParametrosAuditoriaModel parametrosAuditoriaModel) {
-		Menu menu = findMenuById(menuModel.getIdMenu());
+        return crudMenuModel;
+    }
 
-		if (_isEmpty(menu)) {
-			menu = menuConverter.convertMenuModelToMenu(menuModel);
-			setInsercionAuditoria(menu, parametrosAuditoriaModel);
-		} else {
-			menu = menuConverter.convertMenuModelToMenuExistente(menu, menuModel);
-			setModificacionAuditoria(menu, parametrosAuditoriaModel);
-		}
+    @Override
+    public Menu findMenuById(Integer id) {
+        return menuRepository.findByIdMenu(id);
+    }
 
-		menu = menuRepository.save(menu);
+    @Override
+    public MenuModel findMenuByIdModel(Integer id) {
+        return menuConverter.convertMenuToMenuModel(findMenuById(id));
+    }
 
-		return menuConverter.convertMenuToMenuModel(menu);
-	}
+    @Override
+    public MenuModel addMenu(MenuModel menuModel, ParametrosAuditoriaModel parametrosAuditoriaModel) {
+        Menu menu = findMenuById(menuModel.getIdMenu());
 
-	@Override
-	public void removeMenu(Integer id) {
-		Menu menu = findMenuById(id);
-		if (null != menu) {
-			menuRepository.delete(menu);
-		}
-	}
-	
-	//Este método obtienen los menus vigentes en base a una coleccion de id de roles ordenados
-	@Override
-	public List<MenuModel> obtenerMenuByRol(Collection<Integer> roles){
-		List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
-		List<Menu> listMenu = new ArrayList<Menu>();
-		
-		listMenu = menuRepository.listMenuPorRoles(roles);
-		
-		for (Menu menu : listMenu) {
-			listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
-		}
-		return listMenuModel;
-	}
-	
-	@Override
-	public List<MenuModel> obtenerMenusPadre(){
-		List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
-		List<Menu> listMenu = new ArrayList<Menu>();
-		
-		listMenu = menuRepository.listMenuPadres();
-		
-		for (Menu menu : listMenu) {
-			listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
-		}
-		return listMenuModel;
-	}
-	
-	//Este método obtiene todos los menus en base a una coleccion de id de roles sin importar su estado de registro
-	@Override
-	public List<MenuModel> obtenerAllMenuByRol(Collection<Integer> roles){
-		List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
-		List<Menu> listMenu = new ArrayList<Menu>();
-		
-		listMenu = menuRepository.listAllMenuPorRoles(roles);
-		
-		for (Menu menu : listMenu) {
-			listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
-		}
-		return listMenuModel;
-	}
+        if (_isEmpty(menu)) {
+            menu = menuConverter.convertMenuModelToMenu(menuModel);
+            setInsercionAuditoria(menu, parametrosAuditoriaModel);
+        } else {
+            menu = menuConverter.convertMenuModelToMenuExistente(menu, menuModel);
+            setModificacionAuditoria(menu, parametrosAuditoriaModel);
+        }
+
+        menu = menuRepository.save(menu);
+
+        return menuConverter.convertMenuToMenuModel(menu);
+    }
+
+    @Override
+    public Boolean removeMenu(Integer id) throws Exception {
+        Menu menu = null;
+        try {
+            menu = findMenuById(id);
+            if (null != menu) {
+                menuRepository.delete(menu);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    //Este método obtienen los menus vigentes en base a una coleccion de id de roles ordenados
+    @Override
+    public List<MenuModel> obtenerMenuByRol(Collection<Integer> roles) {
+        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+        List<Menu> listMenu = new ArrayList<Menu>();
+
+        listMenu = menuRepository.listMenuPorRoles(roles);
+
+        for (Menu menu : listMenu) {
+            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+        }
+        return listMenuModel;
+    }
+
+    @Override
+    public List<MenuModel> obtenerMenuByRolAndEmpresaSeleccionada(Collection<Integer> roles, Integer idEmpresaSesion) {
+        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+        List<Menu> listMenu = new ArrayList<Menu>();
+
+        listMenu = menuRepository.listMenuPorRolesAndEmpresaSeleccionada(roles, idEmpresaSesion);
+
+        for (Menu menu : listMenu) {
+            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+        }
+        return listMenuModel;
+    }
+
+    @Override
+    public List<MenuModel> obtenerMenusPadre(String tipoUsuarioSesion) {
+        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+        List<Menu> listMenu = new ArrayList<Menu>();
+
+        if (_equiv(tipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+            tipoUsuarioSesion = "%";
+        }
+        listMenu = menuRepository.listMenuPadres(tipoUsuarioSesion);
+
+        for (Menu menu : listMenu) {
+            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+        }
+        return listMenuModel;
+    }
+
+    //Este método obtiene todos los menus en base a una coleccion de id de roles sin importar su estado de registro
+    @Override
+    public List<MenuModel> obtenerAllMenuByRol(Collection<Integer> roles) {
+        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+        List<Menu> listMenu = new ArrayList<Menu>();
+
+        listMenu = menuRepository.listAllMenuPorRoles(roles);
+
+        for (Menu menu : listMenu) {
+            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+        }
+        return listMenuModel;
+    }
 }

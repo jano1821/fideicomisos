@@ -17,6 +17,7 @@ public class DatosGenerales {
     private List<RolModel> listRolModel;
     private Integer idUsuario;
     private String tipoUsuarioSession;
+    private Integer idEmpresa;
 
     public List<MenuModel> getListMenuModel() {
         return listMenuModel;
@@ -80,6 +81,14 @@ public class DatosGenerales {
 
     public void setTipoUsuarioSession(String tipoUsuarioSession) {
         this.tipoUsuarioSession = tipoUsuarioSession;
+    }
+
+    public Integer getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Integer idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
 
 }

@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.entity.administrativo;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +19,7 @@ public class HistorialContrasenia {
     @Column(name = "n_idhist", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
     private Integer idHistorial;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "n_idusua", nullable = false, insertable = true, updatable = true)
     private Usuario usuario;
 
