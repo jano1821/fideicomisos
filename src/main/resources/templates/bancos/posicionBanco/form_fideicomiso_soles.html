@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="utf-8" />
-<title>Fideicomisos</title>
+<title>Fideicomisos Soles</title>
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
@@ -34,14 +34,14 @@
 			<div class="row">
 				<div class="one wide column"></div>
 				<div class="fourteen wide column">
-				    <h2><span th:text="${nombreFideicomisario}"></span></h2>
+					<h2><span th:text="${nombreFideicomisario}"></span></h2>
 					<form class="ui form" action="#"
-						th:action="@{/fideicomiso/buscarFideicomiso}"
+						th:action="@{/fideicomiso/buscarFideicomisoSoles}"
 						th:object="${posicionBancoModel}" method="POST"
-						id="frm-fideicomiso">						
+						id="frm-fideicomiso">
 						<div class="ui segments">
 							<div class="ui segment">
-								<div class="ui fluid icon input">						   
+								<div class="ui fluid icon input">
 									<input type="text" th:field="*{busqueda}"
 										th:value="${busqueda}"
 										placeholder="Búsqueda por Nombre Fideicomiso...">
@@ -51,7 +51,7 @@
 								</div>
 							</div>
 							<div class="ui secondary segment">
-								<h3>POSICIÓN DE BANCOS DE FIDEICOMISOS</h3>
+							    <h3>POSICIÓN DE BANCOS DE FIDEICOMISOS</h3>
 								<table class="ui selectable celled table">
 									<thead>
 										<tr>
@@ -92,11 +92,9 @@
 											<td class="ui center aligned"
 												th:text="${posicionBanco.fechaUltimaActualizacion}"></td>
 										</tr>
-										
 									</tbody>
 								</table>
 							</div>
-							
 							<div class="ui right aligned secondary segment">
 								<div class="ui pagination menu">
 									<button class="button" type="submit" name="leftRow">

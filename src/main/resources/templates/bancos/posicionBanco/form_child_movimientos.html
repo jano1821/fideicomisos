@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+<meta charset="utf-8" />
+<title>Movimientos de Cuentas</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</head>
+
+<body>
+	<div class="ui one column stackable grid">
+		<div class="column">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
+					<h2><span th:text="${nombreFideicomisario}"></span></h2>
+					<form class="ui form" action="#"
+						th:action="@{/movimientoCuentaEntidadFinanciera/buscarMovimientoCuenta}"
+						th:object="${movimientoCuentaEntidadFinancieraModel}" method="POST"
+						id="frm-movimientoCuenta">						
+						<div class="ui segments">
+						
+							<div class="ui secondary segment">
+								<div class="three fields">
+									
+										<h3><label for="descripcion1">N° Cuenta</label></h3>
+										<input type="text" id="descripcion1" name="descripcion1"
+											placeholder="Descripcion1">
+									
+										<h3><label for="descripcion2">Cuenta</label></h3>
+										<input type="text" id="descripcion2" name="descripcion2"
+											placeholder="Descripcion2">
+									
+										<h3><label for="descripcion3">Saldo Contable</label></h3>
+										<input type="text" id="descripcion3" name="descripcion3"
+											placeholder="Descripcion3">
+									
+								</div>
+							</div>	
+													
+							<div class="ui segment">
+								<table class="ui selectable celled table">
+									<thead>
+										<tr>
+											<th>   </th>
+											<th class="ui center aligned">Fecha Registro</th>
+											<th class="ui center aligned">Fecha Valor</th>
+											<th>Descripción</th>
+											<th class="ui right aligned">Cargos</th>
+											<th class="ui right aligned">Abonos</th>
+											<th>Oficina</th>
+											<th class="ui center aligned">N° Operación</th>																		
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="movimientoCuentaEntidadFinanciera : ${movimientoCuentaEntidadFinancieraModel.rows}">
+											<td class="ui center aligned">
+												<div class="ui icon buttons">
+													<button class="ui button" data-tooltip="Detalle Movimiento" data-position="right center" 
+													type="submit" name="detailRow" th:value="${movimientoCuentaEntidadFinanciera.identificadorMovimientoCuentaEntidadFinanciera}">
+														<i class="list ul icon"></i>
+													</button>
+												</div>
+											</td>											
+											<td class="ui center aligned" th:text="${movimientoCuentaEntidadFinanciera.fechaProcesoMovimiento}"></td>
+											<td class="ui center aligned" th:text="${movimientoCuentaEntidadFinanciera.fechaValutaMovimiento}"></td>
+											<td th:text="${movimientoCuentaEntidadFinanciera.descripcionMovimiento}"></td>
+											<td class="ui right aligned" th:text="${movimientoCuentaEntidadFinanciera.montoCargoMovimiento}"></td>
+											<td class="ui right aligned" th:text="${movimientoCuentaEntidadFinanciera.montoAbonoMovimiento}"></td>
+											<td th:text="${movimientoCuentaEntidadFinanciera.descripcionOficinaMovimiento}"></td>
+											<td class="ui center aligned" th:text="${movimientoCuentaEntidadFinanciera.numeroOperacionMovimiento}"></td>											
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned secondary segment">
+								<div class="ui pagination menu">
+									<button class="button" type="submit" name="leftRow">
+										<a class="icon item"> <i class="left arrow icon"></i></a>
+									</button>
+									<a th:text="${movimientoCuentaEntidadFinancieraModel.paginaActual}"
+										class="active item"> </a>
+									<div class="disabled item">...</div>
+									<a th:text="${movimientoCuentaEntidadFinancieraModel.cantidadRegistros + ' reg.'}"
+										class="disabled item"> </a>
+									<div class="disabled item">...</div>
+									<a th:text="${movimientoCuentaEntidadFinancieraModel.paginaFinal}" class="item"></a>
+									<button class="button" type="submit" name="rightRow">
+										<a class="icon item"> <i class="right arrow icon"></i></a>
+									</button>
+								</div>
+							</div>
+							<div class="ui secondary segment">
+								<div th:if="${movimientoCuentaEntidadFinancieraModel.result == '2'}"
+									class="ui info message">
+									<i class="close icon"></i>
+									<div class="header">Mensaje de información</div>
+									<p>No hay más registros a la derecha...</p>
+								</div>
+								<div th:if="${movimientoCuentaEntidadFinancieraModel.result == '3'}"
+									class="ui info message">
+									<i class="close icon"></i>
+									<div class="header">Mensaje de información</div>
+									<p>No hay más registros a la izquierda...</p>
+								</div>
+								<input type="hidden" th:field="*{paginaActual}" th:value="${paginaActual}"> 
+								<input type="hidden" th:field="*{paginaFinal}" th:value="${paginaFinal}">
+								<input type="hidden" th:field="*{identificadorCuentaEntidadFinanciera}" th:value="${identificadorCuentaEntidadFinanciera}">								
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="one wide column"></div>
+			</div>
+
+		</div>
+	</div>
+	<script>
+		function toggleSidebar() {
+			$("#app .ui.sidebar").sidebar({
+				context : $("#app")
+			}).sidebar("setting", "transition", "overlay").sidebar("toggle");
+		}
+		document.addEventListener("DOMContentLoaded", function() {
+			//toggleSidebar();
+		});
+
+		$(document).ready(function() {
+			$('#abrir_menu').click(function() {
+				toggleSidebar();
+			});
+		});
+	</script>
+</body>

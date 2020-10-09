@@ -33,43 +33,80 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 	@Qualifier("fideicomisarioServiceImpl")
 	private FideicomisarioInterface fideicomisarioInterface;
 
-	public PosicionBancoModel getListaFideicomiso(String cadenaBusqueda, String numeroDocumento, Integer pagina,
-			Integer cantRegistros) {
-
-		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
-
-		if (StringUtil.isEmpty(cadenaBusqueda)) {
-			posicionBancoModel = getListFideicomisoCuentaEntidadFinancieraByFideicomisario(numeroDocumento, pagina,
-					cantRegistros);
-		} else {
-			String cadenaFideicomiso = Constante.COMODIN_LIKE + cadenaBusqueda + Constante.COMODIN_LIKE;
-			posicionBancoModel = getListFideicomisoCuentaEntidadFinancieraByFideicomisarioNombreFideicomiso(
-					cadenaFideicomiso, numeroDocumento, pagina, cantRegistros);
-		}
-
-		return posicionBancoModel;
-	}
-
-	public PosicionBancoModel getListaFideicomisoMoneda(String cadenaBusqueda, String numeroDocumento,
-			String monedaCuenta, Integer pagina, Integer cantRegistros) {
-
-		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
-
-		if (StringUtil.isEmpty(cadenaBusqueda)) {
-			posicionBancoModel = getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMoneda(numeroDocumento,
-					monedaCuenta, pagina, cantRegistros);
-		} else {
-			String cadenaFideicomiso = Constante.COMODIN_LIKE + cadenaBusqueda + Constante.COMODIN_LIKE;
-			posicionBancoModel = getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMonedaNombreFideicomiso(
-					cadenaFideicomiso, numeroDocumento, monedaCuenta, pagina, cantRegistros);
-		}
-
-		return posicionBancoModel;
-
-	}
-
-	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisario(String numeroDocumento,
+	public PosicionBancoModel getListaFideicomiso(String cadenaBusqueda, String numeroDocumento, String codigoMoneda,
 			Integer pagina, Integer cantRegistros) {
+
+		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
+
+		String cadenaFideicomiso = null;
+		String nombreFideicomisario = null;
+
+		Integer identificadorFideicomisario = null;
+
+		FideicomisarioModel fideicomisarioModel = new FideicomisarioModel();
+
+		fideicomisarioModel = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento);
+		identificadorFideicomisario = fideicomisarioModel.getIdentificadorFideicomisario();
+		nombreFideicomisario = fideicomisarioModel.getNombreFideicomisario();
+
+		if (StringUtil.isEmpty(codigoMoneda)) {
+			if (StringUtil.isEmpty(cadenaBusqueda)) {
+				posicionBancoModel = getListFideicomisoCuentaEntidadFinancieraByFideicomisario(
+						identificadorFideicomisario, pagina, cantRegistros);
+			} else {
+				cadenaFideicomiso = Constante.COMODIN_LIKE + cadenaBusqueda + Constante.COMODIN_LIKE;
+				posicionBancoModel = getListFideicomisoCuentaEntidadFinancieraByFideicomisarioNombreFideicomiso(
+						identificadorFideicomisario, cadenaFideicomiso, pagina, cantRegistros);
+			}
+		} else {
+			if (StringUtil.isEmpty(cadenaBusqueda)) {
+				posicionBancoModel = getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMoneda(
+						identificadorFideicomisario, codigoMoneda, pagina, cantRegistros);
+			} else {
+				cadenaFideicomiso = Constante.COMODIN_LIKE + cadenaBusqueda + Constante.COMODIN_LIKE;
+				posicionBancoModel = getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMonedaNombreFideicomiso(
+						identificadorFideicomisario, cadenaFideicomiso, codigoMoneda, pagina, cantRegistros);
+			}
+
+		}
+		
+		posicionBancoModel.setNombreFideicomisario(nombreFideicomisario);
+
+		return posicionBancoModel;
+	}
+
+	/*
+	 * public PosicionBancoModel getListaFideicomisoMoneda(String cadenaBusqueda,
+	 * String numeroDocumento, String monedaCuenta, Integer pagina, Integer
+	 * cantRegistros) {
+	 * 
+	 * PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
+	 * 
+	 * Integer identificadorFideicomisario = null;
+	 * 
+	 * FideicomisarioModel fideicomisarioModel = new FideicomisarioModel();
+	 * 
+	 * fideicomisarioModel =
+	 * fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento);
+	 * identificadorFideicomisario =
+	 * fideicomisarioModel.getIdentificadorFideicomisario();
+	 * 
+	 * if (StringUtil.isEmpty(cadenaBusqueda)) { posicionBancoModel =
+	 * getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMoneda(
+	 * identificadorFideicomisario, monedaCuenta, pagina, cantRegistros); } else {
+	 * String cadenaFideicomiso = Constante.COMODIN_LIKE + cadenaBusqueda +
+	 * Constante.COMODIN_LIKE; posicionBancoModel =
+	 * getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMonedaNombreFideicomiso(
+	 * identificadorFideicomisario, cadenaFideicomiso, monedaCuenta, pagina,
+	 * cantRegistros); }
+	 * 
+	 * return posicionBancoModel;
+	 * 
+	 * }
+	 */
+
+	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisario(
+			Integer identificadorFideicomisario, Integer pagina, Integer cantRegistros) {
 
 		List<Object> listFideicomisoCuentaEntidadFinanciera;
 		List<PosicionBancoModel> listPosicionBancoModel;
@@ -77,13 +114,9 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 		Page<Object> pageFideicomisoCuentaEntidadFinanciera;
 
 		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
-		FideicomisarioModel fideicomisarioModel = new FideicomisarioModel();
-
-		fideicomisarioModel = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento);
 
 		pageFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
-				.getListFideicomisoCuentaEntidadFinancieraByIdFideicomisario(
-						fideicomisarioModel.getIdentificadorFideicomisario(),
+				.getListFideicomisoCuentaEntidadFinancieraByIdFideicomisario(identificadorFideicomisario,
 						obtenerIndexPorPagina(pagina, cantRegistros, null, false, false));
 
 		posicionBancoModel.setPaginaFinal(pageFideicomisoCuentaEntidadFinanciera.getTotalPages());
@@ -104,7 +137,7 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 	}
 
 	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioNombreFideicomiso(
-			String nombreFideicomiso, String numeroDocumento, Integer pagina, Integer cantRegistros) {
+			Integer identificadorFideicomisario, String nombreFideicomiso, Integer pagina, Integer cantRegistros) {
 
 		List<Object> listFideicomisoCuentaEntidadFinanciera;
 		List<PosicionBancoModel> listPosicionBancoModel;
@@ -112,13 +145,10 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 		Page<Object> pageFideicomisoCuentaEntidadFinanciera;
 
 		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
-		FideicomisarioModel fideicomisarioModel = new FideicomisarioModel();
-
-		fideicomisarioModel = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento);
 
 		pageFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
 				.getListFideicomisoCuentaEntidadFinancieraByIdFideicomisarioNombreFideicomiso(
-						fideicomisarioModel.getIdentificadorFideicomisario(), nombreFideicomiso,
+						identificadorFideicomisario, nombreFideicomiso,
 						obtenerIndexPorPagina(pagina, cantRegistros, null, false, false));
 
 		posicionBancoModel.setPaginaFinal(pageFideicomisoCuentaEntidadFinanciera.getTotalPages());
@@ -138,8 +168,8 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 		return posicionBancoModel;
 	}
 
-	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMoneda(String numeroDocumento,
-			String monedaCuenta, Integer pagina, Integer cantRegistros) {
+	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMoneda(
+			Integer identificadorFideicomisario, String monedaCuenta, Integer pagina, Integer cantRegistros) {
 
 		List<Object> listFideicomisoCuentaEntidadFinanciera;
 		List<PosicionBancoModel> listPosicionBancoModel;
@@ -147,14 +177,10 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 		Page<Object> pageFideicomisoCuentaEntidadFinanciera;
 
 		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
-		FideicomisarioModel fideicomisarioModel = new FideicomisarioModel();
-
-		fideicomisarioModel = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento);
 
 		pageFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
-				.getListFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMoneda(
-						fideicomisarioModel.getIdentificadorFideicomisario(), monedaCuenta,
-						obtenerIndexPorPagina(pagina, cantRegistros, null, false, false));
+				.getListFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMoneda(identificadorFideicomisario,
+						monedaCuenta, obtenerIndexPorPagina(pagina, cantRegistros, null, false, false));
 
 		posicionBancoModel.setPaginaFinal(pageFideicomisoCuentaEntidadFinanciera.getTotalPages());
 		posicionBancoModel.setCantidadRegistros(_toInteger(pageFideicomisoCuentaEntidadFinanciera.getTotalElements()));
@@ -174,7 +200,7 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 	}
 
 	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMonedaNombreFideicomiso(
-			String nombreFideicomiso, String numeroDocumento, String monedaCuenta, Integer pagina,
+			Integer identificadorFideicomisario, String nombreFideicomiso, String monedaCuenta, Integer pagina,
 			Integer cantRegistros) {
 
 		List<Object> listFideicomisoCuentaEntidadFinanciera;
@@ -183,13 +209,10 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 		Page<Object> pageFideicomisoCuentaEntidadFinanciera;
 
 		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
-		FideicomisarioModel fideicomisarioModel = new FideicomisarioModel();
-
-		fideicomisarioModel = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento);
 
 		pageFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
 				.getListFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
-						fideicomisarioModel.getIdentificadorFideicomisario(), monedaCuenta, nombreFideicomiso,
+						identificadorFideicomisario, monedaCuenta, nombreFideicomiso,
 						obtenerIndexPorPagina(pagina, cantRegistros, null, false, false));
 
 		posicionBancoModel.setPaginaFinal(pageFideicomisoCuentaEntidadFinanciera.getTotalPages());

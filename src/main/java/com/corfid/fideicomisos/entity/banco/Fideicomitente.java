@@ -30,7 +30,7 @@ public class Fideicomitente extends Auditoria {
 	@Column(name = "c_tipdoc", nullable = false, insertable = true, updatable = true, length = 6)
 	private String tipoDocumento;
 
-	@Column(name = "c_numdoc", nullable = false, insertable = true, updatable = true, length = 11)
+	@Column(name = "c_numdoc", nullable = false, insertable = true, updatable = true, length = 15)
 	private String numeroDocumento;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "fideicomitente")

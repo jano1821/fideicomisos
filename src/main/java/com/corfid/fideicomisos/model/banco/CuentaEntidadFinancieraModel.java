@@ -1,34 +1,24 @@
 package com.corfid.fideicomisos.model.banco;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-public class PosicionBancoModel extends PaginacionGeneralModel {
+public class CuentaEntidadFinancieraModel {
 
-	private Integer identificadorFideicomiso;
 	private Integer identificadorCuentaEntidadFinanciera;
-	private String nombreFideicomisario;
-	private String nombreFideicomiso;
+	private Integer identificadorFideicomiso;
 	private String numeroCuentaEntidadFinanciera;
 	private String nombreEntidadFinanciera;
 	private String acronimoEntidadFinanciera;
+	private String tipoEntidadFinanciera;
+	private String descripcionCuentaEntidadFinanciera;
+	private String codigoMoneda;
 	private String isoMonedaCuentaEntidadFinanciera;
 	private String descripcionMonedaCuentaEntidadFinanciera;
-	private String descripcionCuentaEntidadFinanciera;
 	private Double saldoContableActual;
 	private Double saldoDisponibleActual;
+	private String codigoEstado;
+	private String descripcionEstado;
 	private Date fechaUltimaActualizacion;
-
-	public List<PosicionBancoModel> rows = new ArrayList<PosicionBancoModel>();
-
-	public Integer getIdentificadorFideicomiso() {
-		return identificadorFideicomiso;
-	}
-
-	public void setIdentificadorFideicomiso(Integer identificadorFideicomiso) {
-		this.identificadorFideicomiso = identificadorFideicomiso;
-	}
 
 	public Integer getIdentificadorCuentaEntidadFinanciera() {
 		return identificadorCuentaEntidadFinanciera;
@@ -38,20 +28,12 @@ public class PosicionBancoModel extends PaginacionGeneralModel {
 		this.identificadorCuentaEntidadFinanciera = identificadorCuentaEntidadFinanciera;
 	}
 
-	public String getNombreFideicomisario() {
-		return nombreFideicomisario;
+	public Integer getIdentificadorFideicomiso() {
+		return identificadorFideicomiso;
 	}
 
-	public void setNombreFideicomisario(String nombreFideicomisario) {
-		this.nombreFideicomisario = nombreFideicomisario;
-	}
-
-	public String getNombreFideicomiso() {
-		return nombreFideicomiso;
-	}
-
-	public void setNombreFideicomiso(String nombreFideicomiso) {
-		this.nombreFideicomiso = nombreFideicomiso;
+	public void setIdentificadorFideicomiso(Integer identificadorFideicomiso) {
+		this.identificadorFideicomiso = identificadorFideicomiso;
 	}
 
 	public String getNumeroCuentaEntidadFinanciera() {
@@ -78,6 +60,30 @@ public class PosicionBancoModel extends PaginacionGeneralModel {
 		this.acronimoEntidadFinanciera = acronimoEntidadFinanciera;
 	}
 
+	public String getTipoEntidadFinanciera() {
+		return tipoEntidadFinanciera;
+	}
+
+	public void setTipoEntidadFinanciera(String tipoEntidadFinanciera) {
+		this.tipoEntidadFinanciera = tipoEntidadFinanciera;
+	}
+
+	public String getDescripcionCuentaEntidadFinanciera() {
+		return descripcionCuentaEntidadFinanciera;
+	}
+
+	public void setDescripcionCuentaEntidadFinanciera(String descripcionCuentaEntidadFinanciera) {
+		this.descripcionCuentaEntidadFinanciera = descripcionCuentaEntidadFinanciera;
+	}
+
+	public String getCodigoMoneda() {
+		return codigoMoneda;
+	}
+
+	public void setCodigoMoneda(String codigoMoneda) {
+		this.codigoMoneda = codigoMoneda;
+	}
+
 	public String getIsoMonedaCuentaEntidadFinanciera() {
 		return isoMonedaCuentaEntidadFinanciera;
 	}
@@ -92,14 +98,6 @@ public class PosicionBancoModel extends PaginacionGeneralModel {
 
 	public void setDescripcionMonedaCuentaEntidadFinanciera(String descripcionMonedaCuentaEntidadFinanciera) {
 		this.descripcionMonedaCuentaEntidadFinanciera = descripcionMonedaCuentaEntidadFinanciera;
-	}
-
-	public String getDescripcionCuentaEntidadFinanciera() {
-		return descripcionCuentaEntidadFinanciera;
-	}
-
-	public void setDescripcionCuentaEntidadFinanciera(String descripcionCuentaEntidadFinanciera) {
-		this.descripcionCuentaEntidadFinanciera = descripcionCuentaEntidadFinanciera;
 	}
 
 	public Double getSaldoContableActual() {
@@ -118,20 +116,28 @@ public class PosicionBancoModel extends PaginacionGeneralModel {
 		this.saldoDisponibleActual = saldoDisponibleActual;
 	}
 
+	public String getCodigoEstado() {
+		return codigoEstado;
+	}
+
+	public void setCodigoEstado(String codigoEstado) {
+		this.codigoEstado = codigoEstado;
+	}
+
+	public String getDescripcionEstado() {
+		return descripcionEstado;
+	}
+
+	public void setDescripcionEstado(String descripcionEstado) {
+		this.descripcionEstado = descripcionEstado;
+	}
+
 	public Date getFechaUltimaActualizacion() {
 		return fechaUltimaActualizacion;
 	}
 
 	public void setFechaUltimaActualizacion(Date fechaUltimaActualizacion) {
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
-	}
-
-	public List<PosicionBancoModel> getRows() {
-		return rows;
-	}
-
-	public void setRows(List<PosicionBancoModel> rows) {
-		this.rows = rows;
 	}
 
 }

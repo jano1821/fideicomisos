@@ -19,7 +19,10 @@ public class Constante {
     public static final String FORM_MENU = "mantenimiento/administrativo/form_menu";
     public static final String LISTA_PERSONAS = "mantenimiento/administrativo/lista_personas";
     public static final String FORM_PERSONA = "mantenimiento/administrativo/form_persona";
-    public static final String URL_LISTA_FIDEICOMISO = "";
+    public static final String URL_LISTA_FIDEICOMISO = "bancos/posicionBanco/form_fideicomiso";
+    public static final String URL_LISTA_FIDEICOMISO_SOLES = "bancos/posicionBanco/form_fideicomiso_soles";
+    public static final String URL_LISTA_FIDEICOMISO_DOLARES = "bancos/posicionBanco/form_fideicomiso_dolares";
+    public static final String URL_LISTA_MOVIMIENTOS_CUENTA = "bancos/posicionBanco/form_child_movimientos";
     
     //TABLAS
     public static final String TABLA_USUARIO = "admusuar";
@@ -69,4 +72,6 @@ public class Constante {
     public static final String NO_ES_EMPRESA = "N";
     public static final String NO_HAY_REGISTROS_A_LA_IZQUIERDA = "3";
     public static final String NO_HAY_REGISTROS_A_LA_DERECHA = "2";
+    public static final String CODIGO_MONEDA_SOLES = "1";
+    public static final String CODIGO_MONEDA_DOLARES = "2";
 }

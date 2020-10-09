@@ -7,6 +7,7 @@ import java.util.List;
 public class MovimientoCuentaEntidadFinancieraModel extends PaginacionGeneralModel {
 
 	private Integer identificadorMovimientoCuentaEntidadFinanciera;
+	private Integer identificadorCuentaEntidadFinanciera;
 	private String descripcionMovimiento;
 	private String abreviaturaDescripcionMovimiento;
 	private String numeroOperacionMovimiento;
@@ -25,6 +26,14 @@ public class MovimientoCuentaEntidadFinancieraModel extends PaginacionGeneralMod
 	public void setIdentificadorMovimientoCuentaEntidadFinanciera(
 			Integer identificadorMovimientoCuentaEntidadFinanciera) {
 		this.identificadorMovimientoCuentaEntidadFinanciera = identificadorMovimientoCuentaEntidadFinanciera;
+	}
+	
+	public Integer getIdentificadorCuentaEntidadFinanciera() {
+		return identificadorCuentaEntidadFinanciera;
+	}
+
+	public void setIdentificadorCuentaEntidadFinanciera(Integer identificadorCuentaEntidadFinanciera) {
+		this.identificadorCuentaEntidadFinanciera = identificadorCuentaEntidadFinanciera;
 	}
 
 	public String getDescripcionMovimiento() {

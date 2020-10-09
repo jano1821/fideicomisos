@@ -14,13 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.corfid.fideicomisos.model.banco.MovimientoCuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
 import com.corfid.fideicomisos.model.cruds.CrudMenuModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
+import com.corfid.fideicomisos.service.banco.FideicomisarioInterface;
 import com.corfid.fideicomisos.service.banco.FideicomisoInterface;
+import com.corfid.fideicomisos.service.banco.MovimientoCuentaEntidadFinancieraInterface;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.InitialController;
+import com.corfid.fideicomisos.utilities.StringUtil;
 
 @Controller
 @RequestMapping("/fideicomiso")
@@ -29,16 +33,45 @@ public class FideicomisoController extends InitialController {
 	@Autowired
 	@Qualifier("fideicomisoServiceImpl")
 	private FideicomisoInterface fideicomisoInterface;
-		
+
+	@Autowired
+	@Qualifier("fideicomisarioServiceImpl")
+	private FideicomisarioInterface fideicomisarioInterface;
+
+	@Autowired
+	@Qualifier("movimientoCuentaEntidadFinancieraServiceImpl")
+	private MovimientoCuentaEntidadFinancieraInterface movimientoCuentaEntidadFinancieraInterface;
+
 	@GetMapping("/getListFideicomisos")
-	public ModelAndView getListFideicomisos(
-			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales) {
+	public ModelAndView getListFideicomisos(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales) {
 
 		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
 		String numeroDocumento = datosGenerales.getRucEmpresa();
 
-		return busqueda(Constante.CONST_VACIA, numeroDocumento, Constante.CONST_CERO, Constante.CONST_CERO,
-				Constante.PAGINA_INICIAL, Constante.CONST_CERO, posicionBancoModel);
+		return busqueda(Constante.CONST_VACIA, numeroDocumento, Constante.CONST_VACIA, Constante.CONST_CERO,
+				Constante.CONST_CERO, Constante.PAGINA_INICIAL, Constante.CONST_CERO, posicionBancoModel);
+	}
+
+	@GetMapping("/getListFideicomisosSoles")
+	public ModelAndView getListFideicomisosSoles(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales) {
+
+		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String codigoMoneda = Constante.CODIGO_MONEDA_SOLES;
+
+		return busqueda(Constante.CONST_VACIA, numeroDocumento, codigoMoneda, Constante.CONST_CERO,
+				Constante.CONST_CERO, Constante.PAGINA_INICIAL, Constante.CONST_CERO, posicionBancoModel);
+	}
+
+	@GetMapping("/getListFideicomisosDolares")
+	public ModelAndView getListFideicomisosDolares(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales) {
+
+		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String codigoMoneda = Constante.CODIGO_MONEDA_DOLARES;
+
+		return busqueda(Constante.CONST_VACIA, numeroDocumento, codigoMoneda, Constante.CONST_CERO,
+				Constante.CONST_CERO, Constante.PAGINA_INICIAL, Constante.CONST_CERO, posicionBancoModel);
 	}
 
 	@PostMapping(value = "/buscarFideicomiso", params = { "findRow", "busqueda" })
@@ -49,8 +82,8 @@ public class FideicomisoController extends InitialController {
 		String cadenaBusqueda = request.getParameter("busqueda");
 		String numeroDocumento = datosGenerales.getRucEmpresa();
 
-		return busqueda(cadenaBusqueda, numeroDocumento, Constante.CONST_CERO, Constante.CONST_CERO,
-				Constante.PAGINA_INICIAL, Constante.CONST_CERO, posicionBancoModel);
+		return busqueda(cadenaBusqueda, numeroDocumento, Constante.CONST_VACIA, Constante.CONST_CERO,
+				Constante.CONST_CERO, Constante.PAGINA_INICIAL, Constante.CONST_CERO, posicionBancoModel);
 	}
 
 	@PostMapping(value = "/buscarFideicomiso", params = { "rightRow", "busqueda", "paginaActual", "paginaFinal" })
@@ -64,8 +97,8 @@ public class FideicomisoController extends InitialController {
 
 		String numeroDocumento = datosGenerales.getRucEmpresa();
 
-		return busqueda(cadenaBusqueda, numeroDocumento, Constante.CONST_CERO, Constante.DERECHA, paginaActual,
-				paginaFinal, posicionBancoModel);
+		return busqueda(cadenaBusqueda, numeroDocumento, Constante.CONST_VACIA, Constante.CONST_CERO, Constante.DERECHA,
+				paginaActual, paginaFinal, posicionBancoModel);
 	}
 
 	@PostMapping(value = "/buscarFideicomiso", params = { "leftRow", "busqueda", "paginaActual", "paginaFinal" })
@@ -79,18 +112,224 @@ public class FideicomisoController extends InitialController {
 
 		String numeroDocumento = datosGenerales.getRucEmpresa();
 
-		return busqueda(cadenaBusqueda, numeroDocumento, Constante.IZQUIERDA, Constante.CONST_CERO, paginaActual,
-				paginaFinal, posicionBancoModel);
+		return busqueda(cadenaBusqueda, numeroDocumento, Constante.CONST_VACIA, Constante.IZQUIERDA,
+				Constante.CONST_CERO, paginaActual, paginaFinal, posicionBancoModel);
 	}
 
-	private ModelAndView busqueda(String cadenaBusqueda, String numeroDocumento, String izquierda, String derecha,
-			String pagina, String fin, PosicionBancoModel posicionBancoModel) {
+	@PostMapping(value = "/buscarFideicomisoSoles", params = { "findRow", "busqueda" })
+	public ModelAndView buscarFideicomisoSoles(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			PosicionBancoModel posicionBancoModel, final BindingResult bindingResult,
+			final HttpServletRequest request) {
 
-		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_FIDEICOMISO);
+		String cadenaBusqueda = request.getParameter("busqueda");
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String codigoMoneda = Constante.CODIGO_MONEDA_SOLES;
+
+		return busqueda(cadenaBusqueda, numeroDocumento, codigoMoneda, Constante.CONST_CERO, Constante.CONST_CERO,
+				Constante.PAGINA_INICIAL, Constante.CONST_CERO, posicionBancoModel);
+	}
+
+	@PostMapping(value = "/buscarFideicomisoSoles", params = { "rightRow", "busqueda", "paginaActual", "paginaFinal" })
+	public ModelAndView paginaDerechaS(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			PosicionBancoModel posicionBancoModel, final BindingResult bindingResult,
+			final HttpServletRequest request) {
+
+		String cadenaBusqueda = request.getParameter("busqueda");
+		String paginaActual = request.getParameter("paginaActual");
+		String paginaFinal = request.getParameter("paginaFinal");
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String codigoMoneda = Constante.CODIGO_MONEDA_SOLES;
+
+		return busqueda(cadenaBusqueda, numeroDocumento, codigoMoneda, Constante.CONST_CERO, Constante.DERECHA,
+				paginaActual, paginaFinal, posicionBancoModel);
+	}
+
+	@PostMapping(value = "/buscarFideicomisoSoles", params = { "leftRow", "busqueda", "paginaActual", "paginaFinal" })
+	public ModelAndView paginaIzquierdaS(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			PosicionBancoModel posicionBancoModel, final BindingResult bindingResult,
+			final HttpServletRequest request) {
+
+		String cadenaBusqueda = request.getParameter("busqueda");
+		String paginaActual = request.getParameter("paginaActual");
+		String paginaFinal = request.getParameter("paginaFinal");
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String codigoMoneda = Constante.CODIGO_MONEDA_SOLES;
+
+		return busqueda(cadenaBusqueda, numeroDocumento, codigoMoneda, Constante.IZQUIERDA, Constante.CONST_CERO,
+				paginaActual, paginaFinal, posicionBancoModel);
+	}
+
+	@PostMapping(value = "/buscarFideicomisoDolares", params = { "findRow", "busqueda" })
+	public ModelAndView buscarFideicomisoDolares(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			PosicionBancoModel posicionBancoModel, final BindingResult bindingResult,
+			final HttpServletRequest request) {
+
+		String cadenaBusqueda = request.getParameter("busqueda");
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String codigoMoneda = Constante.CODIGO_MONEDA_DOLARES;
+
+		return busqueda(cadenaBusqueda, numeroDocumento, codigoMoneda, Constante.CONST_CERO, Constante.CONST_CERO,
+				Constante.PAGINA_INICIAL, Constante.CONST_CERO, posicionBancoModel);
+	}
+
+	@PostMapping(value = "/buscarFideicomisoDolares", params = { "rightRow", "busqueda", "paginaActual",
+			"paginaFinal" })
+	public ModelAndView paginaDerechaD(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			PosicionBancoModel posicionBancoModel, final BindingResult bindingResult,
+			final HttpServletRequest request) {
+
+		String cadenaBusqueda = request.getParameter("busqueda");
+		String paginaActual = request.getParameter("paginaActual");
+		String paginaFinal = request.getParameter("paginaFinal");
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String codigoMoneda = Constante.CODIGO_MONEDA_DOLARES;
+
+		return busqueda(cadenaBusqueda, numeroDocumento, codigoMoneda, Constante.CONST_CERO, Constante.DERECHA,
+				paginaActual, paginaFinal, posicionBancoModel);
+	}
+
+	@PostMapping(value = "/buscarFideicomisoDolares", params = { "leftRow", "busqueda", "paginaActual", "paginaFinal" })
+	public ModelAndView paginaIzquierdaD(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			PosicionBancoModel posicionBancoModel, final BindingResult bindingResult,
+			final HttpServletRequest request) {
+
+		String cadenaBusqueda = request.getParameter("busqueda");
+		String paginaActual = request.getParameter("paginaActual");
+		String paginaFinal = request.getParameter("paginaFinal");
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String codigoMoneda = Constante.CODIGO_MONEDA_DOLARES;
+
+		return busqueda(cadenaBusqueda, numeroDocumento, codigoMoneda, Constante.IZQUIERDA, Constante.CONST_CERO,
+				paginaActual, paginaFinal, posicionBancoModel);
+	}
+
+	@PostMapping(value = "/buscarFideicomiso", params = { "detailRow" })
+	public ModelAndView visualizarMovimientoCuenta(
+			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
+			final HttpServletRequest request) {
+
+		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
+
+		PaginadoModel paginadoModel = obtenerMovimientoAndPagina(Constante.PAGINA_INICIAL, Constante.CONST_CERO,
+				Constante.CONST_CERO, Constante.CONST_CERO);
+
+		Integer identificadorCuentaEntidadFinanciera = StringUtil.toInteger(request.getParameter("detailRow"));
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
+				.getNombreFideicomisario();
+
+		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
+				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
+						paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
+
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		movimientoCuentaEntidadFinancieraModel
+				.setIdentificadorCuentaEntidadFinanciera(identificadorCuentaEntidadFinanciera);
+		movimientoCuentaEntidadFinancieraModel.setResult(Constante.CONST_VACIA);
+		movimientoCuentaEntidadFinancieraModel.setPaginaActual(paginadoModel.getPaginaActual());
+		
+		
+
+		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
+		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
+		modelAndView.addObject("usuario", user.getUsername());
+
+		return modelAndView;
+	}
+
+	@PostMapping(value = "/buscarFideicomisoSoles", params = { "detailRow" })
+	public ModelAndView visualizarMovimientoCuentaS(
+			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			final BindingResult bindingResult, final HttpServletRequest request) {
+
+		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
+
+		PaginadoModel paginadoModel = obtenerMovimientoAndPagina(Constante.PAGINA_INICIAL, Constante.CONST_CERO,
+				Constante.CONST_CERO, Constante.CONST_CERO);
+
+		Integer identificadorCuentaEntidadFinanciera = StringUtil.toInteger(request.getParameter("detailRow"));
+		
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
+				.getNombreFideicomisario();
+
+		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
+				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
+						paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
+
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		movimientoCuentaEntidadFinancieraModel
+				.setIdentificadorCuentaEntidadFinanciera(identificadorCuentaEntidadFinanciera);
+		movimientoCuentaEntidadFinancieraModel.setResult(Constante.CONST_VACIA);
+		movimientoCuentaEntidadFinancieraModel.setPaginaActual(paginadoModel.getPaginaActual());
+
+		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
+		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
+		modelAndView.addObject("usuario", user.getUsername());
+
+		return modelAndView;
+	}
+
+	@PostMapping(value = "/buscarFideicomisoDolares", params = { "detailRow" })
+	public ModelAndView visualizarMovimientoCuentaD(
+			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			final BindingResult bindingResult, final HttpServletRequest request) {
+
+		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
+
+		PaginadoModel paginadoModel = obtenerMovimientoAndPagina(Constante.PAGINA_INICIAL, Constante.CONST_CERO,
+				Constante.CONST_CERO, Constante.CONST_CERO);
+
+		Integer identificadorCuentaEntidadFinanciera = StringUtil.toInteger(request.getParameter("detailRow"));
+		
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
+				.getNombreFideicomisario();
+
+		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
+				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
+						paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
+
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		movimientoCuentaEntidadFinancieraModel
+				.setIdentificadorCuentaEntidadFinanciera(identificadorCuentaEntidadFinanciera);
+		movimientoCuentaEntidadFinancieraModel.setResult(Constante.CONST_VACIA);
+		movimientoCuentaEntidadFinancieraModel.setPaginaActual(paginadoModel.getPaginaActual());
+
+		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
+		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
+		modelAndView.addObject("usuario", user.getUsername());
+
+		return modelAndView;
+	}
+
+	private ModelAndView busqueda(String cadenaBusqueda, String numeroDocumento, String codigoMoneda, String izquierda,
+			String derecha, String pagina, String fin, PosicionBancoModel posicionBancoModel) {
 
 		PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
-		posicionBancoModel = fideicomisoInterface.getListaFideicomiso(cadenaBusqueda, numeroDocumento,
+		ModelAndView modelAndView = null;
+
+		if (StringUtil.isEmpty(codigoMoneda)) {
+			modelAndView = new ModelAndView(Constante.URL_LISTA_FIDEICOMISO);
+		} else if (StringUtil.equiv(codigoMoneda, Constante.CODIGO_MONEDA_SOLES)) {
+			modelAndView = new ModelAndView(Constante.URL_LISTA_FIDEICOMISO_SOLES);
+		} else {
+			modelAndView = new ModelAndView(Constante.URL_LISTA_FIDEICOMISO_DOLARES);
+		}
+
+		posicionBancoModel = fideicomisoInterface.getListaFideicomiso(cadenaBusqueda, numeroDocumento, codigoMoneda,
 				paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
 
 		if (paginadoModel.isMovIzquierda()) {
@@ -106,6 +345,7 @@ public class FideicomisoController extends InitialController {
 		posicionBancoModel.setBusqueda(cadenaBusqueda);
 		posicionBancoModel.setPaginaActual(paginadoModel.getPaginaActual());
 
+		modelAndView.addObject("nombreFideicomisario", posicionBancoModel.getNombreFideicomisario());
 		modelAndView.addObject("posicionBancoModel", posicionBancoModel);
 		modelAndView.addObject("usuario", user.getUsername());
 

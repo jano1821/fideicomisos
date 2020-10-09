@@ -4,20 +4,20 @@ import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
 
 public interface FideicomisoInterface {
 
-	public PosicionBancoModel getListaFideicomiso(String cadenaBusqueda, String numeroDocumento, Integer pagina,
-			Integer cantRegistros);
-
-	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisario(String numeroDocumento,
+	public PosicionBancoModel getListaFideicomiso(String cadenaBusqueda, String numeroDocumento, String codigoMoneda,
 			Integer pagina, Integer cantRegistros);
 
-	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioNombreFideicomiso(
-			String nombreFideicomiso, String numeroDocumento, Integer pagina, Integer cantRegistros);
+	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisario(
+			Integer identificadorFideicomisario, Integer pagina, Integer cantRegistros);
 
-	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMoneda(String numeroDocumento,
-			String monedaCuenta, Integer pagina, Integer cantRegistros);
+	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioNombreFideicomiso(
+			Integer identificadorFideicomisario, String nombreFideicomiso, Integer pagina, Integer cantRegistros);
+
+	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMoneda(
+			Integer identificadorFideicomisario, String monedaCuenta, Integer pagina, Integer cantRegistros);
 
 	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMonedaNombreFideicomiso(
-			String nombreFideicomiso, String numeroDocumento, String monedaCuenta, Integer pagina,
+			Integer identificadorFideicomisario, String nombreFideicomiso, String monedaCuenta, Integer pagina,
 			Integer cantRegistros);
 
 }

@@ -2,12 +2,7 @@ package com.corfid.fideicomisos.component.banco;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
-
 import org.springframework.stereotype.Component;
-
-import com.corfid.fideicomisos.entity.banco.CuentaEntidadFinanciera;
-import com.corfid.fideicomisos.entity.banco.Fideicomiso;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
 
 @Component("posicionBancoConverter")
