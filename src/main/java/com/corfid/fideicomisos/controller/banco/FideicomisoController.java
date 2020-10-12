@@ -1,24 +1,33 @@
 package com.corfid.fideicomisos.controller.banco;
 
+import java.util.Date;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.corfid.fideicomisos.model.banco.CuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.banco.MovimientoCuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
-import com.corfid.fideicomisos.model.cruds.CrudMenuModel;
+import com.corfid.fideicomisos.model.banco.SaldoTotalMonedaModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
+import com.corfid.fideicomisos.service.banco.CuentaEntidadFinancieraInterface;
 import com.corfid.fideicomisos.service.banco.FideicomisarioInterface;
 import com.corfid.fideicomisos.service.banco.FideicomisoInterface;
 import com.corfid.fideicomisos.service.banco.MovimientoCuentaEntidadFinancieraInterface;
@@ -41,6 +50,10 @@ public class FideicomisoController extends InitialController {
 	@Autowired
 	@Qualifier("movimientoCuentaEntidadFinancieraServiceImpl")
 	private MovimientoCuentaEntidadFinancieraInterface movimientoCuentaEntidadFinancieraInterface;
+
+	@Autowired
+	@Qualifier("cuentaEntidadFinancieraServiceImpl")
+	private CuentaEntidadFinancieraInterface cuentaEntidadFinancieraInterface;
 
 	@GetMapping("/getListFideicomisos")
 	public ModelAndView getListFideicomisos(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales) {
@@ -210,6 +223,7 @@ public class FideicomisoController extends InitialController {
 	@PostMapping(value = "/buscarFideicomiso", params = { "detailRow" })
 	public ModelAndView visualizarMovimientoCuenta(
 			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel,
 			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
 			final HttpServletRequest request) {
 
@@ -228,16 +242,18 @@ public class FideicomisoController extends InitialController {
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
 						paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
 
+		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
+				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
+
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		movimientoCuentaEntidadFinancieraModel
 				.setIdentificadorCuentaEntidadFinanciera(identificadorCuentaEntidadFinanciera);
 		movimientoCuentaEntidadFinancieraModel.setResult(Constante.CONST_VACIA);
 		movimientoCuentaEntidadFinancieraModel.setPaginaActual(paginadoModel.getPaginaActual());
-		
-		
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
+		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
 		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
 		modelAndView.addObject("usuario", user.getUsername());
 
@@ -247,8 +263,9 @@ public class FideicomisoController extends InitialController {
 	@PostMapping(value = "/buscarFideicomisoSoles", params = { "detailRow" })
 	public ModelAndView visualizarMovimientoCuentaS(
 			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
-			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
-			final BindingResult bindingResult, final HttpServletRequest request) {
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel,
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
+			final HttpServletRequest request) {
 
 		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
 
@@ -256,7 +273,7 @@ public class FideicomisoController extends InitialController {
 				Constante.CONST_CERO, Constante.CONST_CERO);
 
 		Integer identificadorCuentaEntidadFinanciera = StringUtil.toInteger(request.getParameter("detailRow"));
-		
+
 		String numeroDocumento = datosGenerales.getRucEmpresa();
 		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
 				.getNombreFideicomisario();
@@ -264,6 +281,9 @@ public class FideicomisoController extends InitialController {
 		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
 						paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
+
+		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
+				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -273,6 +293,7 @@ public class FideicomisoController extends InitialController {
 		movimientoCuentaEntidadFinancieraModel.setPaginaActual(paginadoModel.getPaginaActual());
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
+		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
 		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
 		modelAndView.addObject("usuario", user.getUsername());
 
@@ -282,8 +303,9 @@ public class FideicomisoController extends InitialController {
 	@PostMapping(value = "/buscarFideicomisoDolares", params = { "detailRow" })
 	public ModelAndView visualizarMovimientoCuentaD(
 			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
-			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
-			final BindingResult bindingResult, final HttpServletRequest request) {
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel,
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
+			final HttpServletRequest request) {
 
 		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
 
@@ -291,7 +313,7 @@ public class FideicomisoController extends InitialController {
 				Constante.CONST_CERO, Constante.CONST_CERO);
 
 		Integer identificadorCuentaEntidadFinanciera = StringUtil.toInteger(request.getParameter("detailRow"));
-		
+
 		String numeroDocumento = datosGenerales.getRucEmpresa();
 		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
 				.getNombreFideicomisario();
@@ -299,6 +321,9 @@ public class FideicomisoController extends InitialController {
 		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
 						paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
+
+		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
+				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -308,10 +333,40 @@ public class FideicomisoController extends InitialController {
 		movimientoCuentaEntidadFinancieraModel.setPaginaActual(paginadoModel.getPaginaActual());
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
+		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
 		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
 		modelAndView.addObject("usuario", user.getUsername());
 
 		return modelAndView;
+	}
+
+	@PostMapping("/obtenerSaldoTotalMoneda")
+	public ResponseEntity<?> obtenerSaldoTotalMoneda(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			@Valid @RequestBody SaldoTotalMonedaModel saldoTotalMonedaModel, final BindingResult bindingResult,
+			final HttpServletRequest request, Errors errors) {
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+
+		String msgError = null;
+
+		Date fechaProceso = new Date();
+
+		try {
+			if (errors.hasErrors()) {
+				msgError = errors.getAllErrors().stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining(","));
+				return ResponseEntity.badRequest().body(msgError);
+			}
+
+			saldoTotalMonedaModel = fideicomisoInterface.obtenerSaldoTotalMonedaFideicomiso(saldoTotalMonedaModel.getBusqueda(),
+					numeroDocumento, Constante.CONST_VACIA, fechaProceso);
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+
+		return ResponseEntity.ok(saldoTotalMonedaModel);
+
 	}
 
 	private ModelAndView busqueda(String cadenaBusqueda, String numeroDocumento, String codigoMoneda, String izquierda,

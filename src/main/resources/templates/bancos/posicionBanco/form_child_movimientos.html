@@ -34,29 +34,59 @@
 			<div class="row">
 				<div class="one wide column"></div>
 				<div class="fourteen wide column">
-					<h2><span th:text="${nombreFideicomisario}"></span></h2>
+					<h2><span th:text="${nombreFideicomisario}"></span></h2>					
 					<form class="ui form" action="#"
 						th:action="@{/movimientoCuentaEntidadFinanciera/buscarMovimientoCuenta}"
 						th:object="${movimientoCuentaEntidadFinancieraModel}" method="POST"
 						id="frm-movimientoCuenta">						
-						<div class="ui segments">
+						<div class="ui segments">						
 						
 							<div class="ui secondary segment">
-								<div class="three fields">
+							
+								<form class="ui form" action="" id="frm-child-movimientoCuenta" 
+									th:object="${cuentaEntidadFinancieraModel}">	
 									
-										<h3><label for="descripcion1">N° Cuenta</label></h3>
-										<input type="text" id="descripcion1" name="descripcion1"
-											placeholder="Descripcion1">
-									
-										<h3><label for="descripcion2">Cuenta</label></h3>
-										<input type="text" id="descripcion2" name="descripcion2"
-											placeholder="Descripcion2">
-									
-										<h3><label for="descripcion3">Saldo Contable</label></h3>
-										<input type="text" id="descripcion3" name="descripcion3"
-											placeholder="Descripcion3">
-									
-								</div>
+									<div class="inline fields">
+										<div class="four wide field">
+											<h3><label for="numeroCuentaEntidadFinanciera">N° Cuenta</label></h3>
+											<div class="ui disabled input">
+												<input type="text" name="numeroCuentaEntidadFinanciera" id="numeroCuentaEntidadFinanciera"
+													th:field="*{numeroCuentaEntidadFinanciera}" th:value="${numeroCuentaEntidadFinanciera}">
+											</div>
+										</div>
+										<div class="eight wide field">											
+											<div class="ui disabled input">
+												<input type="text" name="descripcionCuentaEntidadFinanciera" id="descripcionCuentaEntidadFinanciera"
+													th:field="*{descripcionCuentaEntidadFinanciera}" th:value="${descripcionCuentaEntidadFinanciera}">
+											</div>
+										</div>
+										<div class="four wide field">
+											<h3><label for="saldoContableActual">Saldo Contable</label></h3>
+											<div class="ui right aligned disabled input">
+												<input type="text" name="saldoContableActual" id="saldoContableActual"
+													th:field="*{saldoContableActual}" th:value="${saldoContableActual}">
+											</div>
+										</div>									
+									</div>						
+																	
+									<div class="inline fields">
+										<div class="four wide field">
+											<h3><label for="descripcionMonedaIntegrada">Moneda</label></h3>
+											<div class="ui disabled input">
+												<input type="text" name="descripcionMonedaIntegrada" id="descripcionMonedaIntegrada"
+													th:field="*{descripcionMonedaIntegrada}" th:value="${descripcionMonedaIntegrada}">
+											</div>
+										</div>
+										<div class="eight wide field"></div>
+										<div class="four wide field">
+											<h3><label for="saldoDisponibleActual">Saldo Disponible</label></h3>
+											<div class="ui right aligned disabled input">
+												<input type="text" name="saldoDisponibleActual" id="saldoDisponibleActual"
+													th:field="*{saldoDisponibleActual}" th:value="${saldoDisponibleActual}">
+											</div>
+										</div>
+									</div>
+								</form>								
 							</div>	
 													
 							<div class="ui segment">

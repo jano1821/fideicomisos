@@ -95,8 +95,12 @@
 										
 									</tbody>
 								</table>
-							</div>
-							
+							</div>							
+							<div class="ui right aligned segment">
+								<button class="ui primary button" type="submit" id="consolidatedBalances" name="consolidatedBalances">
+									Consolidado Saldos
+								</button>							
+							</div>																				
 							<div class="ui right aligned secondary segment">
 								<div class="ui pagination menu">
 									<button class="button" type="submit" name="leftRow">
@@ -133,6 +137,47 @@
 							</div>
 						</div>
 					</form>
+										
+					<div class="ui basic modal">
+						<h2>SALDOS TOTALES</h2>
+						<table class="ui definition table">
+							<thead>
+								<tr>
+									<th></th>
+									<th class="ui right aligned">SALDO CONTABLE</th>
+									<th class="ui right aligned">SALDO DISPONIBLE</th>								
+								</tr>							
+							</thead>
+							<tbody id="tBodySaldos">
+								<tr>
+									<td>TOTAL SOLES</td>
+									<td class="ui right aligned">0.00</td>
+									<td class="ui right aligned">0.00</td>
+								</tr>
+								<tr>
+									<td>TOTAL DÓLARES</td>
+									<td class="ui right aligned">0.00</td>
+									<td class="ui right aligned">0.00</td>
+								</tr>
+							</tbody>
+						</table>
+						<h2>SALDOS TOTALES CONSOLIDADOS</h2>
+						<table class="ui definition table">
+							<thead>
+								<tr>
+									<th></th>
+									<th class="ui right aligned">SALDO CONTABLE</th>
+									<th class="ui right aligned">SALDO DISPONIBLE</th>								
+								</tr>							
+							</thead>
+							<tbody id="moneda">							
+							</tbody>
+						</table>
+						<div class="actions">
+							<div class="ui red basic cancel inverted button">Cancel</div>
+						</div>							
+					</div>
+					
 				</div>
 				<div class="one wide column"></div>
 			</div>
@@ -153,6 +198,69 @@
 			$('#abrir_menu').click(function() {
 				toggleSidebar();
 			});
-		});
+		});		
 	</script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		    $('#consolidatedBalances').click(function(){
+		       event.preventDefault();
+		       obtenerSaldoTotalMoneda();
+		       $('.ui.modal').modal('show');
+		    });
+		}); 
+	</script>
+	<script type="text/javascript">
+		function obtenerSaldoTotalMoneda(){
+			
+			event.preventDefault();
+			
+			var tBodySaldos = document.getElementById("tBodySaldos");
+			
+			var datosGenerales = {};
+			datosGenerales["busqueda"] = $("#busqueda").val;
+						
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+			    url: "/fideicomiso/obtenerSaldoTotalMoneda",
+			    data: JSON.stringify(datosGenerales),
+			    dataType: 'json',
+			    cache: false,
+			    timeout: 600000,
+				success: function (data) {
+
+				var cadena = "<tr>"	+ 				
+					"<td>EXPRESADO EN SOLES</td>" +
+					"<td class=\"ui right aligned\">" +  data["saldoTotalContableSoles"]  + "</td>" +
+					"<td class=\"ui right aligned\">" +  "0.00"  + "</td>" +
+
+				"</tr>" +
+				"<tr>"	+ 
+				"<td>EXPRESADO EN DOLARES</td>" +
+				"<td class=\"ui right aligned\">" +  "0.00"  + "</td>" +
+				"<td class=\"ui right aligned\">" +  "0.00"  + "</td>" +
+
+			"</tr>";
+					
+			$('#moneda').html(cadena);
+					
+					console.log(data);
+
+		    },
+			error: function (e) {
+			    
+		    }
+				
+				
+				
+				
+				
+				
+				
+			});
+			
+			
+		}	
+	</script>
+	
 </body>

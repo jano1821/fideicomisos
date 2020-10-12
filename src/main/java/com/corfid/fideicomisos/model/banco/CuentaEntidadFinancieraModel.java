@@ -14,6 +14,7 @@ public class CuentaEntidadFinancieraModel {
 	private String codigoMoneda;
 	private String isoMonedaCuentaEntidadFinanciera;
 	private String descripcionMonedaCuentaEntidadFinanciera;
+	private String descripcionMonedaIntegrada;
 	private Double saldoContableActual;
 	private Double saldoDisponibleActual;
 	private String codigoEstado;
@@ -98,6 +99,14 @@ public class CuentaEntidadFinancieraModel {
 
 	public void setDescripcionMonedaCuentaEntidadFinanciera(String descripcionMonedaCuentaEntidadFinanciera) {
 		this.descripcionMonedaCuentaEntidadFinanciera = descripcionMonedaCuentaEntidadFinanciera;
+	}
+
+	public String getDescripcionMonedaIntegrada() {
+		return descripcionMonedaIntegrada;
+	}
+
+	public void setDescripcionMonedaIntegrada(String descripcionMonedaIntegrada) {
+		this.descripcionMonedaIntegrada = descripcionMonedaIntegrada;
 	}
 
 	public Double getSaldoContableActual() {

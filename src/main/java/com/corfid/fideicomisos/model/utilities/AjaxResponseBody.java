@@ -8,7 +8,7 @@ public class AjaxResponseBody {
 
     String msg;
     List<PersonaModel> result;
-
+   
     public String getMsg() {
         return msg;
     }

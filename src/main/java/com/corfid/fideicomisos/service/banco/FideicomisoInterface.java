@@ -1,6 +1,9 @@
 package com.corfid.fideicomisos.service.banco;
 
+import java.util.Date;
+
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
+import com.corfid.fideicomisos.model.banco.SaldoTotalMonedaModel;
 
 public interface FideicomisoInterface {
 
@@ -19,5 +22,20 @@ public interface FideicomisoInterface {
 	public PosicionBancoModel getListFideicomisoCuentaEntidadFinancieraByFideicomisarioMonedaNombreFideicomiso(
 			Integer identificadorFideicomisario, String nombreFideicomiso, String monedaCuenta, Integer pagina,
 			Integer cantRegistros);
+
+	public SaldoTotalMonedaModel obtenerSaldoTotalMonedaFideicomiso(String cadenaBusqueda, String numeroDocumento,
+			String codigoMoneda, Date fechaProceso);
+
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisario(
+			Integer identificadorFideicomisario, Date fechaProceso);
+
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioNombreFideicomiso(
+			Integer identificadorFideicomisario, String nombreFideicomiso, Date fechaProceso);
+
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMoneda(
+			Integer identificadorFideicomisario, String codigoMoneda, Date fechaProceso);
+
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
+			Integer identificadorFideicomisario, String nombreFideicomiso, String codigoMoneda, Date fechaProceso);
 
 }

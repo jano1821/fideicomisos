@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.corfid.fideicomisos.model.banco.CuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.banco.MovimientoCuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
+import com.corfid.fideicomisos.service.banco.CuentaEntidadFinancieraInterface;
 import com.corfid.fideicomisos.service.banco.FideicomisarioInterface;
 import com.corfid.fideicomisos.service.banco.MovimientoCuentaEntidadFinancieraInterface;
 import com.corfid.fideicomisos.utilities.Constante;
@@ -29,6 +31,10 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 	@Autowired
 	@Qualifier("fideicomisarioServiceImpl")
 	private FideicomisarioInterface fideicomisarioInterface;
+	
+	@Autowired
+	@Qualifier("cuentaEntidadFinancieraServiceImpl")
+	private CuentaEntidadFinancieraInterface cuentaEntidadFinancieraInterface;
 
 	@Autowired
 	@Qualifier("movimientoCuentaEntidadFinancieraServiceImpl")
@@ -37,6 +43,7 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 	@PostMapping(value = "/buscarMovimientoCuenta", params = { "rightRow", "identificadorCuentaEntidadFinanciera",
 			"paginaActual", "paginaFinal" })
 	public ModelAndView paginaDerecha(MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel,
 			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
 			final HttpServletRequest request) {
 
@@ -49,12 +56,13 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 				.toInteger(request.getParameter("identificadorCuentaEntidadFinanciera"));
 
 		return busqueda(identificadorCuentaEntidadFinanciera, numeroDocumento, Constante.CONST_CERO, Constante.DERECHA,
-				paginaActual, paginaFinal, movimientoCuentaEntidadFinancieraModel);
+				paginaActual, paginaFinal, movimientoCuentaEntidadFinancieraModel, cuentaEntidadFinancieraModel);
 	}
 
 	@PostMapping(value = "/buscarMovimientoCuenta", params = { "leftRow", "identificadorCuentaEntidadFinanciera",
 			"paginaActual", "paginaFinal" })
 	public ModelAndView paginaIzquierda(MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel,
 			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
 			final HttpServletRequest request) {
 
@@ -67,12 +75,14 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 				.toInteger(request.getParameter("identificadorCuentaEntidadFinanciera"));
 
 		return busqueda(identificadorCuentaEntidadFinanciera, numeroDocumento, Constante.IZQUIERDA,
-				Constante.CONST_CERO, paginaActual, paginaFinal, movimientoCuentaEntidadFinancieraModel);
+				Constante.CONST_CERO, paginaActual, paginaFinal, movimientoCuentaEntidadFinancieraModel,
+				cuentaEntidadFinancieraModel);
 	}
 
 	private ModelAndView busqueda(Integer identificadorCuentaEntidadFinanciera, String numeroDocumento,
 			String izquierda, String derecha, String pagina, String fin,
-			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel) {
+			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel) {
 
 		PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
@@ -84,6 +94,9 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
 						paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
+		
+		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
+				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);	
 
 		if (paginadoModel.isMovIzquierda()) {
 			movimientoCuentaEntidadFinancieraModel.setResult(Constante.NO_HAY_REGISTROS_A_LA_IZQUIERDA);
@@ -100,6 +113,7 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 		movimientoCuentaEntidadFinancieraModel.setPaginaActual(paginadoModel.getPaginaActual());
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
+		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
 		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
 		modelAndView.addObject("usuario", user.getUsername());
 

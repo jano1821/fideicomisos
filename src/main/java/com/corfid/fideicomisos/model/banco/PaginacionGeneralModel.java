@@ -1,8 +1,5 @@
 package com.corfid.fideicomisos.model.banco;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PaginacionGeneralModel {
 
 	private Integer paginaActual;

@@ -12,25 +12,25 @@ public class CuentaEntidadFinancieraConverter {
 		
 		CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel = new CuentaEntidadFinancieraModel();
 		
+		String descripcionMonedaIntegrada = cuentaEntidadFinanciera.getIsoMonedaCuentaEntidadFinanciera().concat(" - ").concat(cuentaEntidadFinanciera.getDescripcionMonedaCuentaEntidadFinanciera());
+		
 		cuentaEntidadFinancieraModel.setIdentificadorCuentaEntidadFinanciera(cuentaEntidadFinanciera.getIdentificadorCuentaEntidadFinanciera());
 		cuentaEntidadFinancieraModel.setIdentificadorFideicomiso(cuentaEntidadFinanciera.getFideicomiso().getIdentificadorFideicomiso());
 		cuentaEntidadFinancieraModel.setNumeroCuentaEntidadFinanciera(cuentaEntidadFinanciera.getNumeroCuentaEntidadFinanciera());
 		cuentaEntidadFinancieraModel.setNombreEntidadFinanciera(cuentaEntidadFinanciera.getNombreEntidadFinanciera());
 		cuentaEntidadFinancieraModel.setAcronimoEntidadFinanciera(cuentaEntidadFinanciera.getAcronimoEntidadFinanciera());
 		cuentaEntidadFinancieraModel.setTipoEntidadFinanciera(cuentaEntidadFinanciera.getTipoEntidadFinanciera());
-		/*cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.
-		cuentaEntidadFinancieraModel.*/
-		
+		cuentaEntidadFinancieraModel.setDescripcionCuentaEntidadFinanciera(cuentaEntidadFinanciera.getDescripcionCuentaEntidadFinanciera());
+		cuentaEntidadFinancieraModel.setCodigoMoneda(cuentaEntidadFinanciera.getCodigoMoneda());
+		cuentaEntidadFinancieraModel.setIsoMonedaCuentaEntidadFinanciera(cuentaEntidadFinanciera.getIsoMonedaCuentaEntidadFinanciera());
+		cuentaEntidadFinancieraModel.setDescripcionMonedaCuentaEntidadFinanciera(cuentaEntidadFinanciera.getDescripcionMonedaCuentaEntidadFinanciera());
+		cuentaEntidadFinancieraModel.setDescripcionMonedaIntegrada(descripcionMonedaIntegrada);
+		cuentaEntidadFinancieraModel.setSaldoContableActual(cuentaEntidadFinanciera.getSaldoContableActual());
+		cuentaEntidadFinancieraModel.setSaldoDisponibleActual(cuentaEntidadFinanciera.getSaldoDisponibleActual());
+		cuentaEntidadFinancieraModel.setCodigoEstado(cuentaEntidadFinanciera.getCodigoEstado());
+		cuentaEntidadFinancieraModel.setDescripcionEstado(cuentaEntidadFinanciera.getDescripcionEstado());
+		cuentaEntidadFinancieraModel.setFechaUltimaActualizacion(cuentaEntidadFinanciera.getFechaUltimaActualizacion());
+				
 		return cuentaEntidadFinancieraModel;
 		
 	}

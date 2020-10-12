@@ -1,5 +1,6 @@
 package com.corfid.fideicomisos.utilities;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -264,4 +265,24 @@ public class AbstractService {
     protected Map<String, String> passwordVerificado() {
         return passwordVerificado("", true, 6);
     }
+    
+	protected String dateUtilToStringYYYYMMDD(java.util.Date date) {
+		if (date == null)
+			return null;
+		return new SimpleDateFormat("dd/MM/yyyy").format(date);
+	}
+	
+	protected Date stringToDateyyyyMMdd(String fecha) {
+		Date dFecha = null;
+		if (fecha == null)
+			return null;
+
+		try {
+			dFecha = new SimpleDateFormat("yyyy/MM/dd").parse(fecha);
+		} catch (Exception e) {
+			e.printStackTrace();
+			dFecha = null;
+		}
+		return dFecha;
+	}
 }
