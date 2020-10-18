@@ -2,20 +2,22 @@ package com.corfid.fideicomisos.component.administrativo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.corfid.fideicomisos.component.utilities.GenericConverter;
-import com.corfid.fideicomisos.entity.administrativo.Empresa;
 import com.corfid.fideicomisos.entity.administrativo.Persona;
 import com.corfid.fideicomisos.model.administrativo.ClienteModel;
+import com.corfid.fideicomisos.model.administrativo.EmailModel;
 import com.corfid.fideicomisos.model.administrativo.EmpresaModel;
 import com.corfid.fideicomisos.model.administrativo.PersonaModel;
+import com.corfid.fideicomisos.model.administrativo.TelefonoModel;
 import com.corfid.fideicomisos.service.administrativo.ClienteInterface;
+import com.corfid.fideicomisos.service.administrativo.EmailInterface;
 import com.corfid.fideicomisos.service.administrativo.EmpresaInterface;
+import com.corfid.fideicomisos.service.administrativo.TelefonoInterface;
 import com.corfid.fideicomisos.service.impl.utilities.ErrorControladoException;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
@@ -32,7 +34,15 @@ public class PersonaConverter extends GenericConverter {
     @Qualifier("empresaServiceImpl")
     private EmpresaInterface empresaInterface;
 
-    public Persona convertPersonaModelToPersona(PersonaModel personaModel) {
+    @Autowired
+    @Qualifier("telefonoServiceImpl")
+    private TelefonoInterface telefonoInterface;
+
+    @Autowired
+    @Qualifier("emailServiceImpl")
+    private EmailInterface emailInterface;
+
+    public Persona convertPersonaModelToPersona(PersonaModel personaModel) throws Exception {
         Persona persona = new Persona();
         persona.setIdPersona(personaModel.getIdPersona());
         persona.setNombres(StringUtil.toUpperBlank(personaModel.getNombres()));
@@ -56,6 +66,7 @@ public class PersonaConverter extends GenericConverter {
         } else {
             persona.setNombreCompleto(StringUtil.toUpperBlank(personaModel.getRazonSocial()));
         }
+
         persona.setTipoDocumento(personaModel.getTipoDocumento());
         persona.setNumeroDocumento(personaModel.getNumeroDocumento());
         persona.setEstadoRegistro(personaModel.getEstadoRegistro());
@@ -103,6 +114,8 @@ public class PersonaConverter extends GenericConverter {
         List<EmpresaModel> listEmpresaModel = new ArrayList<EmpresaModel>();
         ClienteModel clienteModel;
         PersonaModel personaModel = new PersonaModel();
+        List<TelefonoModel> listTelefonoModel;
+        List<EmailModel> listEmailmodel;
 
         try {
             personaModel.setIdPersona(persona.getIdPersona());
@@ -123,6 +136,16 @@ public class PersonaConverter extends GenericConverter {
             personaModel.setPermiteVinculacion(persona.getPermiteVinculacion());
             personaModel.setPermiteVinculacionCliente(persona.getPermiteVinculacionCliente());
 
+            listTelefonoModel = telefonoInterface.findTelefonoByIdPersona(personaModel.getIdPersona());
+            if (!StringUtil.isEmpty(listTelefonoModel)) {
+                personaModel.setNumeroTelefono(listTelefonoModel.get(0).getNumero());
+            }
+            
+            listEmailmodel = emailInterface.findEmailByIdPersona(personaModel.getIdPersona());
+            if (!StringUtil.isEmpty(listEmailmodel)) {
+                personaModel.setDireccionEmail(listEmailmodel.get(0).getDireccionMail());
+            }
+
             clienteModel = clienteInterface.findByIdCliente(persona.getIdPersona());
             if (!StringUtil.isEmpty(clienteModel)) {
                 if (!StringUtil.isEmpty(clienteModel.getListEmpresas())) {
@@ -131,12 +154,6 @@ public class PersonaConverter extends GenericConverter {
             }
 
             personaModel.setListEmpresa(listEmpresaModel);
-
-            /*if (!StringUtil.isEmpty(clienteInterface.findByIdCliente(persona.getIdPersona()))) {
-                personaModel.setCliente(Constante.SI_ES_CLIENTE);
-            } else {
-                personaModel.setCliente(Constante.NO_ES_CLIENTE);
-            }*/
 
             if (StringUtil.equiv(persona.getTipoPersona(), "N")) {
                 personaModel.setDescTipoPersona("Natural");

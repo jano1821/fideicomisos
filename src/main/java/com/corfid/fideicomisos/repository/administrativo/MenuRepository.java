@@ -30,7 +30,7 @@ public interface MenuRepository extends JpaRepository<Menu, Serializable> {
     @Query(value = "SELECT m FROM Menu m WHERE m.tipoMenu = 'P' AND m.tipoUsuario.idTipoUsuario like :tipoUsuarioSesion ORDER BY m.idMenuPadre ")
     public abstract List<Menu> listMenuPadres(@Param("tipoUsuarioSesion") String tipoUsuarioSesion);
 
-    @Query(value = "SELECT m FROM Menu m WHERE m.tipoUsuario.idTipoUsuario like :tipoUsuarioSesion ORDER BY m.idMenuPadre ")
+    @Query(value = "SELECT m FROM Menu m WHERE m.tipoUsuario.idTipoUsuario IN ('A','B') ORDER BY m.idMenuPadre ")
     public abstract List<Menu> listAllMenuByNivel(@Param("tipoUsuarioSesion") String tipoUsuarioSesion);
 
 	@Query(value = "SELECT m FROM Menu m "

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Direcciones</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+
+</head>
+
+<body>
+	<div class="ui one column stackable grid">
+		<div class="column">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
+
+
+					<form class="ui form" action="#"
+						th:action="@{/persona/crudAccionesListaDirecciones}"
+						th:object="${crudDireccionModel}" method="POST" id="frm-direccion">
+						<input type="hidden" th:field="*{idPersona}"
+							th:value="${idPersona}"></input>
+						<div class="ui segments">
+							<div class="ui secondary segment">
+
+								<table class="ui selectable celled table">
+									<thead>
+										<tr>
+											<th>Direccion</th>
+											<th>Estado de Registro</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="direccion : ${crudDireccionModel.rows}"
+											th:class="${direccion.estadoRegistro=='N'}? 'negative'">
+											<td th:text="${direccion.direccion}"></td>
+											<td th:text="${direccion.descEstadoRegistro}"></td>
+											<td class="ui center aligned">
+												<div class="ui icon buttons">
+													<button class="ui button" data-tooltip="Editar"
+														data-position="right center" type="submit" name="editRowDireccion"
+														th:value="${direccion.idDireccion}">
+														<i class="edit icon"></i>
+													</button>
+													<button class="ui button" data-tooltip="Eliminar"
+														data-position="right center" type="submit"
+														name="removeRowDireccion" th:value="${direccion.idDireccion}">
+														<i class="trash alternate icon"></i>
+													</button>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+							<div class="ui right aligned secondary segment">
+								<div class="ui pagination menu">
+
+									<button class="button" type="submit" name="leftRow">
+										<a class="icon item" data-tooltip="Mover a la Izquierda"
+											data-position="top center"> <i class="left arrow icon"></i>
+										</a>
+									</button>
+
+									<a th:text="${crudDireccionModel.paginaActual}" class="active item">
+									</a>
+									<div class="disabled item">...</div>
+									<a th:text="${crudDireccionModel.cantidadRegistros + ' Reg.'}"
+										class="disabled item"> </a>
+									<div class="disabled item">...</div>
+									<a th:text="${crudDireccionModel.paginaFinal}" class="item"> </a>
+									<button class="button" type="submit" name="rightRow">
+										<a class="icon item" data-tooltip="Mover a la Derecha"
+											data-position="top center"> <i class="right arrow icon"></i>
+										</a>
+									</button>
+								</div>
+							</div>
+							<div class="ui secondary segment">
+								<div th:if="${crudDireccionModel.codigoError != null }"
+									th:utext="${crudDireccionModel.mensaje}"></div>
+
+								<button class="fluid ui primary button" type="submit"
+									name="addRowDireccion">
+									<i class="plus circle icon"></i> Agregar Direccion
+								</button>
+								<button class="fluid ui negative basic button" type="submit"
+									name="volverDireccion">
+									<i class="reply icon"></i> Volver a lista de Personas
+								</button>
+								<input type="hidden" th:field="*{paginaActual}"
+									th:value="${paginaActual}"> <input type="hidden"
+									th:field="*{paginaFinal}" th:value="${paginaFinal}">
+
+							</div>
+						</div>
+
+
+					</form>
+
+				</div>
+				<div class="one wide column"></div>
+			</div>
+
+		</div>
+	</div>
+
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+		//toggleSidebar();
+	});
+
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});	  
+</script>
+</body>
+</html>

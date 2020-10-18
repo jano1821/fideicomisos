@@ -18,6 +18,7 @@ import com.corfid.fideicomisos.repository.administrativo.MenuRepository;
 import com.corfid.fideicomisos.service.administrativo.MenuInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
+import com.corfid.fideicomisos.utilities.ConstantesError;
 
 @Service("menuServiceImpl")
 public class MenuServiceImpl extends AbstractService implements MenuInterface {
@@ -50,32 +51,41 @@ public class MenuServiceImpl extends AbstractService implements MenuInterface {
     }
 
     @Override
-    public CrudMenuModel listMenuByDescripcionPaginado(String descripcion, Integer pagina, Integer cant) {
+    public CrudMenuModel listMenuByDescripcionPaginado(String descripcion,
+                                                       Integer pagina,
+                                                       Integer cant) throws Exception {
         List<Menu> listMenu;
         List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
         Page<Menu> pageMenu;
         CrudMenuModel crudMenuModel = new CrudMenuModel();
 
-        String cadenaMenu = Constante.COMODIN_LIKE + descripcion + Constante.COMODIN_LIKE;
+        try {
+            String cadenaMenu = Constante.COMODIN_LIKE + descripcion + Constante.COMODIN_LIKE;
 
-        pageMenu = menuRepository.listMenuByDescripcionPaginado(cadenaMenu,
-                                                                obtenerIndexPorPagina(pagina,
-                                                                                      cant,
-                                                                                      "descripcion",
-                                                                                      true,
-                                                                                      false));
+            pageMenu = menuRepository.listMenuByDescripcionPaginado(cadenaMenu,
+                                                                    obtenerIndexPorPagina(pagina,
+                                                                                          cant,
+                                                                                          "descripcion",
+                                                                                          true,
+                                                                                          false));
 
-        listMenu = pageMenu.getContent();
-        crudMenuModel.setPaginaFinal(pageMenu.getTotalPages());
-        crudMenuModel.setCantidadRegistros(_toInteger(pageMenu.getTotalElements()));
+            listMenu = pageMenu.getContent();
+            crudMenuModel.setPaginaFinal(pageMenu.getTotalPages());
+            crudMenuModel.setCantidadRegistros(_toInteger(pageMenu.getTotalElements()));
 
-        for (Menu menu : listMenu) {
-            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+            for (Menu menu : listMenu) {
+                listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+            }
+
+            crudMenuModel.setRows(listMenuModel);
+            crudMenuModel.setCodigoError(ConstantesError.ERROR_0);
+
+            return crudMenuModel;
+        } catch (Exception e) {
+            crudMenuModel.setCodigoError(ConstantesError.ERROR_18);
+            crudMenuModel.setMensajeError(obtenerMensajeError(ConstantesError.ERROR_18));
+            return crudMenuModel;
         }
-
-        crudMenuModel.setRows(listMenuModel);
-
-        return crudMenuModel;
     }
 
     @Override
@@ -89,20 +99,31 @@ public class MenuServiceImpl extends AbstractService implements MenuInterface {
     }
 
     @Override
-    public MenuModel addMenu(MenuModel menuModel, ParametrosAuditoriaModel parametrosAuditoriaModel) {
-        Menu menu = findMenuById(menuModel.getIdMenu());
+    public MenuModel addMenu(MenuModel menuModel, ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception {
+        Menu menu;
 
-        if (_isEmpty(menu)) {
-            menu = menuConverter.convertMenuModelToMenu(menuModel);
-            setInsercionAuditoria(menu, parametrosAuditoriaModel);
-        } else {
-            menu = menuConverter.convertMenuModelToMenuExistente(menu, menuModel);
-            setModificacionAuditoria(menu, parametrosAuditoriaModel);
+        try {
+            menu = findMenuById(menuModel.getIdMenu());
+            if (_isEmpty(menu)) {
+                menu = menuConverter.convertMenuModelToMenu(menuModel);
+                setInsercionAuditoria(menu, parametrosAuditoriaModel);
+            } else {
+                menu = menuConverter.convertMenuModelToMenuExistente(menu, menuModel);
+                setModificacionAuditoria(menu, parametrosAuditoriaModel);
+            }
+
+            menu = menuRepository.save(menu);
+            if (_isEmpty(menu)) {
+                menuModel.setCodigoError(ConstantesError.ERROR_24);
+            } else {
+                menuModel.setCodigoError(ConstantesError.ERROR_0);
+                menuModel = menuConverter.convertMenuToMenuModel(menu);
+            }
+            return menuModel;
+        } catch (Exception e) {
+            menuModel.setCodigoError(ConstantesError.ERROR_24);
+            return menuModel;
         }
-
-        menu = menuRepository.save(menu);
-
-        return menuConverter.convertMenuToMenuModel(menu);
     }
 
     @Override

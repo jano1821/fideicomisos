@@ -72,6 +72,7 @@ public class SeleccionController extends InitialController {
 
             datosGenerales.setIdUsuario(usuarioModel.getIdUsuario());
             datosGenerales.setTipoUsuarioSession(usuarioModel.getTipoUsuario());
+            datosGenerales.setUsuario(user.getUsername());
 
             if (StringUtil.equiv(usuarioModel.getTipoUsuario(), Constante.TIPO_USUARIO_SUPER_ADMIN)) {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,7 +86,6 @@ public class SeleccionController extends InitialController {
                 datosGenerales.setMenu(construirMenu(listMenuModel));
 
                 mav = new ModelAndView(Constante.MENU);
-                mav.addObject("usuario", user.getUsername());
             } else {
                 mav = new ModelAndView(Constante.SELECCION);
                 crudPersonaModel = personaInterface.obtenerEmpresaByPersona(usuarioModel.getIdPersona());
@@ -93,7 +93,6 @@ public class SeleccionController extends InitialController {
                 crudPersonaModel.setUsuario(user.getUsername());
 
                 mav.addObject("crudMenuModel", crudPersonaModel);
-                mav.addObject("usuario", user.getUsername());
             }
         } catch (Exception e) {
             mav = new ModelAndView(Constante.SITIO_EN_CONSTRUCCION);
@@ -122,9 +121,9 @@ public class SeleccionController extends InitialController {
         datosGenerales.setModo(req.getParameter("modo"));
         datosGenerales.setRucEmpresa(datos[0]);
         datosGenerales.setIdEmpresa(StringUtil.toInteger(datos[1]));
+        datosGenerales.setNombreEmpresa(datos[2]);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
         for (String rol : roles) {
             rolesSesion.add(StringUtil.toInteger(rol));
@@ -135,12 +134,11 @@ public class SeleccionController extends InitialController {
         datosGenerales.setListMenuModel(listMenuModel);
         datosGenerales.setMenu(construirMenu(listMenuModel));
 
-        model.addObject("usuario", user.getUsername());
         return model;
     }
 
     @ModelAttribute("datosGenerales")
-    public DatosGenerales getVisitor() {
+    public DatosGenerales getDatosGenerales() {
         return new DatosGenerales();
     }
 }

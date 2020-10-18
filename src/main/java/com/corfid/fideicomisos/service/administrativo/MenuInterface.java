@@ -12,13 +12,15 @@ public interface MenuInterface {
 
     public List<MenuModel> listAllMenus(String idTipoUsuarioSesion) throws Exception;
 
-    public CrudMenuModel listMenuByDescripcionPaginado(String descripcion, Integer pagina, Integer cant);
+    public CrudMenuModel listMenuByDescripcionPaginado(String descripcion,
+                                                       Integer pagina,
+                                                       Integer cant) throws Exception;
 
     public Menu findMenuById(Integer id);
 
     public MenuModel findMenuByIdModel(Integer id);
 
-    public MenuModel addMenu(MenuModel menuModel, ParametrosAuditoriaModel parametrosAuditoriaModel);
+    public MenuModel addMenu(MenuModel menuModel, ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
 
     public Boolean removeMenu(Integer id) throws Exception;
 

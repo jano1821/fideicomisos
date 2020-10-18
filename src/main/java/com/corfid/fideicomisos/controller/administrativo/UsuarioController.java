@@ -3,22 +3,26 @@ package com.corfid.fideicomisos.controller.administrativo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,7 +30,9 @@ import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.administrativo.RolModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
+import com.corfid.fideicomisos.model.cruds.CrudPersonaModel;
 import com.corfid.fideicomisos.model.cruds.CrudUsuarioModel;
+import com.corfid.fideicomisos.model.utilities.AjaxResponseBody;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.GenericModel;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
@@ -66,12 +72,6 @@ public class UsuarioController extends InitialController {
         return environment.getProperty("local.server.port");
     }
 
-    @PostMapping("/cancel")
-    public String cancel() {
-
-        return "redirect:" + Constante.URL_LISTA_USUARIOS;
-    }
-
     @GetMapping("/crudAccionesListaUsuarios")
     public String interceptor() {
         return "redirect:" + Constante.URL_SELECCION;
@@ -84,13 +84,12 @@ public class UsuarioController extends InitialController {
 
     @GetMapping("/lista_usuarios")
     public ModelAndView showListaUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
-                                         Model model,
-                                         @RequestParam(name = "result", required = false) String result) {
+                                         Model model) {
         CrudUsuarioModel crudUsuarioModel = new CrudUsuarioModel();
 
-        crudUsuarioModel.setResult(result);
         crudUsuarioModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
         crudUsuarioModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+        datosGenerales.setModulo(Constante.MODULO_USUARIO);
 
         return busqueda(Constante.CONST_VACIA,
                         Constante.CONST_CERO,
@@ -145,7 +144,14 @@ public class UsuarioController extends InitialController {
         return busqueda(caja, Constante.IZQUIERDA, Constante.CONST_CERO, paginaActual, paginaFinal, crudUsuarioModel);
     }
 
-    @PostMapping("/addusuario")
+    @PostMapping(value = "/addusuario", params = { "cancelar" })
+    public String cancelar(final CrudPersonaModel crudPersonaModel,
+                           final BindingResult bindingResult,
+                           final HttpServletRequest req) throws Exception {
+        return "redirect:" + Constante.URL_LISTA_USUARIOS;
+    }
+
+    @PostMapping(value = "/addusuario", params = { "saveRow" })
     public ModelAndView registrarUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
                                          @ModelAttribute(name = "usuarioModel") UsuarioModel usuarioModel,
                                          Model model) throws Exception {
@@ -162,15 +168,23 @@ public class UsuarioController extends InitialController {
 
             usuarioModel.setIdUsuarioRegistro(datosGenerales.getIdUsuario());
             usuarioModel.setTipoUsuarioSesion(datosGenerales.getTipoUsuarioSession());
+            usuarioModel.setIdEmpresaSesion(datosGenerales.getIdEmpresa());
+            usuarioModel.setIdUsuarioSesion(datosGenerales.getIdUsuario());
+            
+            if (StringUtil.isEmpty(usuarioModel.getEstadoActividad())) {
+                usuarioModel.setEstadoActividad("1");
+            }
+            
             usuarioModel = usuarioInterface.addUsuario(usuarioModel, getParametrosAuditoriaModel());
             if (!StringUtil.isEmpty(usuarioModel) && StringUtil.equiv(usuarioModel.getCodigoError(),
                                                                       ConstantesError.ERROR_0)) {
-                crudUsuarioModel.setResult(Constante.RESULT_CORRECTO);
+                crudUsuarioModel.setCodigoError(ConstantesError.ERROR_0);
             } else {
-                crudUsuarioModel.setResult(Constante.RESULT_ERROR);
                 crudUsuarioModel.setCodigoError(usuarioModel.getCodigoError());
                 crudUsuarioModel.setMensajeError(usuarioModel.getDescripcionError());
             }
+            crudUsuarioModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+            crudUsuarioModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
             return busqueda(Constante.CONST_VACIA,
                             Constante.CONST_CERO,
                             Constante.CONST_CERO,
@@ -183,30 +197,40 @@ public class UsuarioController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaUsuarios", params = { "addRow" })
-    public ModelAndView addUsuario(final CrudUsuarioModel crudUsuarioModel, final BindingResult bindingResult) {
-        return preparingFormUsuario(null);
+    public ModelAndView addUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                   final CrudUsuarioModel crudUsuarioModel,
+                                   final BindingResult bindingResult) {
+
+        return preparingFormUsuario(null, datosGenerales.getTipoUsuarioSession(), datosGenerales.getIdEmpresa());
     }
 
     @PostMapping(value = "/crudAccionesListaUsuarios", params = { "editRow" })
-    public ModelAndView editUsuario(final CrudUsuarioModel crudUsuarioModel,
+    public ModelAndView editUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                    final CrudUsuarioModel crudUsuarioModel,
                                     final BindingResult bindingResult,
                                     final HttpServletRequest req) {
 
-        return preparingFormUsuario(req.getParameter("editRow"));
+        return preparingFormUsuario(req.getParameter("editRow"),
+                                    datosGenerales.getTipoUsuarioSession(),
+                                    datosGenerales.getIdEmpresa());
     }
 
     @PostMapping(value = "/crudAccionesListaUsuarios", params = { "removeRow" })
-    public ModelAndView removeUsuario(final CrudUsuarioModel crudUsuarioModel,
+    public ModelAndView removeUsuario(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                      CrudUsuarioModel crudUsuarioModel,
                                       final BindingResult bindingResult,
-                                      final HttpServletRequest req) {
+                                      final HttpServletRequest req) throws Exception {
 
         if (!StringUtil.isEmpty(req.getParameter("removeRow"))) {
-            usuarioInterface.removeUsuario(StringUtil.toInteger(req.getParameter("removeRow")));
-            crudUsuarioModel.setResult(Constante.RESULT_CORRECTO);
+            crudUsuarioModel = usuarioInterface.removeUsuario(StringUtil.toInteger(req.getParameter("removeRow")),
+                                                              datosGenerales.getIdUsuario(),
+                                                              datosGenerales.getIdEmpresa());
         } else {
-            crudUsuarioModel.setResult(Constante.RESULT_ERROR);
+            crudUsuarioModel.setCodigoError(ConstantesError.ERROR_1);
         }
 
+        crudUsuarioModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+        crudUsuarioModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
         return busqueda(Constante.CONST_VACIA,
                         Constante.CONST_CERO,
                         Constante.CONST_CERO,
@@ -216,7 +240,7 @@ public class UsuarioController extends InitialController {
 
     }
 
-    private ModelAndView preparingFormUsuario(Object id) {
+    private ModelAndView preparingFormUsuario(Object id, String tipoUsuarioSesion, Integer idEmpresaSesion) {
         ModelAndView model = new ModelAndView(Constante.FORM_USUARIO);
         try {
             List<CatalogoConstraintModel> listCatalogoConstraintModelEstadoRegistro;
@@ -231,10 +255,10 @@ public class UsuarioController extends InitialController {
             List<GenericModel> listGenericRolModelVinculado = null;
             List<GenericModel> listGenericRolModel = null;
             GenericModel genericModel;
+            UsuarioModel usuarioModel = new UsuarioModel();
 
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            UsuarioModel usuarioModel = new UsuarioModel();
             if (!StringUtil.isEmpty(id)) {
                 final Integer idUsuario = StringUtil.toInteger(id);
                 usuarioModel = usuarioInterface.findUsuarioByIdModel(idUsuario);
@@ -243,10 +267,8 @@ public class UsuarioController extends InitialController {
 
             /* Este bloque es para obtener los usuarios asignados o por asignar a un usuario */
             listPersonaModel = personaInterface.obtenerPersonasNoVinculadasUsuarios();
-
+            listGenericPersonaModel = new ArrayList<GenericModel>();
             if (!StringUtil.isEmpty(listPersonaModel)) {
-                listGenericPersonaModel = new ArrayList<GenericModel>();
-
                 for (PersonaModel personaModelTemp : listPersonaModel) {
                     genericModel = new GenericModel();
                     genericModel.setId(StringUtil.toStr(personaModelTemp.getIdPersona()));
@@ -276,7 +298,9 @@ public class UsuarioController extends InitialController {
                                                         listGenericPersonaModelVinculado);
 
             /* Este bloque es para obtener los roles de un usuario */
-            listRolModel = rolInterface.listAllRolesByEstadoRegistro(Constante.ESTADO_REGISTRO_VIGENTE);
+            listRolModel = rolInterface.listAllRolesByEstadoRegistro(Constante.ESTADO_REGISTRO_VIGENTE,
+                                                                     tipoUsuarioSesion,
+                                                                     idEmpresaSesion);
 
             if (!StringUtil.isEmpty(listRolModel)) {
                 listGenericRolModel = new ArrayList<GenericModel>();
@@ -312,8 +336,16 @@ public class UsuarioController extends InitialController {
                                                                                                                     Constante.ESTADO_REGISTRO);
             listCatalogoConstraintModelActividad = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_USUARIO,
                                                                                                                Constante.INDICADOR_ACTIVIDAD);
-            listCatalogoConstraintModelTipoUsuario = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_USUARIO,
-                                                                                                                 Constante.TIPO_USUARIO);
+
+            if (StringUtil.equiv(tipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                listCatalogoConstraintModelTipoUsuario = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_USUARIO,
+                                                                                                                     Constante.TIPO_USUARIO);
+            } else {
+                listCatalogoConstraintModelTipoUsuario = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_USUARIO_ADM,
+                                                                                                                     Constante.TIPO_USUARIO);
+            }
+
+            usuarioModel.setTipoUsuarioSesion(tipoUsuarioSesion);
 
             model.addObject("usuarioModel", usuarioModel);
             model.addObject("usuario", user.getUsername());
@@ -337,54 +369,83 @@ public class UsuarioController extends InitialController {
                                   CrudUsuarioModel crudUsuarioModel) {
         ModelAndView mav = new ModelAndView(Constante.LISTA_USUARIOS);
         try {
-            String result, mensajeError;
+            CrudUsuarioModel crudUsuarioModelPaginado;
 
             PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            result = crudUsuarioModel.getResult();
-            mensajeError = crudUsuarioModel.getMensajeError();
-
-            crudUsuarioModel = usuarioInterface.listUsuarioByUsernamePaginado(busqueda,
-                                                                              crudUsuarioModel.getTipoUsuarioSession(),
-                                                                              user.getUsername(),
-                                                                              crudUsuarioModel.getIdEmpresaSession(),
-                                                                              paginadoModel.getPaginaActual(),
-                                                                              Constante.PAGINADO_5_ROWS);
-
-            crudUsuarioModel.setBusqueda(busqueda);
-
-            if (StringUtil.equiv(result, Constante.RESULT_ERROR)) {
-                crudUsuarioModel.setMensaje(construirMensaje("Aviso", mensajeError, Constante.MENSAJE_ERROR));
-            } else if (StringUtil.equiv(result, Constante.RESULT_CORRECTO)) {
-                crudUsuarioModel.setMensaje(construirMensaje("Aviso",
-                                                             "La Operacion se Realizó Satisfactoriamente",
-                                                             Constante.MENSAJE_SATISFACTORIO));
-            }
-
-            crudUsuarioModel.setResult(result);
+            crudUsuarioModelPaginado = usuarioInterface.listUsuarioByUsernamePaginado(busqueda,
+                                                                                      crudUsuarioModel.getTipoUsuarioSession(),
+                                                                                      user.getUsername(),
+                                                                                      crudUsuarioModel.getIdEmpresaSession(),
+                                                                                      paginadoModel.getPaginaActual(),
+                                                                                      Constante.PAGINADO_5_ROWS);
 
             if (paginadoModel.isMovIzquierda()) {
-                crudUsuarioModel.setMensaje(construirMensaje("Aviso",
-                                                             "No hay más Registros a la Izquierda",
-                                                             Constante.MENSAJE_INFORMATIVO));
-                crudUsuarioModel.setResult(Constante.RESULT_ERROR);
+                crudUsuarioModelPaginado.setCodigoError(ConstantesError.ERROR_1);
+                crudUsuarioModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                                     "No hay más Registros a la Izquierda",
+                                                                     Constante.MENSAJE_INFORMATIVO));
             } else if (paginadoModel.isMovDerecha()) {
-                crudUsuarioModel.setMensaje(construirMensaje("Aviso",
-                                                             "No hay más Registros a la Derecha",
-                                                             Constante.MENSAJE_INFORMATIVO));
-                crudUsuarioModel.setResult(Constante.RESULT_ERROR);
+                crudUsuarioModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                                     "No hay más Registros a la Derecha",
+                                                                     Constante.MENSAJE_INFORMATIVO));
+                crudUsuarioModelPaginado.setCodigoError(ConstantesError.ERROR_1);
+            } else {
+                if (!StringUtil.isEmpty(crudUsuarioModel.getCodigoError())) {
+                    if (StringUtil.equiv(crudUsuarioModel.getCodigoError(), ConstantesError.ERROR_0)) {
+                        crudUsuarioModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                                             "La Operacion se Realizó Satisfactoriamente",
+                                                                             Constante.MENSAJE_SATISFACTORIO));
+                    } else if (StringUtil.equiv(crudUsuarioModel.getCodigoError(), ConstantesError.ERROR_1)) {
+                        crudUsuarioModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                                             "Ocurrió un error en la operación",
+                                                                             Constante.MENSAJE_ERROR));
+                    } else {
+                        crudUsuarioModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                                             crudUsuarioModel.getMensajeError(),
+                                                                             Constante.MENSAJE_ERROR));
+                    }
+                    crudUsuarioModelPaginado.setCodigoError(crudUsuarioModel.getCodigoError());
+                }
             }
 
-            crudUsuarioModel.setPaginaActual(paginadoModel.getPaginaActual());
-            crudUsuarioModel.setUsuario(user.getUsername());
+            crudUsuarioModelPaginado.setPaginaActual(paginadoModel.getPaginaActual());
+            crudUsuarioModelPaginado.setUsuario(user.getUsername());
 
-            mav.addObject("crudUsuarioModel", crudUsuarioModel);
+            mav.addObject("crudUsuarioModel", crudUsuarioModelPaginado);
             mav.addObject("usuario", user.getUsername());
 
             return mav;
         } catch (Exception e) {
             return new ModelAndView(Constante.SITIO_EN_CONSTRUCCION);
         }
+    }
+    
+    @PostMapping("/buscarNumeroDocumentoPersona")
+    public ResponseEntity<?> getSearchResultViaAjax(@Valid @RequestBody PersonaModel personaModel, Errors errors) {
+
+        AjaxResponseBody result = new AjaxResponseBody();
+        try {
+            if (errors.hasErrors()) {
+
+                result.setMsg(errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.joining(",")));
+                return ResponseEntity.badRequest().body(result);
+
+            }
+
+            PersonaModel personaModelResponse = new PersonaModel();
+            personaModelResponse = personaInterface.findPersonaByIdModel(personaModel.getIdPersona());
+
+            if (!StringUtil.isEmpty(personaModelResponse)) {
+                result.setMsg(personaModelResponse.getNumeroDocumento());
+            } else {
+                result.setMsg(Constante.CONST_VACIA);
+            }
+        } catch (Exception e) {
+            result.setMsg(Constante.CONST_VACIA);
+        }
+        return ResponseEntity.ok(result);
+
     }
 }

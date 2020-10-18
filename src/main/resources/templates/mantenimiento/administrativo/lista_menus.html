@@ -118,11 +118,11 @@
 								</div>
 							</div>
 							<div class="ui secondary segment">
-								<div th:if="${crudMenuModel.result != null }"
+								<div th:if="${crudMenuModel.codigoError != null }"
 									th:utext="${crudMenuModel.mensaje}"></div>
 
 								<button class="fluid ui primary button" type="submit"
-									name="addRow">
+									name="addRow" id="addRow">
 									<i class="plus circle icon"></i> Agregar Menu
 								</button>
 								<input type="hidden" th:field="*{paginaActual}"

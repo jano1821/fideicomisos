@@ -7,9 +7,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.administrativo.UsuarioConverter;
+import com.corfid.fideicomisos.entity.administrativo.ClienteEmpresa;
 import com.corfid.fideicomisos.entity.administrativo.Persona;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
 import com.corfid.fideicomisos.model.administrativo.RolModel;
@@ -17,15 +19,14 @@ import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
 import com.corfid.fideicomisos.model.cruds.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.UsuarioRepository;
+import com.corfid.fideicomisos.service.administrativo.ClienteEmpresaInterface;
+import com.corfid.fideicomisos.service.administrativo.EmpresaInterface;
 import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
 import com.corfid.fideicomisos.service.administrativo.UsuarioRolInterface;
 import com.corfid.fideicomisos.service.impl.utilities.ErrorControladoException;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
-import com.corfid.fideicomisos.utilities.StringUtil;
-
-import org.springframework.data.domain.*;
 
 @Service("usuarioServiceImpl")
 public class UsuarioServiceImpl extends AbstractService implements UsuarioInterface {
@@ -41,6 +42,10 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
     @Autowired
     @Qualifier("usuarioRolServiceImpl")
     UsuarioRolInterface usuarioRolInterface;
+
+    @Autowired
+    @Qualifier("clienteEmpresaServiceimpl")
+    ClienteEmpresaInterface clienteEmpresaInterface;
 
     @Override
     public List<UsuarioModel> listAllUsuarios() throws Exception {
@@ -107,8 +112,12 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
     @Override
     public UsuarioModel findUsuarioByUsuario(String userName) throws Exception {
         UsuarioModel usuarioModel = null;
+        Usuario usuario;
         try {
-            usuarioModel = usuarioConverter.convertUsuarioToUsuarioModel(usuarioRepository.findByUsuario(userName));
+            usuario = usuarioRepository.findByUsuario(userName);
+            if (!_isEmpty(usuario)) {
+                usuarioModel = usuarioConverter.convertUsuarioToUsuarioModel(usuario);
+            }
             return usuarioModel;
         } catch (Exception e) {
             return usuarioModel;
@@ -133,6 +142,10 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
             UsuarioModel usuarioModelActual = new UsuarioModel();
 
             if (_isEmpty(usuario)) {
+
+                if (!_isEmpty(findUsuarioByUsuario(usuarioModel.getUsuario()))) {
+                    throw new ErrorControladoException(ConstantesError.ERROR_23);
+                }
 
                 password = passwordVerificado(null, true, 8);
                 if (_equiv(_toStr(password.get("error")), ConstantesError.ERROR_0)) {
@@ -167,6 +180,26 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
                     }
                 }
 
+                if (_equiv(usuarioModel.getIdUsuarioSesion(),
+                           usuarioModel.getIdUsuario()) && _equiv(usuarioModel.getEstadoRegistro(),
+                                                                  Constante.ESTADO_REGISTRO_NO_VIGENTE)) {
+                    throw new ErrorControladoException(ConstantesError.ERROR_21);
+                }
+
+                if (!_equiv(usuarioModel.getTipoUsuarioSesion(), Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                    usuarioModel.setUsuario(usuario.getUsuario());
+                    if (_equiv(usuarioModel.getEstadoRegistro(), Constante.ESTADO_REGISTRO_NO_VIGENTE)) {
+                        clienteEmpresaInterface.removerClienteEmpresa(_toInteger(usuarioModel.getPersona()),
+                                                                      usuarioModel.getIdEmpresaSesion());
+                        usuarioModel.setEstadoRegistro(Constante.ESTADO_REGISTRO_VIGENTE);
+                        //usuarioModel.setEstadoActividad(Constante.INDICADOR_ACTIVIDAD);
+                    }
+                } else {
+                    if (_equiv(usuarioModel.getEstadoRegistro(), Constante.ESTADO_REGISTRO_NO_VIGENTE)) {
+                        usuarioModel.setEstadoActividad("0");
+                    }
+                }
+
                 usuario = usuarioConverter.convertUsuarioModelToUsuarioExistente(usuario, usuarioModel);
                 setModificacionAuditoria(usuario, parametrosAuditoriaModel);
             }
@@ -193,7 +226,7 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
         } catch (ErrorControladoException e) {
             usuarioModel.setCodigoError(e.getCodigoError());
             if (_isEmpty(e.getMensajeError())) {
-                usuarioModel.setDescripcionError(ConstantesError.ERROR_0);
+                usuarioModel.setDescripcionError(obtenerMensajeError(e.getCodigoError()));
             } else {
                 usuarioModel.setDescripcionError(e.getMensajeError());
             }
@@ -206,10 +239,43 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
     }
 
     @Override
-    public void removeUsuario(Integer id) {
-        Usuario usuario = findUsuarioById(id);
-        if (null != usuario) {
-            usuarioRepository.delete(usuario);
+    public CrudUsuarioModel removeUsuario(Integer id,
+                                          Integer idUsuarioSesion,
+                                          Integer idEmpresaSesion) throws Exception {
+        CrudUsuarioModel crudUsuarioModel = new CrudUsuarioModel();
+        try {
+            List<ClienteEmpresa> listClienteEmpresa;
+
+            if (_equiv(idUsuarioSesion, id)) {
+                throw new ErrorControladoException(ConstantesError.ERROR_21);
+            }
+
+            listClienteEmpresa = clienteEmpresaInterface.findClienteEmpresaByUsuarioAndNotEmpresa(idUsuarioSesion,
+                                                                                                  idEmpresaSesion);
+            if (!_isEmpty(listClienteEmpresa)) {
+                if (listClienteEmpresa.size() > 0) {
+                    throw new ErrorControladoException(ConstantesError.ERROR_22);
+                }
+            }
+
+            Usuario usuario = findUsuarioById(id);
+            if (null != usuario) {
+                usuarioRepository.delete(usuario);
+            }
+            crudUsuarioModel.setCodigoError(ConstantesError.ERROR_0);
+            return crudUsuarioModel;
+        } catch (ErrorControladoException e) {
+            crudUsuarioModel.setCodigoError(e.getCodigoError());
+            if (_isEmpty(e.getMensajeError())) {
+                crudUsuarioModel.setMensajeError(obtenerMensajeError(e.getCodigoError()));
+            } else {
+                crudUsuarioModel.setMensajeError(e.getMensajeError());
+            }
+            return crudUsuarioModel;
+        } catch (Exception e) {
+            crudUsuarioModel.setCodigoError(ConstantesError.ERROR_1);
+            crudUsuarioModel.setMensajeError(obtenerMensajeError(ConstantesError.ERROR_1));
+            return crudUsuarioModel;
         }
     }
 

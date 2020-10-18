@@ -11,14 +11,25 @@
 					<img src="../static/imgs/logo.png" th:src="@{/imgs/logo.png}" />
 				</div>
 			</div>
+			<div class="center floated column">
+				<h2 class="ui center aligned dividing header">
+					<!-- <i class="industry icon"></i> -->
+					<div class="content"> 
+						<span
+							th:text="${session.datosGenerales.nombreEmpresa == null} ? '' : ${session.datosGenerales.nombreEmpresa}"></span>
+						<div class="sub header"
+							th:text="${session.datosGenerales.usuario == null} ? '' : 'Usuario en Gestión: ' + ${session.datosGenerales.usuario}"></div>
+					</div>
+				</h2>
+				<h3 class="ui center aligned header">
+					<div class="content" th:text="${session.datosGenerales.modulo == null} ? '' : 'Módulo seleccionado: ' + ${session.datosGenerales.modulo}"></div>
+				</h3>
+			</div>
 			<div class="ui center aligned right floated column">
-				<h4 class="ui center aligned icon header">
-					<!--<i class="user icon"></i>-->
-					Usuario: <span th:text="${usuario}"></span>
-				</h4>
 				<form th:action="@{/logout}" method="POST" id="myForm" name="myForm">
-					<div class="ui icon button" onclick="document.myForm.submit()" data-tooltip="Presione para Cerrar Sesión"
-						data-inverted="" data-position="bottom center">
+					<div class="ui icon button" onclick="document.myForm.submit()"
+						data-tooltip="Presione para Cerrar Sesión" data-inverted=""
+						data-position="bottom center">
 						<i class="power off icon"></i>
 					</div>
 				</form>

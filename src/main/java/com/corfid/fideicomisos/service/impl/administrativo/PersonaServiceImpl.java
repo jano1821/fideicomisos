@@ -9,9 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.administrativo.PersonaConverter;
-import com.corfid.fideicomisos.entity.administrativo.Cliente;
 import com.corfid.fideicomisos.entity.administrativo.Persona;
-import com.corfid.fideicomisos.model.administrativo.ClienteModel;
 import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
 import com.corfid.fideicomisos.model.cruds.CrudPersonaModel;
@@ -161,7 +159,8 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
 
                 usuarioModel = usuarioInterface.findUsuarioByIdPersona(persona);
 
-                if (!_isEmpty(usuarioModel) && _equiv(personaModel.getPermiteVinculacionCliente(), Constante.SI_ES_CLIENTE)) {
+                if (!_isEmpty(usuarioModel) && _equiv(personaModel.getPermiteVinculacionCliente(),
+                                                      Constante.SI_ES_CLIENTE)) {
                     if (_equiv(usuarioModel.getTipoUsuario(), Constante.TIPO_USUARIO_SUPER_ADMIN)) {
                         throw new ErrorControladoException(ConstantesError.ERROR_3);
                     }
@@ -228,10 +227,15 @@ public class PersonaServiceImpl extends AbstractService implements PersonaInterf
     }
 
     @Override
-    public void removePersona(Integer id) {
-        Persona persona = findPersonaById(id);
-        if (null != persona) {
-            personaRepository.delete(persona);
+    public Boolean removePersona(Integer id) throws Exception {
+        try {
+            Persona persona = findPersonaById(id);
+            if (null != persona) {
+                personaRepository.delete(persona);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

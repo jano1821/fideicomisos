@@ -70,7 +70,7 @@ public class EmpresaServiceImpl extends AbstractService implements EmpresaInterf
                                              ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception {
         UsuarioModel usuarioModel;
         String[] empresasNueva;
-        List<EmpresaModel> listEmpresasVinculadasAlUsuarioSesion;
+        //List<EmpresaModel> listEmpresasVinculadasAlUsuarioSesion;
         Integer contador = 0;
 
         try {

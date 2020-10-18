@@ -18,6 +18,9 @@ public class DatosGenerales {
     private Integer idUsuario;
     private String tipoUsuarioSession;
     private Integer idEmpresa;
+    private String nombreEmpresa;
+    private String usuario;
+    private String modulo;
 
     public List<MenuModel> getListMenuModel() {
         return listMenuModel;
@@ -89,6 +92,30 @@ public class DatosGenerales {
 
     public void setIdEmpresa(Integer idEmpresa) {
         this.idEmpresa = idEmpresa;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getModulo() {
+        return modulo;
+    }
+
+    public void setModulo(String modulo) {
+        this.modulo = modulo;
     }
 
 }

@@ -9,6 +9,7 @@ public class GenericModel {
     private String tipoUsuarioSesion;
     private String edicion;
     private Integer idEmpresaSesion;
+    private Integer idUsuarioSesion;
 
     public String getId() {
         return id;
@@ -64,6 +65,14 @@ public class GenericModel {
 
     public void setIdEmpresaSesion(Integer idEmpresaSesion) {
         this.idEmpresaSesion = idEmpresaSesion;
+    }
+
+    public Integer getIdUsuarioSesion() {
+        return idUsuarioSesion;
+    }
+
+    public void setIdUsuarioSesion(Integer idUsuarioSesion) {
+        this.idUsuarioSesion = idUsuarioSesion;
     }
 
 }

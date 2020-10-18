@@ -26,15 +26,15 @@ public interface PersonaInterface {
     public PersonaModel addPersona(PersonaModel personaModel,
                                    ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
 
-    public void removePersona(Integer id);
+    public Boolean removePersona(Integer id) throws Exception;
 
     public CrudPersonaModel obtenerEmpresaByPersona(Integer id) throws Exception;
 
     public List<PersonaModel> obtenerAllEmpresas(String tipoUsuarioSesion, Integer idEmpresaSesion) throws Exception;
 
-    List<PersonaModel> obtenerPersonasNoVinculadasUsuarios() throws Exception;
+    public List<PersonaModel> obtenerPersonasNoVinculadasUsuarios() throws Exception;
 
-    List<PersonaModel> obtenerPersonasPorNumeroDocumento(String tipoDocumento, String numeroDocumento) throws Exception;
+    public List<PersonaModel> obtenerPersonasPorNumeroDocumento(String tipoDocumento, String numeroDocumento) throws Exception;
 
-    PersonaModel validarFormulario(PersonaModel personaModel) throws Exception;
+    public PersonaModel validarFormulario(PersonaModel personaModel) throws Exception;
 }

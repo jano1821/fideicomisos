@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,6 +25,7 @@ import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 import com.corfid.fideicomisos.model.administrativo.MenuModel;
 import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.administrativo.RolModel;
+import com.corfid.fideicomisos.model.cruds.CrudPersonaModel;
 import com.corfid.fideicomisos.model.cruds.CrudRolModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.GenericModel;
@@ -35,6 +35,7 @@ import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
 import com.corfid.fideicomisos.service.administrativo.RolInterface;
 import com.corfid.fideicomisos.service.utilities.CatalogoConstraintInterface;
 import com.corfid.fideicomisos.utilities.Constante;
+import com.corfid.fideicomisos.utilities.ConstantesError;
 import com.corfid.fideicomisos.utilities.InitialController;
 import com.corfid.fideicomisos.utilities.StringUtil;
 
@@ -73,12 +74,11 @@ public class RolController extends InitialController {
 
     @GetMapping("/lista_roles")
     public ModelAndView showListaRoles(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
-                                       Model model,
-                                       @RequestParam(name = "result", required = false) String result) throws Exception {
+                                       Model model) throws Exception {
         CrudRolModel crudRolModel = new CrudRolModel();
-        crudRolModel.setResult(result);
         crudRolModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
         crudRolModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+        datosGenerales.setModulo(Constante.MODULO_ROL);
 
         return busqueda(Constante.CONST_VACIA,
                         Constante.CONST_CERO,
@@ -90,15 +90,22 @@ public class RolController extends InitialController {
 
     @GetMapping("/crudAccionesListaRoles")
     public String intercepcion() {
-        return "redirect:/seleccion/seleccion";
+        return "redirect:" + Constante.URL_SELECCION;
     }
 
     @GetMapping("/addrol")
     public String intercepcionForm() {
-        return "redirect:/seleccion/seleccion";
+        return "redirect:" + Constante.URL_SELECCION;
     }
 
-    @PostMapping("/addrol")
+    @PostMapping(value = "/addrol", params = { "cancelar" })
+    public String cancelar(final CrudPersonaModel crudPersonaModel,
+                           final BindingResult bindingResult,
+                           final HttpServletRequest req) throws Exception {
+        return "redirect:" + Constante.URL_LISTA_ROLES;
+    }
+
+    @PostMapping(value = "/addrol", params = { "saveRow" })
     public ModelAndView registrarRol(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
                                      @ModelAttribute(name = "rolModel") RolModel rolModel,
                                      Model model) throws Exception {
@@ -118,18 +125,19 @@ public class RolController extends InitialController {
         }
         rolModel.setTipoUsuarioSesion(datosGenerales.getTipoUsuarioSession());
         rolModelActualizado = rolInterface.addRol(rolModel, getParametrosAuditoriaModel());
-        if (!StringUtil.isEmpty(rolModelActualizado)) {
+        if (!StringUtil.isEmpty(rolModelActualizado) && !StringUtil.equiv(rolModelActualizado.getCodigoError(), ConstantesError.ERROR_0)) {
             if (!StringUtil.isEmpty(rolModel.getMenu())) {
-                if (rolInterface.updateMenuRol(rolModel.getMenu().split(","),
-                                               rolModel.getIdRol(),
-                                               getParametrosAuditoriaModel())) {
-                    crudRolModel.setResult(Constante.RESULT_CORRECTO);
+                if (StringUtil.equiv(rolInterface.updateMenuRol(rolModel.getMenu().split(","),
+                                               rolModelActualizado.getIdRol(),
+                                               getParametrosAuditoriaModel()),ConstantesError.ERROR_0)) {
+                    crudRolModel.setCodigoError(ConstantesError.ERROR_0);
                 } else {
-                    crudRolModel.setResult(Constante.RESULT_ERROR);
+                    crudRolModel.setCodigoError(ConstantesError.ERROR_1);
                 }
             }
         } else {
-            crudRolModel.setResult(Constante.RESULT_ERROR);
+            crudRolModel.setCodigoError(rolModelActualizado.getCodigoError());
+            crudRolModel.setMensajeError(rolModelActualizado.getDescripcionError());
         }
 
         crudRolModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
@@ -206,16 +214,24 @@ public class RolController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaRoles", params = { "removeRow" })
-    public ModelAndView removeRol(final CrudRolModel crudRolModel,
+    public ModelAndView removeRol(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                  final CrudRolModel crudRolModel,
                                   final BindingResult bindingResult,
                                   final HttpServletRequest req) throws Exception {
 
         if (!StringUtil.isEmpty(req.getParameter("removeRow"))) {
-            rolInterface.removeRol(StringUtil.toInteger(req.getParameter("removeRow")));
-            crudRolModel.setResult(Constante.RESULT_CORRECTO);
+            if (rolInterface.removeRol(StringUtil.toInteger(req.getParameter("removeRow")))) {
+                crudRolModel.setCodigoError(ConstantesError.ERROR_0);
+            } else {
+                crudRolModel.setCodigoError(ConstantesError.ERROR_1);
+            }
         } else {
-            crudRolModel.setResult(Constante.RESULT_ERROR);
+            crudRolModel.setCodigoError(ConstantesError.ERROR_1);
         }
+
+        crudRolModel.setIdEmpresaSession(datosGenerales.getIdEmpresa());
+        crudRolModel.setTipoUsuarioSession(datosGenerales.getTipoUsuarioSession());
+
         return busqueda(Constante.CONST_VACIA,
                         Constante.CONST_CERO,
                         Constante.CONST_CERO,
@@ -296,7 +312,9 @@ public class RolController extends InitialController {
                     genericModel.setId(StringUtil.toStr(personaModel.getIdPersona()));
                     genericModel.setDescripcion(personaModel.getNombreCompleto());
                     listGenericPersonaModelVinculado.add(genericModel);
-                    listGenericPersonaModel.add(genericModel);
+                    if (StringUtil.isEmpty(listGenericPersonaModel)) {
+                        listGenericPersonaModel.add(genericModel);
+                    }
                 }
             }
         }
@@ -326,47 +344,51 @@ public class RolController extends InitialController {
                                   String fin,
                                   CrudRolModel crudRolModel) throws Exception {
         ModelAndView mav = new ModelAndView(Constante.LISTA_ROLES);
-        String result = crudRolModel.getResult();
+        CrudRolModel crudRolModelPaginado;
         PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
-        crudRolModel = rolInterface.listRolByDescripcionPaginado(busqueda,
-                                                                 crudRolModel.getIdEmpresaSession(),
-                                                                 crudRolModel.getTipoUsuarioSession(),
-                                                                 paginadoModel.getPaginaActual(),
-                                                                 Constante.PAGINADO_5_ROWS);
-
-        if (StringUtil.equiv(result, Constante.RESULT_ERROR)) {
-            crudRolModel.setMensaje(construirMensaje("Aviso",
-                                                     "Ocurrió un Problema con la Operación",
-                                                     Constante.MENSAJE_ERROR));
-        } else if (StringUtil.equiv(result, Constante.RESULT_CORRECTO)) {
-            crudRolModel.setMensaje(construirMensaje("Aviso",
-                                                     "La Operacion se Realizó Satisfactoriamente",
-                                                     Constante.MENSAJE_SATISFACTORIO));
-        }
-
-        crudRolModel.setResult(result);
+        crudRolModelPaginado = rolInterface.listRolByDescripcionPaginado(busqueda,
+                                                                         crudRolModel.getIdEmpresaSession(),
+                                                                         crudRolModel.getTipoUsuarioSession(),
+                                                                         paginadoModel.getPaginaActual(),
+                                                                         Constante.PAGINADO_5_ROWS);
 
         if (paginadoModel.isMovIzquierda()) {
-            crudRolModel.setMensaje(construirMensaje("Aviso",
-                                                     "No hay más Registros a la Izquierda",
-                                                     Constante.MENSAJE_INFORMATIVO));
-            crudRolModel.setResult(Constante.RESULT_ERROR);
+            crudRolModelPaginado.setCodigoError(ConstantesError.ERROR_1);
+            crudRolModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                             "No hay más Registros a la Izquierda",
+                                                             Constante.MENSAJE_INFORMATIVO));
         } else if (paginadoModel.isMovDerecha()) {
-            crudRolModel.setMensaje(construirMensaje("Aviso",
-                                                     "No hay más Registros a la Derecha",
-                                                     Constante.MENSAJE_INFORMATIVO));
-            crudRolModel.setResult(Constante.RESULT_ERROR);
+            crudRolModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                             "No hay más Registros a la Derecha",
+                                                             Constante.MENSAJE_INFORMATIVO));
+            crudRolModelPaginado.setCodigoError(ConstantesError.ERROR_1);
+        } else {
+            if (!StringUtil.isEmpty(crudRolModel.getCodigoError())) {
+                if (StringUtil.equiv(crudRolModel.getCodigoError(), ConstantesError.ERROR_0)) {
+                    crudRolModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                                         "La Operacion se Realizó Satisfactoriamente",
+                                                                         Constante.MENSAJE_SATISFACTORIO));
+                } else if (StringUtil.equiv(crudRolModel.getCodigoError(), ConstantesError.ERROR_1)) {
+                    crudRolModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                                         "Ocurrió un error en la operación",
+                                                                         Constante.MENSAJE_ERROR));
+                } else {
+                    crudRolModelPaginado.setMensaje(construirMensaje("Aviso",
+                                                                     crudRolModel.getMensajeError(),
+                                                                         Constante.MENSAJE_ERROR));
+                }
+            }
         }
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        crudRolModel.setBusqueda(busqueda);
-        crudRolModel.setPaginaActual(paginadoModel.getPaginaActual());
-        crudRolModel.setUsuario(user.getUsername());
+        crudRolModelPaginado.setBusqueda(busqueda);
+        crudRolModelPaginado.setPaginaActual(paginadoModel.getPaginaActual());
+        //crudRolModelPaginado.setUsuario(user.getUsername());
 
-        mav.addObject("crudRolModel", crudRolModel);
-        mav.addObject("usuario", user.getUsername());
+        mav.addObject("crudRolModel", crudRolModelPaginado);
+        //mav.addObject("usuario", user.getUsername());
 
         return mav;
     }

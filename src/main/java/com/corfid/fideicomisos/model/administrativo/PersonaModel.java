@@ -35,8 +35,6 @@ public class PersonaModel extends GenericModel {
 
     private String permiteVinculacion;
 
-    //private String cliente;
-
     private String permiteVinculacionCliente;
 
     private List<EmpresaModel> listEmpresa = new ArrayList<EmpresaModel>();
@@ -44,6 +42,10 @@ public class PersonaModel extends GenericModel {
     private String empresa;
 
     private Integer idUsuarioRegistro;
+
+    private String numeroTelefono;
+
+    private String direccionEmail;
 
     public Integer getIdPersona() {
         return idPersona;
@@ -157,14 +159,6 @@ public class PersonaModel extends GenericModel {
         this.permiteVinculacion = permiteVinculacion;
     }
 
-    /*public String getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
-    }*/
-
     public List<EmpresaModel> getListEmpresa() {
         return listEmpresa;
     }
@@ -195,6 +189,22 @@ public class PersonaModel extends GenericModel {
 
     public void setPermiteVinculacionCliente(String permiteVinculacionCliente) {
         this.permiteVinculacionCliente = permiteVinculacionCliente;
+    }
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+
+    public String getDireccionEmail() {
+        return direccionEmail;
+    }
+
+    public void setDireccionEmail(String direccionEmail) {
+        this.direccionEmail = direccionEmail;
     }
 
 }

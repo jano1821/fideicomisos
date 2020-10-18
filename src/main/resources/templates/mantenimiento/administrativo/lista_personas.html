@@ -99,16 +99,31 @@
 												th:text="${persona.descEstadoRegistro}"></td>
 											<td class="ui center aligned">
 												<div class="ui icon buttons">
-													<button class="ui button" data-tooltip="Eliminar"
+													<button class="ui button" data-tooltip="Editar"
 														data-position="right center" type="submit" name="editRow"
 														th:value="${persona.idPersona}">
 														<i class="edit icon"></i>
 													</button>
-													<button class="ui button" data-tooltip="Eliminar"
+													<button class="ui button" data-tooltip="Email"
+														data-position="right center" type="submit" name="emailRow"
+														th:value="${persona.idPersona}">
+														<i class="at icon"></i>
+													</button>
+													<button class="ui button" data-tooltip="Teléfono"
+														data-position="right center" type="submit" name="telefonoRow"
+														th:value="${persona.idPersona}">
+														<i class="phone icon"></i>
+													</button>
+													<button class="ui button" data-tooltip="Dirección"
+														data-position="right center" type="submit" name="direccionRow"
+														th:value="${persona.idPersona}">
+														<i class="map marker alternate icon"></i>
+													</button>
+													<!-- <button class="ui button" data-tooltip="Eliminar"
 														data-position="right center" type="submit"
 														name="removeRow" th:value="${persona.idPersona}">
 														<i class="trash alternate icon"></i>
-													</button>
+													</button> -->
 												</div>
 											</td>
 										</tr>
@@ -142,7 +157,7 @@
 								</div>
 							</div>
 							<div class="ui secondary segment">
-								<div th:if="${crudPersonaModel.result != null }"
+								<div th:if="${crudPersonaModel.codigoError != null }"
 									th:utext="${crudPersonaModel.mensaje}"></div>
 
 								<button class="fluid ui primary button" type="submit"

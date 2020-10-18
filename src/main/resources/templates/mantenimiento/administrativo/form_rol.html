@@ -74,28 +74,17 @@
 								</div>
 							</div>
 
-							<div class="one fields">
-								<div class="ui center aligned field">
-									<div class="ui buttons">
-										<button class="fluid ui primary button active" type="submit"
-											id="saveRow" name="saveRow">Guardar</button>
-										<div class="or" data-text="O"></div>
-
-										<div class="fluid ui reset button">Limpiar Campos</div>
-									</div>
+							<div class="ui center aligned field">
+								<div class="ui buttons">
+									<button class="fluid ui primary button active" type="submit"
+										id="saveRow" name="saveRow">Guardar</button>
+									<div class="or" data-text="O"></div>
+									<button class="fluid ui negative basic button" type="submit"
+										id="cancelar" name="cancelar">Cancelar</button>
 								</div>
 							</div>
-							<!-- <button class="fluid ui primary button">Guardar</button> -->
 							<div class="ui error message"></div>
 						</form>
-						<form class="ui form" action="#" th:action="@{/rol/cancel}"
-							method="POST" id="frm-cancelar">
-							<a href="#">
-								<button class="fluid ui negative basic button">Cancelar</button>
-							</a>
-						</form>
-
-
 					</div>
 
 				</div>
@@ -113,38 +102,67 @@
 		.sidebar("toggle");
 	}	
 	document.addEventListener("DOMContentLoaded", function() {
-		//toggleSidebar();
 	});
 
 	$(document).ready(function(){
 		  $('#abrir_menu').click(function(){
 			  toggleSidebar();
 		  });
-	});	  
+	});
+
+	$(document).ready(function(){
+		$('#abrir_menu').click(function(){
+			toggleSidebar();
+		});
+		$("#saveRow").click(function(e) {
+			$('#frm-rol').form({
+				on : 'blur',
+				fields : {
+					descripcion : {
+						identifier : 'descripcion',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor Ingrese Descripcion'
+						},
+						{
+							type : 'maxLength[100]',
+							prompt : 'El máximo de caracteres permitidos para la desceripción es de 100'
+						} ]
+					},
+					estadoRegistro : {
+						identifier : 'estadoRegistro',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Estado de Registro'
+						} ]
+					},
+					idEmpresa : {
+						identifier : 'idEmpresa',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Empresa'
+						} ]
+					},
+					menu : {
+						identifier : 'menu',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Menus a Asignar'
+						} ]
+					}
+				}
+			});
+		});
+	
+		$("#cancelar").click(function(e) {
+			$('#frm-rol')
+		      .form('remove fields', ['descripcion', 'estadoRegistro','idEmpresa','menu'])
+		    ;
+		});
+	});
 	</script>
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
-	</script>
-	<script type="text/javascript">
-		$('#frm-rol').form({
-			on : 'blur',
-			fields : {
-				descripcion : {
-					identifier : 'descripcion',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Descripcion'
-					} ]
-				},
-				estadoRegistro : {
-					identifier : 'estadoRegistro',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Estado de Registro'
-					} ]
-				}
-			}
-		});
 	</script>
 </body>
 

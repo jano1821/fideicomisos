@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/corfiddb
+    url: jdbc:mariadb://localhost:3307/corfiddb
     username: root
     password: 123
     driver-class-name: org.mariadb.jdbc.Driver
@@ -8,10 +8,22 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-      
+  mail: 
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    username: jano18.21@gmail.com
+    password: 3288Caridad$$
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          quitwait: false
+
 server:
   error:
     whitelabel:
       enabled: false
-      
-      

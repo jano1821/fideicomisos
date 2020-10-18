@@ -79,8 +79,8 @@
 									</select>
 								</div>
 								<div class="required field">
-									<label>Tipo de Usuario para Seleccion</label> <select class="ui dropdown"
-										name="tipoUsuario" id="tipoUsuario"
+									<label>Tipo de Usuario para Seleccion</label> <select
+										class="ui dropdown" name="tipoUsuario" id="tipoUsuario"
 										th:field="*{tipoUsuario}">
 										<option value="">Seleccionar...</option>
 										<option th:each="tipoUsuario : ${listTipoUsuario}"
@@ -99,29 +99,19 @@
 									</select>
 								</div>
 							</div>
-							<div class="one fields">
-								<div class="ui center aligned field">
-									<div class="ui buttons">
-										<button class="fluid ui primary button active" type="submit"
-											id="saveRow" name="saveRow">Guardar</button>
-										<div class="or" data-text="O"></div>
+							<div class="ui center aligned field">
+								<div class="ui buttons">
+									<button class="fluid ui primary button active" type="submit"
+										id="saveRow" name="saveRow">Guardar</button>
+									<div class="or" data-text="O"></div>
 
-										<div class="fluid ui reset button">Limpiar Campos</div>
-									</div>
+									<button class="fluid ui negative basic button" type="submit"
+										id="cancelar" name="cancelar">Cancelar</button>
 								</div>
 							</div>
 							<div class="ui error message"></div>
 						</form>
-						<form class="ui form" action="#" th:action="@{/menu/cancel}"
-							method="POST" id="frm-cancelar">
-							<a href="#">
-								<button class="fluid ui negative basic button">Cancelar</button>
-							</a>
-						</form>
-
-
 					</div>
-
 				</div>
 				<div class="one wide column"></div>
 			</div>
@@ -153,39 +143,43 @@
 		$('.ui.checkbox').checkbox();
 	</script>
 	<script type="text/javascript">
-		$('#frm-menu').form({
-			on : 'blur',
-			fields : {
-				descripcion : {
-					identifier : 'descripcion',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Descripcion'
-					} ]
-				},
-				tipoMenu : {
-					identifier : 'tipoMenu',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Tipo de Menu'
-					} ]
-				},
-				estadoRegistro : {
-					identifier : 'estadoRegistro',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Estado de Registro'
-					} ]
-				},
-				idMenuPadre : {
-					identifier : 'idMenuPadre',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Menu Contenedor'
-					} ]
+	$(document).ready(function(){
+		$("#saveRow").click(function(e) {
+			$('#frm-menu').form({
+				on : 'blur',
+				fields : {
+					descripcion : {
+						identifier : 'descripcion',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor Ingrese Descripcion'
+						} ]
+					},
+					tipoMenu : {
+						identifier : 'tipoMenu',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Tipo de Menu'
+						} ]
+					},
+					estadoRegistro : {
+						identifier : 'estadoRegistro',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Estado de Registro'
+						} ]
+					},
+					idMenuPadre : {
+						identifier : 'idMenuPadre',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Menu Contenedor'
+						} ]
+					}
 				}
-			}
-		});
+			});
+		 });
+	});
 	</script>
 </body>
 

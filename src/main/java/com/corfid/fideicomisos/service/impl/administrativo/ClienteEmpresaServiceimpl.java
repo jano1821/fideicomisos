@@ -1,5 +1,8 @@
 package com.corfid.fideicomisos.service.impl.administrativo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -57,6 +60,19 @@ public class ClienteEmpresaServiceimpl extends AbstractService implements Client
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public List<ClienteEmpresa> findClienteEmpresaByUsuarioAndNotEmpresa(Integer idUsuario,
+                                                                         Integer idEmpresaSesion) throws Exception {
+        List<ClienteEmpresa> listClienteEmpresa = null;
+        try {
+            listClienteEmpresa = new ArrayList<ClienteEmpresa>();
+            listClienteEmpresa = clienteEmpresaRepository.findByIdempresaAndIdUsuario(idUsuario, idEmpresaSesion);
+
+            return listClienteEmpresa;
+        } catch (Exception e) {
+            return listClienteEmpresa;
         }
     }
 }

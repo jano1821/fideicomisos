@@ -57,10 +57,12 @@ public class CrudModel {
         this.acciones = acciones;
     }
 
+    @Deprecated
     public String getResult() {
         return result;
     }
 
+    @Deprecated
     public void setResult(String result) {
         this.result = result;
     }

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html  xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
 <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -62,15 +62,15 @@
 							value="${_csrf.token}" />
 
 						<div class="mb-4">
-							<label for="usuario" class="form-label font-weight-bold">Usuario</label>
+							<label for="usuario" class="form-label font-weight-bold">Número de Documento</label>
 							<input type="text" class="form-control"
-								placeholder="Ingrese Usuario" name="username" id="username">
+								placeholder="Ingrese Número de Documento" name="username" id="username">
 						</div>
 						<div class="mb-4">
 							<label for="password" class="form-label font-weight-bold">Contraseña</label>
 							<input type="password" class="form-control mb-2"
 								placeholder="Ingrese Contraseña" name="password" id="password" />
-							<a href="#" class="form-text text-muted text-decoration">¿Olvidaste
+							<a th:href="@{/olvido/olvidoPassword}" class="form-text text-muted text-decoration">¿Olvidaste
 								tu contraseña?</a>
 						</div>
 						<div class="mb-4 form-check">
@@ -78,9 +78,7 @@
 							<label class="form-check-label" for="comprobacion">No soy
 								un robot</label>
 						</div>
-						<button class="btn btn-primary w-100"
-							onclick="j_username.value=domain.value + '@' + username.value; return true"
-							type="submit">Ingresar</button>
+						<button class="btn btn-primary w-100" type="submit">Ingresar</button><!-- onclick="j_username.value=domain.value + '@' + username.value; return true" -->
 					</form>
 				</div>
 				<div class="text-center px-lg-5 pt-lg-3 pb-lg-4 p-4 w-100 mt-auto">
@@ -93,8 +91,6 @@
 		</div>
 	</section>
 
-	<!-- Optional JavaScript -->
-	<!-- Popper.js first, then Bootstrap JS -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
 		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -104,21 +100,5 @@
 		integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
 		crossorigin="anonymous"></script>
 
-	<script type="text/javascript">
-
-function procesar() {
-
-    campo1=document.getElementById('campo1').value;
-    campo2=document.getElementById('campo2').value;
-
-    final=campo1+campo2;
-
-    document.getElementById('final').value=final;
-
-    document.forms.ejemplo.submit();
-
-}
-
-</script>
 </body>
 </html>

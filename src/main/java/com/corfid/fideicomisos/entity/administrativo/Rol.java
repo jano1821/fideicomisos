@@ -29,7 +29,7 @@ public class Rol extends Auditoria {
     @Column(name = "c_descri", nullable = false, length = 100, insertable = true, updatable = true)
     private String descripcion;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "c_idtius", nullable = false, insertable = true, updatable = true)
     private TipoUsuario tipoUsuario;
 
@@ -39,7 +39,7 @@ public class Rol extends Auditoria {
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
     private Set<Menu> menus = new HashSet<Menu>();
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "n_idempr", nullable = true, insertable = true, updatable = true)
     private Empresa empresa;
 

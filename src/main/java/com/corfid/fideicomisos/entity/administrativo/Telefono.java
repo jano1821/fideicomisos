@@ -28,9 +28,8 @@ public class Telefono extends Auditoria {
     @JoinColumn(name = "n_idpers", nullable = false, insertable = true, updatable = true)
     private Persona persona;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "n_idoper", nullable = false, insertable = true, updatable = true)
-    private Operador operador;
+    @Column(name = "c_idoper", nullable = false, length = 45, insertable = true, updatable = true)
+    private String operador;
 
     public Integer getIdTelefono() {
         return idTelefono;
@@ -56,15 +55,15 @@ public class Telefono extends Auditoria {
         this.persona = persona;
     }
 
-    public Operador getOperador() {
+    public String getOperador() {
         return operador;
     }
 
-    public void setOperador(Operador operador) {
+    public void setOperador(String operador) {
         this.operador = operador;
     }
 
-    public Telefono(Integer idTelefono, String numero, Persona persona, Operador operador) {
+    public Telefono(Integer idTelefono, String numero, Persona persona, String operador) {
         super();
         this.idTelefono = idTelefono;
         this.numero = numero;

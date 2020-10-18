@@ -71,7 +71,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="user : ${crudUsuarioModel.rows}">
+										<tr th:each="user : ${crudUsuarioModel.rows}" th:class="${user.estadoRegistro=='N'}? 'negative'">
 											<td th:text="${user.usuario}"></td>
 											<td th:text="${user.descTipoUsuario}"></td>
 											<td th:text="${user.descEstadoActividad}"></td>
@@ -83,11 +83,11 @@
 														th:value="${user.idUsuario}">
 														<i class="edit icon"></i>
 													</button>
-													<button class="ui button" data-tooltip="Eliminar"
+													<!-- <button class="ui button" data-tooltip="Eliminar"
 														data-position="right center" type="submit"
 														name="removeRow" th:value="${user.idUsuario}">
 														<i class="trash alternate icon"></i>
-													</button>
+													</button> -->
 												</div>
 											</td>
 										</tr>
@@ -119,7 +119,7 @@
 								</div>
 							</div>
 							<div class="ui secondary segment">
-								<div th:if="${crudUsuarioModel.result != null }"
+								<div th:if="${crudUsuarioModel.codigoError != null }"
 									th:utext="${crudUsuarioModel.mensaje}"></div>
 
 

@@ -31,4 +31,9 @@ public interface RolRepository extends JpaRepository<Rol, Serializable> {
 	                  Pageable pageable);
 	
 	public abstract List<Rol> findByEstadoRegistro(String estado);
+	
+	@Query(value = "select r from Rol r where r.empresa.idEmpresa = :idEmpresaSeleccionada AND r.estadoRegistro = :estadoRegistro")
+	public abstract List<Rol> listRolByEstadoRegistroAndEmpresaSesion (
+	                      @Param("estadoRegistro") String estadoRegistro, 
+	                      @Param("idEmpresaSeleccionada") Integer idEmpresaSeleccionada);
 }

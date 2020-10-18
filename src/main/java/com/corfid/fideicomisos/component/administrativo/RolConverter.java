@@ -79,6 +79,9 @@ public class RolConverter {
         rolModel.setDescripcion(rol.getDescripcion());
         rolModel.setEstadoRegistro(rol.getEstadoRegistro());
         rolModel.setListMenu(listMenuModel);
+        if (!StringUtil.isEmpty(rol.getEmpresa())) {
+            rolModel.setIdEmpresa(rol.getEmpresa().getIdEmpresa());
+        }
 
         if (StringUtil.equiv(rol.getEstadoRegistro(), "S")) {
             rolModel.setDescEstadoRegistro("Vigente");

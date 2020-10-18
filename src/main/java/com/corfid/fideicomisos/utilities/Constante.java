@@ -3,6 +3,9 @@ package com.corfid.fideicomisos.utilities;
 public class Constante {
     //URL's
     public static final String MENU = "principal";
+    public static final String OLVIDO = "mantenimiento/administrativo/cambio_password_ingreso_numero_doc";
+    public static final String SELECCION_MODO_RECUPERACION = "mantenimiento/administrativo/cambio_password_seleccion_modo";
+    public static final String SELECCION_CAMBIO_PASSWORD = "mantenimiento/administrativo/cambio_password";
     public static final String LOGIN = "login";
     public static final String SITIO_EN_CONSTRUCCION = "mantenimiento/administrativo/construccion";
     public static final String SELECCION = "seleccion";
@@ -18,7 +21,13 @@ public class Constante {
     public static final String LISTA_MENUS = "mantenimiento/administrativo/lista_menus";
     public static final String FORM_MENU = "mantenimiento/administrativo/form_menu";
     public static final String LISTA_PERSONAS = "mantenimiento/administrativo/lista_personas";
+    public static final String LISTA_DIRECCIONES = "mantenimiento/administrativo/lista_direccion";
+    public static final String LISTA_EMAIL = "mantenimiento/administrativo/lista_email";
+    public static final String LISTA_TELEFONO = "mantenimiento/administrativo/lista_telefono";
     public static final String FORM_PERSONA = "mantenimiento/administrativo/form_persona";
+    public static final String FORM_DIRECCION = "mantenimiento/administrativo/form_direccion";
+    public static final String FORM_EMAIL = "mantenimiento/administrativo/form_email";
+    public static final String FORM_TELEFONO = "mantenimiento/administrativo/form_telefono";
     public static final String URL_LISTA_FIDEICOMISO = "bancos/posicionBanco/form_fideicomiso";
     public static final String URL_LISTA_FIDEICOMISO_SOLES = "bancos/posicionBanco/form_fideicomiso_soles";
     public static final String URL_LISTA_FIDEICOMISO_DOLARES = "bancos/posicionBanco/form_fideicomiso_dolares";
@@ -26,9 +35,12 @@ public class Constante {
     
     //TABLAS
     public static final String TABLA_USUARIO = "admusuar";
+    public static final String TABLA_USUARIO_ADM = "admusuaa";
     public static final String TABLA_ROLES = "admroles";
     public static final String TABLA_MENU = "admcmenu";
     public static final String TABLA_PERSONA = "admperso";
+    public static final String TABLA_TELEFONO = "admtelef";
+    public static final String TABLA_SERVICIO = "servicio";
     
     //CONSTRAINTS
     public static final String ESTADO_REGISTRO = "c_estreg";
@@ -37,6 +49,8 @@ public class Constante {
     public static final String TIPO_MENU = "c_tipmen";
     public static final String TIPO_PERSONA = "c_tipper";
     public static final String TIPO_DOC = "c_tipdoc";
+    public static final String OPERADOR = "c_idoper";
+    public static final String PARAMETROS = "paramet";
     
     //VALORES
     public static final String CONST_VACIA = "";
@@ -46,8 +60,8 @@ public class Constante {
     public static final String DERECHA = "1";
     public static final String CONST_CERO = "0";
     public static final String PAGINA_INICIAL = "1";
-    public static final String RESULT_CORRECTO = "1";
-    public static final String RESULT_ERROR = "0";
+    public static final String RESULT_CORRECTO = "0";
+    public static final String RESULT_ERROR = "1";
     public static final String FIDEICOMISARIO = "F";
     public static final String FIDEICOMITENTE = "C";
     public static final String ESTADO_REGISTRO_VIGENTE = "S";
@@ -74,4 +88,15 @@ public class Constante {
     public static final String NO_HAY_REGISTROS_A_LA_DERECHA = "2";
     public static final String CODIGO_MONEDA_SOLES = "1";
     public static final String CODIGO_MONEDA_DOLARES = "2";
+    public static final String ESTADO_ACTIVIDAD_ACTIVO = "1";
+    public static final String ESTADO_ACTIVIDAD_BLOQUEADO = "0";
+    
+    //NOMBRE DE MODULOS
+    public static final String MODULO_MENU = "Menús";
+    public static final String MODULO_ROL = "Roles";
+    public static final String MODULO_USUARIO = "Usuarios";
+    public static final String MODULO_PERSONA = "Personas";
+    public static final String MODULO_DIRECCION = "Direcciones";
+    public static final String MODULO_TELEFONO = "Telefonos";
+    public static final String MODULO_EMAIL = "Email";
 }

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Formulario de Direccion</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+</head>
+
+<body>
+	<div class="ui one column stackable grid">
+		<div class="column">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
+
+					<div class="ui secondary segment">
+
+
+						<form class="ui form" action="#" th:action="@{/persona/adddireccion}"
+							th:object="${direccionModel}" method="POST" id="frm-direccion">
+							<h4 class="ui dividing header">Formulario de Direcciones</h4>
+							<input type="hidden" th:field="*{idDireccion}" th:value="${idDireccion}"></input>
+							<input type="hidden" th:field="*{idPersona}" th:value="${idPersona}"></input>
+							<div class="required field">
+								<label>Datos</label>
+								<div class="two fields">
+									<div class="required field">
+										<input type="text"
+											placeholder="Direccion" th:field="*{direccion}"
+											th:value="${direccion}">
+									</div>
+
+									<div class="required field">
+										<select class="ui dropdown" th:field="*{estadoRegistro}">
+											<option value="">Seleccionar...</option>
+											<option th:each="estado : ${listEstadoRegistro}"
+												th:value="${estado.valorConstraint}"
+												th:text="${estado.descConstraint}"></option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="ui center aligned field">
+								<div class="ui buttons">
+									<button class="fluid ui primary button active" type="submit"
+										id="saveRowDireccion" name="saveDireccion">Guardar</button>
+									<div class="or" data-text="O"></div>
+									<button class="fluid ui negative basic button" type="submit"
+										id="cancelarDireccion" name="cancelarDireccion">Cancelar</button>
+								</div>
+							</div>
+							<div class="ui error message"></div>
+						</form>
+					</div>
+
+				</div>
+				<div class="one wide column"></div>
+			</div>
+
+		</div>
+	</div>
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+	});
+
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});
+
+	$(document).ready(function(){
+		$('#abrir_menu').click(function(){
+			toggleSidebar();
+		});
+		$("#saveRowDireccion").click(function(e) {
+			$('#frm-direccion').form({
+				on : 'blur',
+				fields : {
+					direccion : {
+						identifier : 'direccion',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor Ingrese Direccion'
+						},
+						{
+							type : 'maxLength[500]',
+							prompt : 'El máximo de caracteres permitidos para la desceripción es de 500'
+						} ]
+					},
+					estadoRegistro : {
+						identifier : 'estadoRegistro',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Estado de Registro'
+						} ]
+					},
+				}
+			});
+		});
+	
+		$("#cancelarDireccion").click(function(e) {
+			$('#frm-direccion')
+		      .form('remove fields', ['direccion', 'estadoRegistro']);
+		});
+	});
+	</script>
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+	</script>
+</body>
+
+
+</html>

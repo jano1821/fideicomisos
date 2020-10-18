@@ -18,6 +18,7 @@ import com.corfid.fideicomisos.service.administrativo.MenuRolInterface;
 import com.corfid.fideicomisos.service.administrativo.RolInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
+import com.corfid.fideicomisos.utilities.ConstantesError;
 import com.corfid.fideicomisos.utilities.StringUtil;
 
 @Service("rolServiceImpl")
@@ -91,6 +92,8 @@ public class RolServiceImpl extends AbstractService implements RolInterface {
 
             return crudRolModel;
         } catch (Exception e) {
+            crudRolModel.setCodigoError(ConstantesError.ERROR_17);
+            crudRolModel.setMensajeError(obtenerMensajeError(ConstantesError.ERROR_17));
             return crudRolModel;
         }
     }
@@ -122,14 +125,16 @@ public class RolServiceImpl extends AbstractService implements RolInterface {
 
             return rolConverter.convertRolToRolModel(rol);
         } catch (Exception e) {
+            rolModel.setCodigoError(ConstantesError.ERROR_19);
+            rolModel.setDescripcionError(obtenerMensajeError(ConstantesError.ERROR_19));
             return rolModel;
         }
     }
 
     @Override
-    public boolean updateMenuRol(String[] idMenu,
-                                 Integer idRol,
-                                 ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception {
+    public String updateMenuRol(String[] idMenu,
+                                Integer idRol,
+                                ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception {
         List<String> listIdMenuActual = new ArrayList<String>();
         Integer existeNuevo = 0;
 
@@ -165,26 +170,38 @@ public class RolServiceImpl extends AbstractService implements RolInterface {
                 }
             }
 
-            return true;
+            return ConstantesError.ERROR_0;
+        } catch (Exception e) {
+            return ConstantesError.ERROR_20;
+        }
+    }
 
+    @Override
+    public Boolean removeRol(Integer id) throws Exception {
+        Rol rol = null;
+        try {
+            rol = findRolById(id);
+            if (null != rol) {
+                rolRepository.delete(rol);
+            }
+            return true;
         } catch (Exception e) {
             return false;
         }
     }
 
     @Override
-    public void removeRol(Integer id) {
-        Rol rol = findRolById(id);
-        if (null != rol) {
-            rolRepository.delete(rol);
-        }
-    }
-
-    @Override
-    public List<RolModel> listAllRolesByEstadoRegistro(String estadoRegistro) throws Exception {
+    public List<RolModel> listAllRolesByEstadoRegistro(String estadoRegistro,
+                                                       String tipoUsuarioSesion,
+                                                       Integer idEmpresaSesion) throws Exception {
         List<RolModel> listRolModel = null;
         try {
-            List<Rol> listRol = rolRepository.findByEstadoRegistro(estadoRegistro);
+            List<Rol> listRol;
+            if (_equiv(tipoUsuarioSesion, Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                listRol = rolRepository.findByEstadoRegistro(estadoRegistro);
+            } else {
+                listRol = rolRepository.listRolByEstadoRegistroAndEmpresaSesion(estadoRegistro, idEmpresaSesion);
+            }
             if (!_isEmpty(listRol)) {
                 listRolModel = new ArrayList<RolModel>();
                 for (Rol rol : listRol) {

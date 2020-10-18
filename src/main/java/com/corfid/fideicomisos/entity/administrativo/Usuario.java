@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -58,7 +57,7 @@ public class Usuario extends Auditoria {
     @JoinTable(name = "admusrol", joinColumns = @JoinColumn(name = "n_idusua"), inverseJoinColumns = @JoinColumn(name = "n_iderol"))
     private Set<Rol> roles = new HashSet<Rol>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usuario")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
     private List<HistorialContrasenia> lstHistorialContrasenia = new ArrayList<HistorialContrasenia>(0);
 
     public Integer getIdUsuario() {

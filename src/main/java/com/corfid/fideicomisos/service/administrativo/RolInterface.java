@@ -17,7 +17,7 @@ public interface RolInterface {
 
     public RolModel addRol(RolModel rolModel, ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
 
-    public void removeRol(Integer id);
+    public Boolean removeRol(Integer id) throws Exception;
 
     public CrudRolModel listRolByDescripcionPaginado(String descripcion,
                                                      Integer idEmpresaSesion,
@@ -25,7 +25,11 @@ public interface RolInterface {
                                                      Integer pagina,
                                                      Integer cant) throws Exception;
 
-    public boolean updateMenuRol(String[] idMenu, Integer idRol, ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
+    public String updateMenuRol(String[] idMenu,
+                                Integer idRol,
+                                ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
 
-    public List<RolModel> listAllRolesByEstadoRegistro(String estadoRegistro) throws Exception;
+    public List<RolModel> listAllRolesByEstadoRegistro(String estadoRegistro,
+                                                       String tipoUsuarioSesion,
+                                                       Integer idEmpresaSesion) throws Exception;
 }

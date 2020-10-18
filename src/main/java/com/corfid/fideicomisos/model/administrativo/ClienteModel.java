@@ -3,8 +3,6 @@ package com.corfid.fideicomisos.model.administrativo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.corfid.fideicomisos.entity.administrativo.Empresa;
-
 public class ClienteModel {
 
     private Integer idCliente;

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Formulario de Telefonos</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+</head>
+
+<body>
+	<div class="ui one column stackable grid">
+		<div class="column">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
+
+					<div class="ui secondary segment">
+
+
+						<form class="ui form" action="#" th:action="@{/persona/addtelefono}"
+							th:object="${telefonoModel}" method="POST" id="frm-telefono">
+							<h4 class="ui dividing header">Formulario de Telefono</h4>
+							<input type="hidden" th:field="*{idTelefono}" th:value="${idTelefono}"></input>
+							<input type="hidden" th:field="*{idPersona}" th:value="${idPersona}"></input>
+							<div class="required field">
+								<label>Datos</label>
+								<div class="three fields">
+									<div class="required field">
+										<input type="text" name="descripcion"
+											placeholder="Numeño Telefonico" th:field="*{numero}"
+											th:value="${numero}">
+									</div>
+									
+									<div class="required field">
+										<select class="ui dropdown" name="operador"
+											id="operador" th:field="*{operador}">
+											<option value="">Seleccionar...</option>
+											<option th:each="ope : ${listOperador}"
+												th:value="${ope.valorConstraint}"
+												th:text="${ope.descConstraint}"></option>
+										</select>
+									</div>
+
+									<div class="required field">
+										<select class="ui dropdown" name="estadoRegistro"
+											id="estadoRegistro" th:field="*{estadoRegistro}">
+											<option value="">Seleccionar...</option>
+											<option th:each="estado : ${listEstadoRegistro}"
+												th:value="${estado.valorConstraint}"
+												th:text="${estado.descConstraint}"></option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="ui center aligned field">
+								<div class="ui buttons">
+									<button class="fluid ui primary button active" type="submit"
+										id="saveRowTelefono" name="saveRowTelefono">Guardar</button>
+									<div class="or" data-text="O"></div>
+									<button class="fluid ui negative basic button" type="submit"
+										id="cancelarTelefono" name="cancelarTelefono">Cancelar</button>
+								</div>
+							</div>
+							<div class="ui error message"></div>
+						</form>
+					</div>
+
+				</div>
+				<div class="one wide column"></div>
+			</div>
+
+		</div>
+	</div>
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+	});
+
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});
+
+	$(document).ready(function(){
+		$('#abrir_menu').click(function(){
+			toggleSidebar();
+		});
+		
+		$("#saveRowTelefono").click(function(e) {
+			$('#frm-telefono').form({
+				on : 'blur',
+				fields : {
+					descripcion : {
+						identifier : 'numero',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor Ingrese Descripcion'
+						},
+						{
+							type : 'maxLength[45]',
+							prompt : 'El máximo de caracteres permitidos para la desceripción es de 45'
+						} ]
+					},
+					estadoRegistro : {
+						identifier : 'estadoRegistro',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Estado de Registro'
+						} ]
+					},
+					operador : {
+						identifier : 'operador',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Operador'
+						} ]
+					}
+				}
+			});
+		});
+	
+		$("#cancelarTelefono").click(function(e) {
+			$('#frm-telefono')
+		      .form('remove fields', ['numero', 'estadoRegistro','operador'])
+		    ;
+		});
+	});
+	</script>
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+	</script>
+</body>
+
+
+</html>

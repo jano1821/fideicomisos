@@ -15,20 +15,22 @@ public interface UsuarioInterface {
 
     public abstract List<UsuarioModel> listAllUsuarios() throws Exception;
 
-    public CrudUsuarioModel listUsuarioByUsernamePaginado(String userName,
-                                                          String tipoUsuarioSesion,
-                                                          String usuarioSession,
-                                                          Integer idEmpresaSesion,
-                                                          Integer pagina,
-                                                          Integer cant) throws Exception;
+    public abstract CrudUsuarioModel listUsuarioByUsernamePaginado(String userName,
+                                                                   String tipoUsuarioSesion,
+                                                                   String usuarioSession,
+                                                                   Integer idEmpresaSesion,
+                                                                   Integer pagina,
+                                                                   Integer cant) throws Exception;
 
-    public Usuario findUsuarioById(Integer id);
+    public abstract Usuario findUsuarioById(Integer id);
 
-    public UsuarioModel findUsuarioByUsuario(String userName) throws Exception;
+    public abstract UsuarioModel findUsuarioByUsuario(String userName) throws Exception;
 
     public abstract UsuarioModel findUsuarioByIdModel(Integer id) throws Exception;
 
-    public abstract void removeUsuario(Integer id);
+    public CrudUsuarioModel removeUsuario(Integer id,
+                                          Integer idUsuarioSesion,
+                                          Integer idEmpresaSesion) throws Exception;
 
-    public UsuarioModel findUsuarioByIdPersona(Persona persona) throws Exception;
+    public abstract UsuarioModel findUsuarioByIdPersona(Persona persona) throws Exception;
 }

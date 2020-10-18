@@ -20,9 +20,6 @@ public class LoginController {
 
 	@GetMapping({"/loginsuccess","/"})
 	public String loginCheck() {
-		
-		
-		
 		return "redirect:/seleccion/seleccion";
 	}
 	

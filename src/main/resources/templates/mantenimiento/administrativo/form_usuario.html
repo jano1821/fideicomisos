@@ -37,18 +37,27 @@
 					<div class="ui secondary segment">
 
 
-						<form class="ui form" action="#"
+						<form class="ui form segment" action="#"
 							th:action="@{/usuario/addusuario}" th:object="${usuarioModel}"
 							method="POST" id="frm-usuario">
 							<h4 class="ui dividing header">Formulario de Usuario</h4>
 							<input type="hidden" th:field="*{idUsuario}"
-								th:value="${idUsuario}"></input>
+								th:value="${idUsuario}"></input> 
+							<input type="hidden"
+								id="tipoUsuarioSesion" name="tipoUsuarioSesion"
+								th:field="*{tipoUsuarioSesion}"></input>
+							<input type="hidden" id="modo"
+								name="modo" th:field="*{edicion}"></input> 
+							<div class="required field">
+								<label>Vincular Persona</label>
+								<div class="required field" th:utext="${comboPersonas}"></div>
+							</div>
 							<div class="required field">
 								<label>Credenciales</label>
 								<div class="four fields">
 									<div class="field">
 										<input type="text" name="usuario" placeholder="Usuario"
-											th:field="*{usuario}" th:value="${usuario}">
+											th:field="*{usuario}" th:value="${usuario}" readonly></input>
 									</div>
 									<div class="field" th:if="${usuarioModel.edicion == 'S'}">
 										<div class="ui toggle checkbox">
@@ -70,21 +79,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="required field">
-								<div class="required field" th:utext="${comboPersonas}"></div>
-							</div>
 							<div class="three fields">
-								<div class="required field">
-									<label>Indicador de Actividad</label> <select
-										class="ui fluid dropdown" name="estadoActividad"
-										id="estadoActividad" th:field="*{estadoActividad}">
-										<option value="">Seleccionar...</option>
-										<option th:each="actividad : ${listActividad}"
-											th:value="${actividad.valorConstraint}"
-											th:text="${actividad.descConstraint}"
-											th:selected="${actividad.valorConstraint==estadoActividad}"></option>
-									</select>
-								</div>
 								<div class="required field">
 									<label>Tipo de Usuario</label> <select class="ui dropdown"
 										name="tipoUsuario" id="tipoUsuario" th:field="*{tipoUsuario}">
@@ -106,31 +101,33 @@
 											th:selected="${estado.valorConstraint==estadoRegistro}"></option>
 									</select>
 								</div>
+								<div class="required field" id="comboIndicadorActividad">
+									<label>Indicador de Actividad</label> <select
+										class="ui fluid dropdown" name="estadoActividad"
+										id="estadoActividad" th:field="*{estadoActividad}">
+										<option value="">Seleccionar...</option>
+										<option th:each="actividad : ${listActividad}"
+											th:value="${actividad.valorConstraint}"
+											th:text="${actividad.descConstraint}"
+											th:selected="${actividad.valorConstraint==estadoActividad}"></option>
+									</select>
+								</div>
 							</div>
 							<div class="required field">
+								<label>Roles a Asignar</label>
 								<div class="required field" th:utext="${comboRoles}"></div>
 							</div>
-							<div class="one fields">
-								<div class="ui center aligned field">
-									<div class="ui buttons">
-										<button class="fluid ui primary button active" type="submit"
-											id="saveRow" name="saveRow">Guardar</button>
-										<div class="or" data-text="O"></div>
-
-										<div class="fluid ui reset button">Limpiar Campos</div>
-									</div>
+							<div class="ui center aligned field">
+								<div class="ui buttons">
+									<button class="fluid ui primary button active" type="submit"
+										id="saveRow" name="saveRow">Guardar</button>
+									<div class="or" data-text="O"></div>
+									<button class="fluid ui negative basic button" type="submit"
+										id="cancelar" name="cancelar">Cancelar</button>
 								</div>
 							</div>
 							<div class="ui error message"></div>
 						</form>
-						<form class="ui form" action="#" th:action="@{/usuario/cancel}"
-							method="POST" id="frm-cancelar">
-							<a href="#">
-								<button class="fluid ui negative basic button">Cancelar</button>
-							</a>
-						</form>
-
-
 					</div>
 
 				</div>
@@ -148,38 +145,197 @@
 		.sidebar("toggle");
 	}	
 	document.addEventListener("DOMContentLoaded", function() {
-		//toggleSidebar();
 	});
 
 	$(document).ready(function(){
-		  $('#abrir_menu').click(function(){
-			  toggleSidebar();
-		  });
-	});	
-	$(document).ready(function(){
-		  $('#activar').change(function () {
-			    //check if checkbox is checked
-			    if ($(this).is(':checked')) {
-			        $('#password').removeAttr('disabled'); //enable input
-			        $('#generar').removeAttr('disabled'); //enable check generar
-			        
-			    } else {
-			        $('#password').attr('disabled', true); //disable input
-			        $('#generar').attr('disabled', true); //disable check generar
-			        $('#generar').attr('checked', true); //disable check generar
-			    }
-			});
+		$('#abrir_menu').click(function(){
+			toggleSidebar();
+		});
+
+		if ($('#tipoUsuarioSesion').val() == 'A'){
+			$('#comboIndicadorActividad').hide();
+		}
+		if ($('#tipoUsuarioSesion').val() == 'A' && $('#modo').val() == 'S'){
+			$("#usuario").attr('readonly', 'readonly');
+		}
+
+		$('#persona').change(function () {
+			buscarPersonaAjax();
+		});
+		
+		$('#activar').change(function () {
+			//check if checkbox is checked
+			if ($(this).is(':checked')) {
+			    $('#password').removeAttr('disabled'); //enable input
+			    $('#generar').removeAttr('disabled'); //enable check generar
+			    
+			} else {
+			    $('#password').attr('disabled', true); //disable input
+			    $('#generar').attr('disabled', true); //disable check generar
+			    $('#generar').attr('checked', true); //disable check generar
+			}
+		});
+		$('#generar').change(function () {
+			//check if checkbox is checked
+			if ($(this).is(':checked')) {
+				$('#password').attr('disabled', true); //disable input
+			} else {
+				$('#password').removeAttr('disabled'); //enable input
+			}
+		});
+		$("#saveRow").click(function(e) {
+			if ($('#tipoUsuarioSesion').val() == 'A'){
+				$('#frm-usuario').form({
+					on : 'blur',
+					fields : {
+						usuario : {
+							identifier : 'usuario',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Ingrese Usuario'
+							},
+							{
+								type : 'maxLength[100]',
+								prompt : 'El máximo de caracteres permitidos para el usuario es de 100'
+							},
+							{
+								type : 'minLength[8]',
+								prompt : 'El mínimo de caracteres para el usuario es de 8'
+							},
+							{
+								type   : 'regExp[/^[a-z0-9A-Z_-]{8,100}$/]',
+								prompt : 'Solo se permiten letras, numeros, "-" y "_"'
+							} ]
+						},
+						persona : {
+							identifier : 'persona',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Seleccione Persona a vincular'
+							} ]
+						},
+						rol : {
+							identifier : 'rol',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Seleccione Roles a asignar'
+							} ]
+						},
+						tipoUsuario : {
+							identifier : 'tipoUsuario',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor seleccione Tipo de Usuario'
+							} ]
+						},
+						estadoRegistro : {
+							identifier : 'estadoRegistro',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor seleccione Estado de Registro'
+							} ]
+						}
+					}
+				});
+			} else {
+				$('#frm-usuario').form({
+					on : 'blur',
+					fields : {
+						usuario : {
+							identifier : 'usuario',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Ingrese Usuario'
+							},
+							{
+								type : 'maxLength[100]',
+								prompt : 'El máximo de caracteres permitidos para el usuario es de 100'
+							},
+							{
+								type : 'minLength[8]',
+								prompt : 'El mínimo de caracteres para el usuario es de 8'
+							},
+							{
+								type   : 'regExp[/^[a-z0-9A-Z_-]{8,100}$/]',
+								prompt : 'Solo se permiten letras, numeros, "-" y "_"'
+							} ]
+						},
+						persona : {
+							identifier : 'persona',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Seleccione Persona a vincular'
+							} ]
+						},
+						rol : {
+							identifier : 'rol',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor Seleccione Roles a asignar'
+							} ]
+						},
+						estadoActividad : {
+							identifier : 'estadoActividad',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor seleccione Estado de Actividad'
+							} ]
+						},
+						tipoUsuario : {
+							identifier : 'tipoUsuario',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor seleccione Tipo de Usuario'
+							} ]
+						},
+						estadoRegistro : {
+							identifier : 'estadoRegistro',
+							rules : [ {
+								type : 'empty',
+								prompt : 'Por Favor seleccione Estado de Registro'
+							} ]
+						}
+					}
+				});
+			}
+		});
 	});
-	$(document).ready(function(){
-		  $('#generar').change(function () {
-			    //check if checkbox is checked
-			    if ($(this).is(':checked')) {
-			    	$('#password').attr('disabled', true); //disable input
-			    } else {
-			    	$('#password').removeAttr('disabled'); //enable input
-			    }
-			});
+
+	$("#cancelar").click(function(e) {
+		$('#frm-usuario')
+	      .form('remove fields', ['usuario', 'persona','rol','estadoActividad','tipoUsuario','estadoRegistro'])
+	    ;
 	});
+
+	function buscarPersonaAjax(){
+		event.preventDefault();
+		
+		var datosPersona = {}
+		datosPersona["idPersona"] = $("#persona").val();
+		
+		$.ajax({
+		    type: "POST",
+		    contentType: "application/json",
+		    url: "/usuario/buscarNumeroDocumentoPersona",
+		    data: JSON.stringify(datosPersona),
+		    dataType: 'json',
+		    cache: false,
+		    timeout: 600000,
+		    success: function (data) {
+
+		        var respuesta = data['msg'];
+
+		        if (respuesta == '' || respuesta == null){
+		        	$('#usuario'). attr("displayonly", false);
+		        } else {
+		        	$('#usuario').val(respuesta);
+			    }
+		    },
+		    error: function (e) {
+			    
+		    }
+		});
+	}
 	</script>
 	<script type="text/javascript">
 		$('.ui.dropdown').dropdown();
@@ -187,59 +343,5 @@
 	<script type="text/javascript">
 		$('.ui.checkbox').checkbox();
 	</script>
-	<script type="text/javascript">
-	
-	</script>
-	<script type="text/javascript">
-		$('#frm-usuario').form({
-			on : 'blur',
-			fields : {
-				usuario : {
-					identifier : 'usuario',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Ingrese Usuario'
-					} ]
-				},
-				persona : {
-					identifier : 'persona',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Seleccione Persona a vincular'
-					} ]
-				},
-				rol : {
-					identifier : 'rol',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor Seleccione Roles a asignar'
-					} ]
-				},
-				estadoActividad : {
-					identifier : 'estadoActividad',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Estado de Actividad'
-					} ]
-				},
-				tipoUsuario : {
-					identifier : 'tipoUsuario',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Tipo de Usuario'
-					} ]
-				},
-				estadoRegistro : {
-					identifier : 'estadoRegistro',
-					rules : [ {
-						type : 'empty',
-						prompt : 'Por Favor seleccione Estado de Registro'
-					} ]
-				}
-			}
-		});
-	</script>
 </body>
-
-
 </html>
