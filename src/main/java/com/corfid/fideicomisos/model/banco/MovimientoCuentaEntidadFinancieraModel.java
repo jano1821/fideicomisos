@@ -12,12 +12,14 @@ public class MovimientoCuentaEntidadFinancieraModel extends PaginacionGeneralMod
 	private String abreviaturaDescripcionMovimiento;
 	private String numeroOperacionMovimiento;
 	private String descripcionOficinaMovimiento;
+	private String monedaMovimientoCuentaEntidadFinanciera;
 	private Date fechaProcesoMovimiento;
 	private Date fechaValutaMovimiento;
 	private Double montoCargoMovimiento;
 	private Double montoAbonoMovimiento;
-
-	public List<MovimientoCuentaEntidadFinancieraModel> rows = new ArrayList<MovimientoCuentaEntidadFinancieraModel>();
+	private Double montoMovimientoCuenta;
+	private List<DetalleMovCuentaEntidadFinancieraModel> listDetalleMovCuentaEntidadFinancieraModel = new ArrayList<DetalleMovCuentaEntidadFinancieraModel>();
+	private List<MovimientoCuentaEntidadFinancieraModel> rows = new ArrayList<MovimientoCuentaEntidadFinancieraModel>();
 
 	public Integer getIdentificadorMovimientoCuentaEntidadFinanciera() {
 		return identificadorMovimientoCuentaEntidadFinanciera;
@@ -27,7 +29,7 @@ public class MovimientoCuentaEntidadFinancieraModel extends PaginacionGeneralMod
 			Integer identificadorMovimientoCuentaEntidadFinanciera) {
 		this.identificadorMovimientoCuentaEntidadFinanciera = identificadorMovimientoCuentaEntidadFinanciera;
 	}
-	
+
 	public Integer getIdentificadorCuentaEntidadFinanciera() {
 		return identificadorCuentaEntidadFinanciera;
 	}
@@ -68,6 +70,14 @@ public class MovimientoCuentaEntidadFinancieraModel extends PaginacionGeneralMod
 		this.descripcionOficinaMovimiento = descripcionOficinaMovimiento;
 	}
 
+	public String getMonedaMovimientoCuentaEntidadFinanciera() {
+		return monedaMovimientoCuentaEntidadFinanciera;
+	}
+
+	public void setMonedaMovimientoCuentaEntidadFinanciera(String monedaMovimientoCuentaEntidadFinanciera) {
+		this.monedaMovimientoCuentaEntidadFinanciera = monedaMovimientoCuentaEntidadFinanciera;
+	}
+
 	public Date getFechaProcesoMovimiento() {
 		return fechaProcesoMovimiento;
 	}
@@ -100,12 +110,29 @@ public class MovimientoCuentaEntidadFinancieraModel extends PaginacionGeneralMod
 		this.montoAbonoMovimiento = montoAbonoMovimiento;
 	}
 
+	public Double getMontoMovimientoCuenta() {
+		return montoMovimientoCuenta;
+	}
+
+	public void setMontoMovimientoCuenta(Double montoMovimientoCuenta) {
+		this.montoMovimientoCuenta = montoMovimientoCuenta;
+	}
+
 	public List<MovimientoCuentaEntidadFinancieraModel> getRows() {
 		return rows;
 	}
 
 	public void setRows(List<MovimientoCuentaEntidadFinancieraModel> rows) {
 		this.rows = rows;
+	}
+
+	public List<DetalleMovCuentaEntidadFinancieraModel> getListDetalleMovCuentaEntidadFinancieraModel() {
+		return listDetalleMovCuentaEntidadFinancieraModel;
+	}
+
+	public void setListDetalleMovCuentaEntidadFinancieraModel(
+			List<DetalleMovCuentaEntidadFinancieraModel> listDetalleMovCuentaEntidadFinancieraModel) {
+		this.listDetalleMovCuentaEntidadFinancieraModel = listDetalleMovCuentaEntidadFinancieraModel;
 	}
 
 }

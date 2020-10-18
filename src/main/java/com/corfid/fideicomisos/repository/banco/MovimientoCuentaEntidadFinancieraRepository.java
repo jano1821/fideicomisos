@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.repository.banco;
 
-
 import java.io.Serializable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,14 +14,16 @@ import com.corfid.fideicomisos.entity.banco.MovimientoCuentaEntidadFinanciera;
 public interface MovimientoCuentaEntidadFinancieraRepository
 		extends JpaRepository<MovimientoCuentaEntidadFinanciera, Serializable> {
 
-	@Query(value = "SELECT model FROM MovimientoCuentaEntidadFinanciera model " +
-				   "WHERE model.cuentaEntidadFinanciera.identificadorCuentaEntidadFinanciera = :identificadorCuentaEntidadFinanciera " +
-				   "AND model.estadoRegistro = 'S'",
-		   countQuery = "SELECT COUNT(model) FROM MovimientoCuentaEntidadFinanciera model " +
-				   		"WHERE model.cuentaEntidadFinanciera.identificadorCuentaEntidadFinanciera = :identificadorCuentaEntidadFinanciera " +
-				   		"AND model.estadoRegistro = 'S'")
+	@Query(value = "SELECT model FROM MovimientoCuentaEntidadFinanciera model "
+			+ "WHERE model.cuentaEntidadFinanciera.identificadorCuentaEntidadFinanciera = :identificadorCuentaEntidadFinanciera "
+			+ "AND model.estadoRegistro = 'S'", countQuery = "SELECT COUNT(model) FROM MovimientoCuentaEntidadFinanciera model "
+					+ "WHERE model.cuentaEntidadFinanciera.identificadorCuentaEntidadFinanciera = :identificadorCuentaEntidadFinanciera "
+					+ "AND model.estadoRegistro = 'S'")
 	public abstract Page<MovimientoCuentaEntidadFinanciera> getListMovimientoCuentaEntidadFinancieraByIdCuenta(
 			@Param("identificadorCuentaEntidadFinanciera") Integer identificadorCuentaEntidadFinanciera,
 			Pageable pageable);
+
+	public abstract MovimientoCuentaEntidadFinanciera findByIdentificadorMovimientoCuentaEntidadFinanciera(
+			Integer identificadorMovimientoCuentaEntidadFinanciera);
 
 }

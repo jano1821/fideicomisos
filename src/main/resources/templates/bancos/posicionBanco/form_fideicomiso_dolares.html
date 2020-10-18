@@ -34,7 +34,9 @@
 			<div class="row">
 				<div class="one wide column"></div>
 				<div class="fourteen wide column">
-					<h2><span th:text="${nombreFideicomisario}"></span></h2>
+					<h2>
+						<span th:text="${nombreFideicomisario}"></span>
+					</h2>
 					<form class="ui form" action="#"
 						th:action="@{/fideicomiso/buscarFideicomisoDolares}"
 						th:object="${posicionBancoModel}" method="POST"
@@ -51,11 +53,11 @@
 								</div>
 							</div>
 							<div class="ui secondary segment">
-							    <h3>POSICIÓN DE BANCOS DE FIDEICOMISOS</h3>
+								<h3>POSICIÓN DE BANCOS DE FIDEICOMISOS</h3>
 								<table class="ui selectable celled table">
 									<thead>
 										<tr>
-											<th>   </th>
+											<th></th>
 											<th>Id</th>
 											<th>Fideicomiso</th>
 											<th>Banco</th>
@@ -64,19 +66,21 @@
 											<th>Nombre Cuenta</th>
 											<th>Sdo. Contable</th>
 											<th>Sdo. Disponible</th>
-											<th>Fecha/Hora</th>											
+											<th>Fecha/Hora</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr th:each="posicionBanco : ${posicionBancoModel.rows}">
 											<td class="ui center aligned">
 												<div class="ui icon buttons">
-													<button class="ui button" data-tooltip="Detalle Cuenta" data-position="right center" 
-													type="submit" name="detailRow" th:value="${posicionBanco.identificadorCuentaEntidadFinanciera}">
+													<button class="ui button" data-tooltip="Detalle Cuenta"
+														data-position="right center" type="submit"
+														name="detailRow"
+														th:value="${posicionBanco.identificadorCuentaEntidadFinanciera}">
 														<i class="list ul icon"></i>
 													</button>
 												</div>
-											</td>											
+											</td>
 											<td th:text="${posicionBanco.identificadorFideicomiso}"></td>
 											<td th:text="${posicionBanco.nombreFideicomiso}"></td>
 											<td th:text="${posicionBanco.acronimoEntidadFinanciera}"></td>
@@ -86,9 +90,9 @@
 											<td
 												th:text="${posicionBanco.descripcionCuentaEntidadFinanciera}"></td>
 											<td class="ui right aligned"
-												th:text="${posicionBanco.saldoContableActual}"></td>
+												th:text="${#numbers.formatDecimal(posicionBanco.saldoContableActual,1,'COMMA',2,'POINT')}"></td>
 											<td class="ui right aligned"
-												th:text="${posicionBanco.saldoDisponibleActual}"></td>
+												th:text="${#numbers.formatDecimal(posicionBanco.saldoDisponibleActual,1,'COMMA',2,'POINT')}"></td>
 											<td class="ui center aligned"
 												th:text="${posicionBanco.fechaUltimaActualizacion}"></td>
 										</tr>
@@ -96,9 +100,9 @@
 								</table>
 							</div>
 							<div class="ui right aligned segment">
-								<button class="ui primary button" type="submit" id="consolidatedBalances" name="consolidatedBalances">
-									Consolidado Saldos
-								</button>							
+								<button class="ui primary button" type="submit"
+									id="consolidatedBalances" name="consolidatedBalances">
+									Consolidado Saldos</button>
 							</div>
 							<div class="ui right aligned secondary segment">
 								<div class="ui pagination menu">
@@ -136,6 +140,68 @@
 							</div>
 						</div>
 					</form>
+					
+					<div class="ui basic modal">					
+						<div class="ui grid">
+						  <div class="four column row">
+						    <div class="left floated column"></div>
+						    <div class="right floated column"></div>
+						  </div>
+						  <div class="row">
+						    <div class="three wide column"></div>
+						    <div class="eight wide column"></div>
+						    <div class="five wide column"></div>
+						  </div>
+						</div>
+						
+						<div class="ui grid">
+						  <div class="row">						    	
+						    <div class="four column row">
+						  		<div class="left floated column"><h2>SALDOS TOTALES</h2>	</div>
+						    </div>												    					
+						  </div>
+						  <div class="row">
+							  <table class="ui definition table">
+									<thead>
+										<tr>
+											<th></th>
+											<th class="ui right aligned">SALDO CONTABLE</th>
+											<th class="ui right aligned">SALDO DISPONIBLE</th>								
+										</tr>							
+									</thead>
+									<tbody id="tSaldoTotal"></tbody>
+								</table>
+						   </div>						   						   
+						   <div class="row"></div>						   	
+						   <div class="two column row">
+						   		<div class="left floated column">
+						   			<h2>SALDOS TOTALES CONSOLIDADOS</h2>
+						   		</div>
+						   		<div class="ui right aligned right floated column">
+						   			<h3>Tipo Cambio: <span id="montoTipoCambio"></span></h3>
+						   		</div>
+						   </div>						  	
+						  	<div class="row">
+						  		<table class="ui definition table">
+									<thead>
+										<tr>
+											<th></th>
+											<th class="ui right aligned">SALDO CONTABLE</th>
+											<th class="ui right aligned">SALDO DISPONIBLE</th>								
+										</tr>							
+									</thead>
+									<tbody id=tSaldoTotalConsolidado></tbody>
+								</table>						  	
+						  	</div>			  
+						  <div class="four column row">
+							  <div class="right floated column">	
+							  		<div class="actions">							  		
+							  			<div class="fluid ui red basic cancel inverted button">Cancel</div>
+							  		</div>								
+							  </div>	
+						  </div>						  
+						</div>						
+					</div>
 				</div>
 				<div class="one wide column"></div>
 			</div>
@@ -157,5 +223,76 @@
 				toggleSidebar();
 			});
 		});
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#consolidatedBalances').click(function() {
+				event.preventDefault();
+				obtenerSaldoTotalMoneda();
+				$('.ui.modal').modal('show');
+			});
+		});
+	</script>
+	<script type="text/javascript">
+		function obtenerSaldoTotalMoneda() {
+
+			event.preventDefault();
+			var datosGenerales = {};
+			datosGenerales["busqueda"] = $('#busqueda').val();
+
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "/fideicomiso/obtenerSaldoTotalMonedaDolares",
+				data : JSON.stringify(datosGenerales),
+				dataType : 'json',
+				cache : false,
+				timeout : 600000,
+				success : function(data) {
+
+					var cadena1HTML = "<tr>" + 
+										"<td>TOTAL SOLES</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalContableSoles"]).toFixed(2)) + "</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalDisponibleSoles"]).toFixed(2)) + "</td>" +							
+							 		  "</tr>" + 
+							 		  "<tr>" + 
+							 		  	"<td>TOTAL DÓLARES</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalContableDolares"]).toFixed(2)) + "</td>" +							
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalDisponibleDolares"]).toFixed(2)) + "</td>"	+							
+									  "</tr>";
+					
+					var cadena2HTML = "<tr>" + 
+										"<td>EXPRESADO EN SOLES</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalConsolidadoContableSoles"]).toFixed(2)) + "</td>" +							
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalConsolidadoDisponibleSoles"]).toFixed(2)) + "</td>" +		
+									  "</tr>" + 
+									  "<tr>" +
+										"<td>EXPRESADO EN DOLARES</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalConsolidadoContableDolares"]).toFixed(2)) + "</td>" +							
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalConsolidadoDisponibleDolares"]).toFixed(2)) + "</td>" +		
+									  "</tr>";
+
+					$('#tSaldoTotal').html(cadena1HTML);
+					$('#tSaldoTotalConsolidado').html(cadena2HTML);
+					$('#montoTipoCambio').text(Number.parseFloat(data["montoTipoCambio"]).toFixed(2));
+				},
+				error : function(e) {
+				}
+			});
+		}
+	</script>
+	<script type="text/javascript">
+		function addCommas(cadenaNumerica) {
+			cadenaNumerica += '';
+		    var segmentoNumerico = cadenaNumerica.split('.');
+		    var segmentoNumerico1 = segmentoNumerico[0];
+		    var segmentoNumerico2 = segmentoNumerico.length > 1 ? '.' + segmentoNumerico[1] : '';
+		    var rgx = /(\d+)(\d{3})/;
+		    while (rgx.test(segmentoNumerico1)) {
+		    	segmentoNumerico1 = segmentoNumerico1.replace(rgx, '$1' + ',' + '$2');
+		    }
+		    
+		    return segmentoNumerico1 + segmentoNumerico2;
+		}	
 	</script>
 </body>

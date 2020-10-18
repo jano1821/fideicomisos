@@ -63,8 +63,8 @@
 										<div class="four wide field">
 											<h3><label for="saldoContableActual">Saldo Contable</label></h3>
 											<div class="ui right aligned disabled input">
-												<input type="text" name="saldoContableActual" id="saldoContableActual"
-													th:field="*{saldoContableActual}" th:value="${saldoContableActual}">
+												<input type="text" name="saldoContableActual" id="saldoContableActual" style="text-align:right"
+													th:value="${#numbers.formatDecimal(cuentaEntidadFinancieraModel.saldoContableActual,1,'COMMA',2,'POINT')}">
 											</div>
 										</div>									
 									</div>						
@@ -81,8 +81,8 @@
 										<div class="four wide field">
 											<h3><label for="saldoDisponibleActual">Saldo Disponible</label></h3>
 											<div class="ui right aligned disabled input">
-												<input type="text" name="saldoDisponibleActual" id="saldoDisponibleActual"
-													th:field="*{saldoDisponibleActual}" th:value="${saldoDisponibleActual}">
+												<input type="text" name="saldoDisponibleActual" id="saldoDisponibleActual" style="text-align:right"
+												 th:value="${#numbers.formatDecimal(cuentaEntidadFinancieraModel.saldoDisponibleActual,1,'COMMA',2,'POINT')}">
 											</div>
 										</div>
 									</div>
@@ -90,7 +90,7 @@
 							</div>	
 													
 							<div class="ui segment">
-								<table class="ui selectable celled table">
+								<table class="ui selectable celled table" id="tMovimientosCuenta">
 									<thead>
 										<tr>
 											<th>   </th>
@@ -108,16 +108,16 @@
 											<td class="ui center aligned">
 												<div class="ui icon buttons">
 													<button class="ui button" data-tooltip="Detalle Movimiento" data-position="right center" 
-													type="submit" name="detailRow" th:value="${movimientoCuentaEntidadFinanciera.identificadorMovimientoCuentaEntidadFinanciera}">
+															type="button" id="detailRow" onclick="mostrarDetalleMovimiento(this)" name="detailRow" th:value="${movimientoCuentaEntidadFinanciera.identificadorMovimientoCuentaEntidadFinanciera}">
 														<i class="list ul icon"></i>
-													</button>
+													</button>													
 												</div>
 											</td>											
 											<td class="ui center aligned" th:text="${movimientoCuentaEntidadFinanciera.fechaProcesoMovimiento}"></td>
 											<td class="ui center aligned" th:text="${movimientoCuentaEntidadFinanciera.fechaValutaMovimiento}"></td>
 											<td th:text="${movimientoCuentaEntidadFinanciera.descripcionMovimiento}"></td>
-											<td class="ui right aligned" th:text="${movimientoCuentaEntidadFinanciera.montoCargoMovimiento}"></td>
-											<td class="ui right aligned" th:text="${movimientoCuentaEntidadFinanciera.montoAbonoMovimiento}"></td>
+											<td class="ui right aligned" th:text="${#numbers.formatDecimal(movimientoCuentaEntidadFinanciera.montoCargoMovimiento,1,'COMMA',2,'POINT')}"></td>
+											<td class="ui right aligned" th:text="${#numbers.formatDecimal(movimientoCuentaEntidadFinanciera.montoAbonoMovimiento,1,'COMMA',2,'POINT')}"></td>
 											<td th:text="${movimientoCuentaEntidadFinanciera.descripcionOficinaMovimiento}"></td>
 											<td class="ui center aligned" th:text="${movimientoCuentaEntidadFinanciera.numeroOperacionMovimiento}"></td>											
 										</tr>
@@ -160,6 +160,56 @@
 							</div>
 						</div>
 					</form>
+					
+					<div class="ui modal segments" id="modalPrincipal">								
+						<div class="ui form">						
+							<div class="ui segment">
+								<div class="inline fields">
+									<div class="thirteen wide field">
+										<h3><label for="descripcionOperacion">Operación</label></h3>
+										<div class="ui disabled input">
+											<input type="text" name="descripcionOperacion" id="descripcionOperacion"
+													value="">
+										</div>
+									</div>
+									<div class="three wide field">								
+										<div class="ui disabled input">
+											<input type="text" name="montoOperacion" id="montoOperacion"
+													value="">
+										</div>
+									</div>
+								</div>
+								<div class="inline fields">
+									<div class="thirteen wide field"></div>
+									<div class="three wide field">								
+										<div class="ui disabled input">
+											<input type="text" name="monedaOperacion" id="monedaOperacion"
+													value="">
+										</div>
+									</div>
+								</div>									
+							</div>							
+							<div class="ui secondary segment">
+								<h4>DETALLE DE MOVIMIENTO DE CUENTA</h4>
+								<table class="ui celled table">
+									<thead>
+										<tr>
+											<th>Id</th>
+											<th>Detalle</th>
+											<th class="ui right aligned">Importe</th>								
+										</tr>							
+									</thead>
+									<tbody id="tDetalleMovimientoCuenta"></tbody>
+								</table>
+							</div>						
+						</div>												
+						<div class="actions">
+							<div class="ui black deny button">Cancel</div>
+						</div>	
+					</div>
+					<div class="ui modal segments" id="modalSecundario">	
+						<h4>No existe detalle de movimiento de la cuenta</h4>
+					</div>	
 				</div>
 				<div class="one wide column"></div>
 			</div>
@@ -181,5 +231,63 @@
 				toggleSidebar();
 			});
 		});
+	</script>
+
+	<script type="text/javascript">
+		function mostrarDetalleMovimiento(object){	
+			
+			var id = object.value;
+			var datosGenerales = {};
+			datosGenerales["identificadorMovimientoCuentaEntidadFinanciera"] = id;
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+			    url: "/movimientoCuentaEntidadFinanciera/mostrarDetalleMovimiento",
+			    data: JSON.stringify(datosGenerales),
+			    dataType: 'json',
+			    cache: false,
+			    timeout: 600000,
+				success: function (data) {
+						var listDetalleMovimiento = data['listDetalleMovCuentaEntidadFinancieraModel'];
+						if (listDetalleMovimiento.length > 0){
+							
+							$("#descripcionOperacion").val(data['descripcionMovimiento']);
+							$("#montoOperacion").val(data['montoMovimientoCuenta']);
+							$("#monedaOperacion").val(data['monedaMovimientoCuentaEntidadFinanciera']);
+							
+							var detalleTabla = "";
+							for (var i=0;i<listDetalleMovimiento.length;i++){
+								detalleTabla += "<tr>";
+								detalleTabla += 	"<td>" + listDetalleMovimiento[i]['correlativoDetalleMovimiento'] + "</td>";
+								detalleTabla += 	"<td>" + listDetalleMovimiento[i]['descripcionDetalleMovimiento']+"</td>";
+								detalleTabla += 	"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(listDetalleMovimiento[i]['montoMovimiento']).toFixed(2)) + "</td>";
+								detalleTabla += "</tr>";
+							}
+							$('#tDetalleMovimientoCuenta').html(detalleTabla);
+							$('#modalPrincipal').modal('show');
+						} else {
+							$('#modalSecundario').modal('show');	
+						}
+			    },
+				error: function (e) {
+					
+					alert(e);
+				}
+			});						
+		}	
+	</script>
+	<script type="text/javascript">
+		function addCommas(cadenaNumerica) {
+			cadenaNumerica += '';
+		    var segmentoNumerico = cadenaNumerica.split('.');
+		    var segmentoNumerico1 = segmentoNumerico[0];
+		    var segmentoNumerico2 = segmentoNumerico.length > 1 ? '.' + segmentoNumerico[1] : '';
+		    var rgx = /(\d+)(\d{3})/;
+		    while (rgx.test(segmentoNumerico1)) {
+		    	segmentoNumerico1 = segmentoNumerico1.replace(rgx, '$1' + ',' + '$2');
+		    }
+		    
+		    return segmentoNumerico1 + segmentoNumerico2;
+		}	
 	</script>
 </body>

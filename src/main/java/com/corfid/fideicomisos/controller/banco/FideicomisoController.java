@@ -358,8 +358,66 @@ public class FideicomisoController extends InitialController {
 				return ResponseEntity.badRequest().body(msgError);
 			}
 
-			saldoTotalMonedaModel = fideicomisoInterface.obtenerSaldoTotalMonedaFideicomiso(saldoTotalMonedaModel.getBusqueda(),
-					numeroDocumento, Constante.CONST_VACIA, fechaProceso);
+			saldoTotalMonedaModel = fideicomisoInterface.obtenerSaldoTotalMonedaFideicomiso(
+					saldoTotalMonedaModel.getBusqueda(), numeroDocumento, Constante.CONST_VACIA, fechaProceso);
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+
+		return ResponseEntity.ok(saldoTotalMonedaModel);
+
+	}
+
+	@PostMapping("/obtenerSaldoTotalMonedaSoles")
+	public ResponseEntity<?> obtenerSaldoTotalMonedaSoles(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			@Valid @RequestBody SaldoTotalMonedaModel saldoTotalMonedaModel, final BindingResult bindingResult,
+			final HttpServletRequest request, Errors errors) {
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+
+		String msgError = null;
+
+		Date fechaProceso = new Date();
+
+		try {
+			if (errors.hasErrors()) {
+				msgError = errors.getAllErrors().stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining(","));
+				return ResponseEntity.badRequest().body(msgError);
+			}
+
+			saldoTotalMonedaModel = fideicomisoInterface.obtenerSaldoTotalMonedaFideicomiso(
+					saldoTotalMonedaModel.getBusqueda(), numeroDocumento, Constante.CODIGO_MONEDA_SOLES, fechaProceso);
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+
+		return ResponseEntity.ok(saldoTotalMonedaModel);
+
+	}
+	
+	@PostMapping("/obtenerSaldoTotalMonedaDolares")
+	public ResponseEntity<?> obtenerSaldoTotalMonedaDolares(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			@Valid @RequestBody SaldoTotalMonedaModel saldoTotalMonedaModel, final BindingResult bindingResult,
+			final HttpServletRequest request, Errors errors) {
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+
+		String msgError = null;
+
+		Date fechaProceso = new Date();
+
+		try {
+			if (errors.hasErrors()) {
+				msgError = errors.getAllErrors().stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining(","));
+				return ResponseEntity.badRequest().body(msgError);
+			}
+
+			saldoTotalMonedaModel = fideicomisoInterface.obtenerSaldoTotalMonedaFideicomiso(
+					saldoTotalMonedaModel.getBusqueda(), numeroDocumento, Constante.CODIGO_MONEDA_DOLARES, fechaProceso);
 
 		} catch (Exception ex) {
 			System.out.println(ex);

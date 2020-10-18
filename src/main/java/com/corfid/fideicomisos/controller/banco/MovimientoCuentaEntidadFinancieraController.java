@@ -1,20 +1,27 @@
 package com.corfid.fideicomisos.controller.banco;
 
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.banco.CuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.banco.MovimientoCuentaEntidadFinancieraModel;
+import com.corfid.fideicomisos.model.banco.SaldoTotalMonedaModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.service.banco.CuentaEntidadFinancieraInterface;
@@ -31,7 +38,7 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 	@Autowired
 	@Qualifier("fideicomisarioServiceImpl")
 	private FideicomisarioInterface fideicomisarioInterface;
-	
+
 	@Autowired
 	@Qualifier("cuentaEntidadFinancieraServiceImpl")
 	private CuentaEntidadFinancieraInterface cuentaEntidadFinancieraInterface;
@@ -94,9 +101,9 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
 						paginadoModel.getPaginaActual(), Constante.PAGINADO_5_ROWS);
-		
+
 		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
-				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);	
+				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
 
 		if (paginadoModel.isMovIzquierda()) {
 			movimientoCuentaEntidadFinancieraModel.setResult(Constante.NO_HAY_REGISTROS_A_LA_IZQUIERDA);
@@ -118,6 +125,32 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 		modelAndView.addObject("usuario", user.getUsername());
 
 		return modelAndView;
+	}
+
+	@PostMapping("/mostrarDetalleMovimiento")
+	public ResponseEntity<?> obtenerDetalleMovimiento(
+			@Valid @RequestBody MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
+			final BindingResult bindingResult, Errors errors) {
+
+		String msgError = null;
+
+		try {
+			if (errors.hasErrors()) {
+				msgError = errors.getAllErrors().stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining(","));
+				return ResponseEntity.badRequest().body(msgError);
+			}
+
+			movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
+					.getMovimientoCuentaEntidadFinancieraByIdMovimientoCuentaEntidadFinanciera(
+							movimientoCuentaEntidadFinancieraModel.getIdentificadorMovimientoCuentaEntidadFinanciera());
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+
+		return ResponseEntity.ok(movimientoCuentaEntidadFinancieraModel);
+
 	}
 
 }

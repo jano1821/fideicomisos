@@ -13,6 +13,8 @@ public class SaldoTotalMonedaModel {
 	private Double saldoTotalConsolidadoContableDolares;
 	private Double saldoTotalConsolidadoDisponibleDolares;
 
+	private Double montoTipoCambio;
+
 	public String getBusqueda() {
 		return busqueda;
 	}
@@ -83,6 +85,14 @@ public class SaldoTotalMonedaModel {
 
 	public void setSaldoTotalConsolidadoDisponibleDolares(Double saldoTotalConsolidadoDisponibleDolares) {
 		this.saldoTotalConsolidadoDisponibleDolares = saldoTotalConsolidadoDisponibleDolares;
+	}
+
+	public Double getMontoTipoCambio() {
+		return montoTipoCambio;
+	}
+
+	public void setMontoTipoCambio(Double montoTipoCambio) {
+		this.montoTipoCambio = montoTipoCambio;
 	}
 
 }

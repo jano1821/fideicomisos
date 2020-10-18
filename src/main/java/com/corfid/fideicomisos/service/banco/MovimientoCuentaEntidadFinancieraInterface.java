@@ -6,5 +6,8 @@ public interface MovimientoCuentaEntidadFinancieraInterface {
 
 	public MovimientoCuentaEntidadFinancieraModel getMovimientoCuentaEntidadFinancieraByIdCuenta(
 			Integer identificadorCuentaEntidadFinanciera, Integer pagina, Integer cantRegistros);
+	
+	public MovimientoCuentaEntidadFinancieraModel getMovimientoCuentaEntidadFinancieraByIdMovimientoCuentaEntidadFinanciera(
+			Integer identificadorMovimientoCuentaEntidadFinanciera);
 
 }
