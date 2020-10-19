@@ -6,6 +6,7 @@ public class Constante {
     public static final String OLVIDO = "mantenimiento/administrativo/cambio_password_ingreso_numero_doc";
     public static final String SELECCION_MODO_RECUPERACION = "mantenimiento/administrativo/cambio_password_seleccion_modo";
     public static final String SELECCION_CAMBIO_PASSWORD = "mantenimiento/administrativo/cambio_password";
+    public static final String SELECCION_CAMBIO_PASSWORD_CONFIRMACION = "mantenimiento/administrativo/cambio_password_confirmacion";
     public static final String LOGIN = "login";
     public static final String SITIO_EN_CONSTRUCCION = "mantenimiento/administrativo/construccion";
     public static final String SELECCION = "seleccion";
@@ -99,4 +100,6 @@ public class Constante {
     public static final String MODULO_DIRECCION = "Direcciones";
     public static final String MODULO_TELEFONO = "Telefonos";
     public static final String MODULO_EMAIL = "Email";
+    public static final String CODIGO_EMAIL_CAMBIO_PIN = "CON_CAMBIO";
+    public static final String CODIGO_EMAIL_PASSWORD = "CON_PASSWORD";
 }

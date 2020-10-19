@@ -44,6 +44,7 @@ public class OlvidoPasswordController {
                                   @RequestParam(name = "telefono", required = true) String telefono,
                                   @RequestParam(name = "correo", required = true) String correo) throws Exception {
         ModelAndView mav;
+
         String codigo = olvidoPasswordInterface.recuperarContrasenia(documento, opcion, telefono, correo);
         if (StringUtil.equiv(codigo, ConstantesError.ERROR_0)) {
             mav = new ModelAndView(Constante.LOGIN);
@@ -83,16 +84,26 @@ public class OlvidoPasswordController {
     }
 
     @PostMapping(value = "/cambioPassword", params = { "enviar" })
-    public String cambioPassword(@RequestParam(name = "password", required = true) String password,
-                                 @RequestParam(name = "pin", required = true) String pin,
-                                 @RequestParam(name = "idResp", required = true) String idResp,
-                                 @RequestParam(name = "numeroDocumento", required = true) String numeroDocumento) throws Exception {
+    public ModelAndView cambioPassword(@RequestParam(name = "password", required = true) String password,
+                                       @RequestParam(name = "password2", required = true) String password2,
+                                       @RequestParam(name = "pin", required = true) String pin,
+                                       @RequestParam(name = "idResp", required = true) String idResp,
+                                       @RequestParam(name = "numeroDocumento", required = true) String numeroDocumento) throws Exception {
+        ModelAndView mav;
+        String result;
+        String respuesta = olvidoPasswordInterface.validarContrasenia(password, password2);
 
-        String result = olvidoPasswordInterface.validarPin(idResp, pin, password, numeroDocumento);
-        
-        System.out.println("respuesta validacion==================>" + result);
-        
-        return "redirect:/";
+        if (StringUtil.equiv(respuesta, ConstantesError.ERROR_0)) {
+            mav = new ModelAndView(Constante.SELECCION_CAMBIO_PASSWORD_CONFIRMACION);
+            result = olvidoPasswordInterface.validarPin(idResp, pin, password, numeroDocumento);
+        } else {
+            mav = new ModelAndView(Constante.SELECCION_CAMBIO_PASSWORD);
+            result = respuesta;
+        }
+
+        mav.addObject("mensaje", result);
+
+        return mav;
     }
 
     @PostMapping(value = "/cambioPassword", params = { "volver" })
@@ -100,9 +111,10 @@ public class OlvidoPasswordController {
         return "redirect:/";
     }
 
-    /*
-     * @PostMapping(value = "/cambioPassword", params = { "reenviar" }) public String cambioPassword(@RequestParam(name = "password", required = true) String documento,
-     * @RequestParam(name = "pin", required = true) String opcion) throws Exception { olvidoPasswordInterface.recuperarContrasenia(documento, opcion); return "redirect:/"; }
-     */
+    @PostMapping(value = "/confirmacion", params = { "volver" })
+    public String cambioPassword() throws Exception {
+
+        return "redirect:/";
+    }
 
 }

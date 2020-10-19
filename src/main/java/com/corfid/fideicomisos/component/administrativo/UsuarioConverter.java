@@ -30,7 +30,7 @@ public class UsuarioConverter extends GenericConverter {
     @Autowired
     @Qualifier("tipoUsuarioServiceImpl")
     TipoUsuarioInterface tipoUsuarioInterface;
-    
+
     @Autowired
     @Qualifier("rolConverter")
     RolConverter rolConverter;
@@ -59,6 +59,12 @@ public class UsuarioConverter extends GenericConverter {
         BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
         usuario.setPassword(pe.encode(usuarioModel.getPassword()));
         usuario.setEstadoRegistro(usuarioModel.getEstadoRegistro());
+        usuario.setUsuarioInsercion(usuarioModel.getUsuarioInsercion());
+        usuario.setIpInsercion(usuarioModel.getIpInsercion());
+        usuario.setFechaInsercion(usuarioModel.getFechaInsercion());
+        usuario.setUsuarioModificacion(usuarioModel.getUsuarioModificacion());
+        usuario.setIpModificacion(usuarioModel.getIpModificacion());
+        usuario.setFechaModificacion(usuarioModel.getFechaModificacion());
 
         return usuario;
 
@@ -106,6 +112,13 @@ public class UsuarioConverter extends GenericConverter {
             usuarioModel.setEstadoActividadUsuario(usuario.isEstadoActividadUsuario());
             usuarioModel.setEstadoRegistro(usuario.getEstadoRegistro());
             usuarioModel.setIdUsuarioRegistro(usuario.getIdUsuarioRegistro());
+            usuarioModel.setUsuarioInsercion(usuario.getUsuarioInsercion());
+            usuarioModel.setIpInsercion(usuario.getIpInsercion());
+            usuarioModel.setFechaInsercion(usuario.getFechaInsercion());
+            usuarioModel.setUsuarioModificacion(usuario.getUsuarioModificacion());
+            usuarioModel.setIpModificacion(usuario.getIpModificacion());
+            usuarioModel.setFechaModificacion(usuario.getFechaModificacion());
+
             if (!StringUtil.isEmpty(usuario.getPersona())) {
                 usuarioModel.setIdPersona(usuario.getPersona().getIdPersona());
             } else {
@@ -121,8 +134,8 @@ public class UsuarioConverter extends GenericConverter {
             } else {
                 usuarioModel.setDescTipoUsuario("Desconocido");
             }
-            
-            if(!StringUtil.isEmpty(usuario.getRoles())) {
+
+            if (!StringUtil.isEmpty(usuario.getRoles())) {
                 listRolModel = new ArrayList<RolModel>();
                 for (Rol rol : usuario.getRoles()) {
                     rolModel = rolConverter.convertRolToRolModel(rol);

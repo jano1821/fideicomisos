@@ -1,6 +1,7 @@
 package com.corfid.fideicomisos.model.administrativo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +26,12 @@ public class UsuarioModel extends GenericModel {
     private String persona;
     private String rol;
     private List<RolModel> listRoles = new ArrayList<RolModel>();
+    private String usuarioInsercion;
+    private String ipInsercion;
+    private Date fechaInsercion;
+    private String usuarioModificacion;
+    private String ipModificacion;
+    private Date fechaModificacion;
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -164,6 +171,54 @@ public class UsuarioModel extends GenericModel {
 
     public void setListRoles(List<RolModel> listRoles) {
         this.listRoles = listRoles;
+    }
+
+    public String getUsuarioInsercion() {
+        return usuarioInsercion;
+    }
+
+    public void setUsuarioInsercion(String usuarioInsercion) {
+        this.usuarioInsercion = usuarioInsercion;
+    }
+
+    public String getIpInsercion() {
+        return ipInsercion;
+    }
+
+    public void setIpInsercion(String ipInsercion) {
+        this.ipInsercion = ipInsercion;
+    }
+
+    public Date getFechaInsercion() {
+        return fechaInsercion;
+    }
+
+    public void setFechaInsercion(Date fechaInsercion) {
+        this.fechaInsercion = fechaInsercion;
+    }
+
+    public String getUsuarioModificacion() {
+        return usuarioModificacion;
+    }
+
+    public void setUsuarioModificacion(String usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
+
+    public String getIpModificacion() {
+        return ipModificacion;
+    }
+
+    public void setIpModificacion(String ipModificacion) {
+        this.ipModificacion = ipModificacion;
+    }
+
+    public Date getFechaModificacion() {
+        return fechaModificacion;
+    }
+
+    public void setFechaModificacion(Date fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
     }
 
 }

@@ -26,11 +26,17 @@ public interface UsuarioInterface {
 
     public abstract UsuarioModel findUsuarioByUsuario(String userName) throws Exception;
 
+    public Usuario findUsuarioByUserName(String userName) throws Exception;
+
     public abstract UsuarioModel findUsuarioByIdModel(Integer id) throws Exception;
 
-    public CrudUsuarioModel removeUsuario(Integer id,
-                                          Integer idUsuarioSesion,
-                                          Integer idEmpresaSesion) throws Exception;
+    public abstract CrudUsuarioModel removeUsuario(Integer id,
+                                                   Integer idUsuarioSesion,
+                                                   Integer idEmpresaSesion) throws Exception;
 
     public abstract UsuarioModel findUsuarioByIdPersona(Persona persona) throws Exception;
+
+    public abstract String actualizarContrasenia(String userName, String password) throws Exception;
+
+    public abstract String validarContrasenia(String password, String password2) throws Exception;
 }

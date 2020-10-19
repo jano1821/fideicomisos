@@ -32,4 +32,6 @@ public class ConstantesError {
     public static String ERROR_27 = "27";// Error al registrar direccion
     public static String ERROR_28 = "28";// Error al registrar Email
     public static String ERROR_29 = "29";// Error al registrar Telefono
+    public static String ERROR_30 = "30";// Pin Expirado
+    public static String ERROR_31 = "31";// Error en la validación de Pin
 }

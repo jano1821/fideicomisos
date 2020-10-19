@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.administrativo.UsuarioConverter;
@@ -121,6 +122,16 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
             return usuarioModel;
         } catch (Exception e) {
             return usuarioModel;
+        }
+    }
+
+    public Usuario findUsuarioByUserName(String userName) throws Exception {
+        Usuario usuario = null;
+        try {
+            usuario = usuarioRepository.findByUsuario(userName);
+            return usuario;
+        } catch (Exception e) {
+            return usuario;
         }
     }
 
@@ -276,6 +287,62 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
             crudUsuarioModel.setCodigoError(ConstantesError.ERROR_1);
             crudUsuarioModel.setMensajeError(obtenerMensajeError(ConstantesError.ERROR_1));
             return crudUsuarioModel;
+        }
+    }
+
+    @Override
+    public String actualizarContrasenia(String userName, String password) throws Exception {
+        try {
+            if (_isEmpty(userName)) {
+                throw new ErrorControladoException(ConstantesError.ERROR_9);
+            }
+
+            Usuario usuario = findUsuarioByUserName(userName);
+            if (null != usuario) {
+                BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
+                usuario.setPassword(pe.encode(password));
+
+                usuario = usuarioRepository.save(usuario);
+                if (_isEmpty(usuario)) {
+                    throw new ErrorControladoException(ConstantesError.ERROR_9);
+                }
+            }
+
+            return ConstantesError.ERROR_0;
+        } catch (ErrorControladoException e) {
+            return e.getCodigoError();
+        } catch (Exception e) {
+            return ConstantesError.ERROR_1;
+        }
+    }
+
+    @Override
+    public String validarContrasenia(String password, String password2) throws Exception {
+        Map<String, String> resultado = new HashMap<String, String>();
+        try {
+            if (_isEmpty(password)) {
+                throw new ErrorControladoException(ConstantesError.ERROR_9);
+            }
+
+            if (_isEmpty(password2)) {
+                throw new ErrorControladoException(ConstantesError.ERROR_9);
+            }
+
+            resultado = passwordVerificado(password, false, 0);
+            if (!_equiv(_toStr(resultado.get("error")), ConstantesError.ERROR_0)) {
+                throw new ErrorControladoException(_toStr(resultado.get("error")), _toStr(resultado.get("mensaje")));
+            }
+
+            resultado = passwordVerificado(password2, false, 0);
+            if (!_equiv(_toStr(resultado.get("error")), ConstantesError.ERROR_0)) {
+                throw new ErrorControladoException(_toStr(resultado.get("error")), _toStr(resultado.get("mensaje")));
+            }
+
+            return ConstantesError.ERROR_0;
+        } catch (ErrorControladoException e) {
+            return e.getMensajeError();
+        } catch (Exception e) {
+            return ConstantesError.ERROR_1;
         }
     }
 

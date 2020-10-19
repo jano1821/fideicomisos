@@ -93,6 +93,7 @@ public class RestClientRecoveryPasswordPin implements RestClientInterface {
             List<CatalogoConstraintModel> listCatalogoConstraintModelParametros;
             String url = "";
             String authorization = "";
+            String codigoError = ConstantesError.ERROR_0;
 
             listCatalogoConstraintModelParametros = catalogoConstraintInterface.findByNombreTablaAndNombreCampo(Constante.TABLA_SERVICIO,
                                                                                                                 Constante.PARAMETROS);
@@ -122,11 +123,15 @@ public class RestClientRecoveryPasswordPin implements RestClientInterface {
                                                                                                           ResponseValidacionPinModel.class);
 
             if (StringUtil.equiv(responseValidacionPinModel.getBody().getVerified(), "false")) {
-                return ConstantesError.ERROR_1;
+                if (StringUtil.equiv(responseValidacionPinModel.getBody().getPinError(), "TTL_EXPIRED")) {
+                    codigoError = ConstantesError.ERROR_30;
+                } else if (StringUtil.equiv(responseValidacionPinModel.getBody().getPinError(), "WRONG_PIN")) {
+                    codigoError = ConstantesError.ERROR_31;
+                }
             } else {
-                return ConstantesError.ERROR_0;
+                codigoError = ConstantesError.ERROR_0;
             }
-
+            return codigoError;
         } catch (Exception e) {
             return ConstantesError.ERROR_1;
         }
