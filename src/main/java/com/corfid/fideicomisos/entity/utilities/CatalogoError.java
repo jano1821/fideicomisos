@@ -14,7 +14,6 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 public class CatalogoError extends Auditoria {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "c_iderro", nullable = false, insertable = true, updatable = true, length = 10)
 	private String codigoError;
 
