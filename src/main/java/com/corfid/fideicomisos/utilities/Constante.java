@@ -102,4 +102,6 @@ public class Constante {
     public static final String MODULO_EMAIL = "Email";
     public static final String CODIGO_EMAIL_CAMBIO_PIN = "CON_CAMBIO";
     public static final String CODIGO_EMAIL_PASSWORD = "CON_PASSWORD";
+    public static final String CODIGO_EMAIL_BIENVENIDA = "CON_BIENVENIDA";
+    public static final String CODIGO_EMAIL_VALIDACION_PIN = "CON_PIN";
 }

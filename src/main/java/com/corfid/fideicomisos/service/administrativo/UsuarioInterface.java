@@ -1,6 +1,7 @@
 package com.corfid.fideicomisos.service.administrativo;
 
 import java.util.List;
+import java.util.Map;
 
 import com.corfid.fideicomisos.entity.administrativo.Persona;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
@@ -39,4 +40,8 @@ public interface UsuarioInterface {
     public abstract String actualizarContrasenia(String userName, String password) throws Exception;
 
     public abstract String validarContrasenia(String password, String password2) throws Exception;
+
+    public UsuarioModel findUsuarioByPersona(Integer idPersona) throws Exception;
+
+    public Map<String, String> actualizarAndDevolverContrasenia(Integer IdUsuario) throws Exception;
 }

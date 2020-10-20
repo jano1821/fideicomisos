@@ -13,6 +13,7 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;600&display=swap"
 	rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <!-- Custom styles for this template -->
 
@@ -57,14 +58,25 @@
 				</div>
 				<div class="px-lg-5 py-lg-6 p-4 w-100 align-self-center">
 					<h1 class="font-weight-bold mb-4">Inicio de Sesión</h1>
-					<form th:action="@{/logincheck}" method="POST">
+					<form th:action="@{/logincheck}" method="POST" id="target">
 						<input type="hidden" name="${_csrf.parameterName}"
 							value="${_csrf.token}" />
-
+						<input type="hidden" name="username" id="username"
+							value="" />
+							
+						<div class="mb-4">
+							<label for="tipoDoc" class="form-label font-weight-bold">Tipo de Documento</label>
+							<select name="tipoDoc" id="tipoDoc" class="form-control">
+								<option value="">Seleccione..</option>
+								<option value="DNI">DNI</option>
+								<option value="RUC">RUC</option>
+							</select>
+						</div>
+						
 						<div class="mb-4">
 							<label for="usuario" class="form-label font-weight-bold">Número de Documento</label>
 							<input type="text" class="form-control"
-								placeholder="Ingrese Número de Documento" name="username" id="username">
+								placeholder="Ingrese Número de Documento" name="usuario" id="usuario">
 						</div>
 						<div class="mb-4">
 							<label for="password" class="form-label font-weight-bold">Contraseña</label>
@@ -78,7 +90,7 @@
 							<label class="form-check-label" for="comprobacion">No soy
 								un robot</label>
 						</div>
-						<button class="btn btn-primary w-100" type="submit">Ingresar</button><!-- onclick="j_username.value=domain.value + '@' + username.value; return true" -->
+						<button class="btn btn-primary w-100" type="button" name="ingresar" id="ingresar">Ingresar</button>
 					</form>
 				</div>
 				<div class="text-center px-lg-5 pt-lg-3 pb-lg-4 p-4 w-100 mt-auto">
@@ -99,6 +111,25 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
 		integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
 		crossorigin="anonymous"></script>
-
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#ingresar").click(function(e) {
+				var usuario = $("#usuario").val();
+				var val = $("#tipoDoc option:selected").val();
+				$("#username").val(val+usuario);
+				//alert($("#username").val());
+				$( "#target" ).submit();
+			});
+			$("#password").keypress(function(e) {
+			   if(e.which == 13) {
+				  var usuario = $("#usuario").val();
+				  var val = $("#tipoDoc option:selected").val();
+				  $("#username").val(val+usuario);
+			      $('#target').submit();
+			   }
+			});
+		});
+	</script>
 </body>
 </html>

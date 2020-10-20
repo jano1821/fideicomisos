@@ -77,17 +77,17 @@
 											<td th:text="${user.descEstadoActividad}"></td>
 											<td th:text="${user.descEstadoRegistro}"></td>
 											<td class="ui center aligned">
-												<div class="ui icon buttons">
+												<div class="ui icon buttons" id="evaluate">
 													<button class="ui button" data-tooltip="Editar"
-														data-position="right center" type="submit" name="editRow"
+														data-position="right center" type="submit" name="editRow" 
 														th:value="${user.idUsuario}">
 														<i class="edit icon"></i>
 													</button>
-													<!-- <button class="ui button" data-tooltip="Eliminar"
-														data-position="right center" type="submit"
-														name="removeRow" th:value="${user.idUsuario}">
-														<i class="trash alternate icon"></i>
-													</button> -->
+													<button class="ui button" data-tooltip="Enviar Correo con Credenciales"
+														data-position="right center" type="button" id="emailRow" name="emailRow" onclick="enviarMail(this);"
+														th:value="${user.idPersona}">
+														<i class="at icon"></i>
+													</button>
 												</div>
 											</td>
 										</tr>
@@ -157,10 +157,40 @@
 	});
 
 	$(document).ready(function(){
-		  $('#abrir_menu').click(function(){
-			  toggleSidebar();
-		  });
+		$('#abrir_menu').click(function(){
+			toggleSidebar();
+		});
+
+		/*$(".ui.button").click(function(){
+			enviarMail($(this).val())
+	   })*/
 	});	  
+
+	function enviarMail(idPersona){
+		var datosPersona = idPersona.value
+		
+		$.ajax({
+		    type: "POST",
+		    contentType: "application/json",
+		    url: "/usuario/enviarMailCredenciales",
+		    data: JSON.stringify(datosPersona),
+		    dataType: 'json',
+		    cache: false,
+		    timeout: 600000,
+		    success: function (data) {
+		        var respuesta = data['msg'];
+
+		        if (respuesta == '0' ){
+		        	alert("Se envió correo con credenciales");
+		        } else {
+		        	alert("Ocurrió un problema con la petición");
+			    }
+		    },
+		    error: function (e) {
+		    	alert("Ocurrió un problema con la petición");
+		    }
+		});
+	}
 </script>
 </body>
 </html>

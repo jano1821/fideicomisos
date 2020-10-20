@@ -15,19 +15,24 @@ import com.corfid.fideicomisos.component.administrativo.UsuarioConverter;
 import com.corfid.fideicomisos.entity.administrativo.ClienteEmpresa;
 import com.corfid.fideicomisos.entity.administrativo.Persona;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
+import com.corfid.fideicomisos.model.administrativo.CatalogoMailModel;
 import com.corfid.fideicomisos.model.administrativo.RolModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
 import com.corfid.fideicomisos.model.cruds.CrudUsuarioModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.UsuarioRepository;
+import com.corfid.fideicomisos.service.administrativo.CatalogoMailInterface;
 import com.corfid.fideicomisos.service.administrativo.ClienteEmpresaInterface;
 import com.corfid.fideicomisos.service.administrativo.EmpresaInterface;
+import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
 import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
 import com.corfid.fideicomisos.service.administrativo.UsuarioRolInterface;
 import com.corfid.fideicomisos.service.impl.utilities.ErrorControladoException;
+import com.corfid.fideicomisos.service.utilities.EnvioMailInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
+import com.corfid.fideicomisos.utilities.StringUtil;
 
 @Service("usuarioServiceImpl")
 public class UsuarioServiceImpl extends AbstractService implements UsuarioInterface {
@@ -47,6 +52,18 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
     @Autowired
     @Qualifier("clienteEmpresaServiceimpl")
     ClienteEmpresaInterface clienteEmpresaInterface;
+
+    @Autowired
+    @Qualifier("personaServiceImpl")
+    PersonaInterface personaInterface;
+
+    @Autowired
+    @Qualifier("envioEmail")
+    EnvioMailInterface envioMailInterface;
+
+    @Autowired
+    @Qualifier("catalogoMailServiceImpl")
+    CatalogoMailInterface catalogoMailInterface;
 
     @Override
     public List<UsuarioModel> listAllUsuarios() throws Exception {
@@ -151,9 +168,10 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
             Map<String, String> password = new HashMap<String, String>();
             Usuario usuario = findUsuarioById(usuarioModel.getIdUsuario());
             UsuarioModel usuarioModelActual = new UsuarioModel();
+            Boolean tipoGuardado = false;
 
             if (_isEmpty(usuario)) {
-
+                tipoGuardado = true;
                 if (!_isEmpty(findUsuarioByUsuario(usuarioModel.getUsuario()))) {
                     throw new ErrorControladoException(ConstantesError.ERROR_23);
                 }
@@ -168,6 +186,7 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
                 usuario = usuarioConverter.convertUsuarioModelToUsuario(usuarioModel);
                 setInsercionAuditoria(usuario, parametrosAuditoriaModel);
                 usuario.setIndicadorPrimerIngreso(true);
+
             } else {
                 if (!_isEmpty(usuarioModel.getCambiar())) {
                     if (_isEmpty(usuarioModel.getGenerar())) {
@@ -216,7 +235,25 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
             }
 
             usuario = usuarioRepository.save(usuario);
+
             usuarioModelActual = usuarioConverter.convertUsuarioToUsuarioModel(usuario);
+
+            if (!_isEmpty(usuario)) {
+                if (tipoGuardado) {
+                    if (!_isEmpty(usuarioModelActual.getCorreo())) {
+                        String cuerpoMail;
+                        CatalogoMailModel catalogoMailModel = catalogoMailInterface.obtenerCorreoPorCodigo(Constante.CODIGO_EMAIL_BIENVENIDA);
+
+                        cuerpoMail = catalogoMailModel.getContenido().replace("NOMBRE_COMPLETO",
+                                                                              usuarioModelActual.getNombreCompleto());
+                        cuerpoMail = cuerpoMail.replace("PASSWORD", _toStr(password.get("mensaje")));
+
+                        envioMailInterface.sendEmail(usuarioModelActual.getCorreo(),
+                                                     catalogoMailModel.getAsunto(),
+                                                     cuerpoMail);
+                    }
+                }
+            }
 
             usuarioModelActual.setIdUsuarioRegistro(usuarioModel.getIdUsuarioRegistro());
             usuarioModelActual.setRol(usuarioModel.getRol());
@@ -355,4 +392,50 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
         }
     }
 
+    public Map<String, String> actualizarAndDevolverContrasenia(Integer IdUsuario) throws Exception {
+        Map<String, String> password = new HashMap<String, String>();
+        password.put("error", ConstantesError.ERROR_0);
+        try {
+            if (_isEmpty(IdUsuario)) {
+                throw new ErrorControladoException(ConstantesError.ERROR_9);
+            }
+
+            Usuario usuario = findUsuarioById(IdUsuario);
+            if (null != usuario) {
+
+                password = passwordVerificado(null, true, 8);
+                if (_equiv(_toStr(password.get("error")), ConstantesError.ERROR_0)) {
+                    BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
+                    usuario.setPassword(pe.encode(_toStr(password.get("mensaje"))));
+                } else {
+                    throw new ErrorControladoException(ConstantesError.ERROR_9);
+                }
+
+                usuario = usuarioRepository.save(usuario);
+                if (_isEmpty(usuario)) {
+                    throw new ErrorControladoException(ConstantesError.ERROR_9);
+                }
+            }
+
+            return password;
+        } catch (ErrorControladoException e) {
+            password.put("error", e.getCodigoError());
+            return password;
+        } catch (Exception e) {
+            password.put("error", ConstantesError.ERROR_1);
+            return password;
+        }
+    }
+
+    public UsuarioModel findUsuarioByPersona(Integer idPersona) throws Exception {
+        UsuarioModel usuarioModel = null;
+        Persona persona;
+        try {
+            persona = personaInterface.findPersonaById(idPersona);
+            usuarioModel = findUsuarioByIdPersona(persona);
+            return usuarioModel;
+        } catch (Exception e) {
+            return usuarioModel;
+        }
+    }
 }

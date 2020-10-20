@@ -2,7 +2,9 @@ package com.corfid.fideicomisos.controller.administrativo;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
+import com.corfid.fideicomisos.model.administrativo.CatalogoMailModel;
 import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.administrativo.RolModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
@@ -36,10 +39,12 @@ import com.corfid.fideicomisos.model.utilities.AjaxResponseBody;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.GenericModel;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
+import com.corfid.fideicomisos.service.administrativo.CatalogoMailInterface;
 import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
 import com.corfid.fideicomisos.service.administrativo.RolInterface;
 import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
 import com.corfid.fideicomisos.service.utilities.CatalogoConstraintInterface;
+import com.corfid.fideicomisos.service.utilities.EnvioMailInterface;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
 import com.corfid.fideicomisos.utilities.InitialController;
@@ -64,6 +69,14 @@ public class UsuarioController extends InitialController {
     @Autowired
     @Qualifier("rolServiceImpl")
     private RolInterface rolInterface;
+
+    @Autowired
+    @Qualifier("envioEmail")
+    EnvioMailInterface envioMailInterface;
+
+    @Autowired
+    @Qualifier("catalogoMailServiceImpl")
+    CatalogoMailInterface catalogoMailInterface;
 
     @Autowired
     private Environment environment;
@@ -170,11 +183,11 @@ public class UsuarioController extends InitialController {
             usuarioModel.setTipoUsuarioSesion(datosGenerales.getTipoUsuarioSession());
             usuarioModel.setIdEmpresaSesion(datosGenerales.getIdEmpresa());
             usuarioModel.setIdUsuarioSesion(datosGenerales.getIdUsuario());
-            
+
             if (StringUtil.isEmpty(usuarioModel.getEstadoActividad())) {
                 usuarioModel.setEstadoActividad("1");
             }
-            
+
             usuarioModel = usuarioInterface.addUsuario(usuarioModel, getParametrosAuditoriaModel());
             if (!StringUtil.isEmpty(usuarioModel) && StringUtil.equiv(usuarioModel.getCodigoError(),
                                                                       ConstantesError.ERROR_0)) {
@@ -421,7 +434,7 @@ public class UsuarioController extends InitialController {
             return new ModelAndView(Constante.SITIO_EN_CONSTRUCCION);
         }
     }
-    
+
     @PostMapping("/buscarNumeroDocumentoPersona")
     public ResponseEntity<?> getSearchResultViaAjax(@Valid @RequestBody PersonaModel personaModel, Errors errors) {
 
@@ -438,12 +451,55 @@ public class UsuarioController extends InitialController {
             personaModelResponse = personaInterface.findPersonaByIdModel(personaModel.getIdPersona());
 
             if (!StringUtil.isEmpty(personaModelResponse)) {
-                result.setMsg(personaModelResponse.getNumeroDocumento());
+                result.setMsg(personaModelResponse.getTipoDocumento()+personaModelResponse.getNumeroDocumento());
             } else {
                 result.setMsg(Constante.CONST_VACIA);
             }
         } catch (Exception e) {
             result.setMsg(Constante.CONST_VACIA);
+        }
+        return ResponseEntity.ok(result);
+
+    }
+
+    @PostMapping("/enviarMailCredenciales")
+    public ResponseEntity<?> sendMailCredenciales(@Valid @RequestBody String idPersona,
+                                                  Errors errors) throws Exception {
+
+        AjaxResponseBody result = new AjaxResponseBody();
+        UsuarioModel usuarioModel = null;
+        String cuerpoMail;
+        Map<String, String> output = new HashMap<String, String>();
+        try {
+            idPersona = idPersona.replace("\"", "");
+            if (errors.hasErrors()) {
+                result.setMsg(errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.joining(",")));
+                return ResponseEntity.badRequest().body(result);
+            }
+
+            /*
+             * PersonaModel personaModel = new PersonaModel(); personaModel = personaInterface.findPersonaByIdModel(StringUtil.toInteger(idPersona));
+             */
+
+            usuarioModel = usuarioInterface.findUsuarioByPersona(StringUtil.toInteger(idPersona));
+
+            output = usuarioInterface.actualizarAndDevolverContrasenia(usuarioModel.getIdUsuario());
+
+            if (StringUtil.equiv(StringUtil.toStr(output.get("error")), ConstantesError.ERROR_0)) {
+                CatalogoMailModel catalogoMailModel = catalogoMailInterface.obtenerCorreoPorCodigo(Constante.CODIGO_EMAIL_PASSWORD);
+
+                cuerpoMail = catalogoMailModel.getContenido().replace("NOMBRE_COMPLETO",
+                                                                      usuarioModel.getNombreCompleto());
+                cuerpoMail = cuerpoMail.replace("PASSWORD", StringUtil.toStr(output.get("mensaje")));
+
+                envioMailInterface.sendEmail(usuarioModel.getCorreo(), catalogoMailModel.getAsunto(), cuerpoMail);
+
+                result.setMsg(ConstantesError.ERROR_0);
+            } else {
+                result.setMsg(ConstantesError.ERROR_1);
+            }
+        } catch (Exception e) {
+            result.setMsg(ConstantesError.ERROR_1);
         }
         return ResponseEntity.ok(result);
 

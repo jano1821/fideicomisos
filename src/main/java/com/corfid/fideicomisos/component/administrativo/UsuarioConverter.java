@@ -13,9 +13,13 @@ import com.corfid.fideicomisos.entity.administrativo.Persona;
 import com.corfid.fideicomisos.entity.administrativo.Rol;
 import com.corfid.fideicomisos.entity.administrativo.TipoUsuario;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
+import com.corfid.fideicomisos.model.administrativo.EmailModel;
 import com.corfid.fideicomisos.model.administrativo.RolModel;
+import com.corfid.fideicomisos.model.administrativo.TelefonoModel;
 import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
+import com.corfid.fideicomisos.service.administrativo.EmailInterface;
 import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
+import com.corfid.fideicomisos.service.administrativo.TelefonoInterface;
 import com.corfid.fideicomisos.service.administrativo.TipoUsuarioInterface;
 import com.corfid.fideicomisos.utilities.ConstantesError;
 import com.corfid.fideicomisos.utilities.StringUtil;
@@ -34,6 +38,14 @@ public class UsuarioConverter extends GenericConverter {
     @Autowired
     @Qualifier("rolConverter")
     RolConverter rolConverter;
+
+    @Autowired
+    @Qualifier("telefonoServiceImpl")
+    private TelefonoInterface telefonoInterface;
+
+    @Autowired
+    @Qualifier("emailServiceImpl")
+    private EmailInterface emailInterface;
 
     public Usuario convertUsuarioModelToUsuario(UsuarioModel usuarioModel) {
         Usuario usuario = new Usuario();
@@ -103,6 +115,8 @@ public class UsuarioConverter extends GenericConverter {
         UsuarioModel usuarioModel = new UsuarioModel();
         List<RolModel> listRolModel;
         RolModel rolModel = new RolModel();
+        List<TelefonoModel> listTelefonoModel;
+        List<EmailModel> listEmailmodel;
         try {
 
             usuarioModel.setIdUsuario(usuario.getIdUsuario());
@@ -121,6 +135,16 @@ public class UsuarioConverter extends GenericConverter {
 
             if (!StringUtil.isEmpty(usuario.getPersona())) {
                 usuarioModel.setIdPersona(usuario.getPersona().getIdPersona());
+                usuarioModel.setNombreCompleto(usuario.getPersona().getNombreCompleto());
+                listTelefonoModel = telefonoInterface.findTelefonoByIdPersona(usuario.getPersona().getIdPersona());
+                if (!StringUtil.isEmpty(listTelefonoModel)) {
+                    usuarioModel.setNumeroTelefono(listTelefonoModel.get(0).getNumero());
+                }
+
+                listEmailmodel = emailInterface.findEmailByIdPersona(usuario.getPersona().getIdPersona());
+                if (!StringUtil.isEmpty(listEmailmodel)) {
+                    usuarioModel.setCorreo(listEmailmodel.get(0).getDireccionMail());
+                }
             } else {
                 usuarioModel.setIdPersona(null);
             }

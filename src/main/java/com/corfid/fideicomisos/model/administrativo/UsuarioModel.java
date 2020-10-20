@@ -32,6 +32,9 @@ public class UsuarioModel extends GenericModel {
     private String usuarioModificacion;
     private String ipModificacion;
     private Date fechaModificacion;
+    private String nombreCompleto;
+    private String correo;
+    private String numeroTelefono;
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -219,6 +222,30 @@ public class UsuarioModel extends GenericModel {
 
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
     }
 
 }

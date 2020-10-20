@@ -21,6 +21,7 @@ import com.corfid.fideicomisos.repository.administrativo.DireccionRepository;
 import com.corfid.fideicomisos.repository.administrativo.EmailRepository;
 import com.corfid.fideicomisos.service.administrativo.EmailInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
+import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
 
 @Service("emailServiceImpl")
@@ -29,11 +30,6 @@ public class EmailServiceImpl extends AbstractService implements EmailInterface 
     @Autowired
     @Qualifier("emailRepository")
     EmailRepository emailRepository;
-
-    /*
-     * @Autowired
-     * @Qualifier("personaServiceImpl") PersonaInterface personaInterface;
-     */
 
     @Autowired
     @Qualifier("emailConverter")
@@ -97,10 +93,14 @@ public class EmailServiceImpl extends AbstractService implements EmailInterface 
             if (_isEmpty(emailModel.getIdMail())) {
                 email = emailConverter.convertEmailModelToEmail(emailModel);
                 setInsercionAuditoria(email, parametrosAuditoriaModel);
+                actualizarEstadoRegisto(emailModel.getIdPersona());
             } else {
                 email = emailRepository.findByIdMail(emailModel.getIdMail());
                 email = emailConverter.convertEmailModelToEmailExistente(email, emailModel);
                 setModificacionAuditoria(email, parametrosAuditoriaModel);
+                if (_equiv(emailModel.getEstadoRegistro(), Constante.ESTADO_REGISTRO_VIGENTE)) {
+                    actualizarEstadoRegisto(emailModel.getIdPersona());
+                }
             }
 
             email = emailRepository.save(email);
@@ -120,7 +120,7 @@ public class EmailServiceImpl extends AbstractService implements EmailInterface 
         }
 
     }
-    
+
     public List<EmailModel> findEmailByIdPersona(Integer idPersona) throws Exception {
         List<EmailModel> listEmailModel = new ArrayList<EmailModel>();
         EmailModel emailModel;
@@ -137,6 +137,20 @@ public class EmailServiceImpl extends AbstractService implements EmailInterface 
             return listEmailModel;
         } catch (Exception e) {
             return listEmailModel;
+        }
+    }
+
+    public String actualizarEstadoRegisto(Integer idPersona) throws Exception {
+        try {
+            List<Email> listEmail;
+            listEmail = emailRepository.findEmailVigenteByIdPersona(idPersona);
+            for (Email email : listEmail) {
+                email.setEstadoRegistro(Constante.ESTADO_REGISTRO_NO_VIGENTE);
+                emailRepository.save(email);
+            }
+            return ConstantesError.ERROR_0;
+        } catch (Exception e) {
+            return ConstantesError.ERROR_1;
         }
     }
 }

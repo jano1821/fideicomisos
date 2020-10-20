@@ -18,4 +18,6 @@ public interface TelefonoInterface {
                                      ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
 
     public List<TelefonoModel> findTelefonoByIdPersona(Integer idPersona) throws Exception;
+
+    public String actualizarEstadoTelefonos(Integer idPersona) throws Exception;
 }

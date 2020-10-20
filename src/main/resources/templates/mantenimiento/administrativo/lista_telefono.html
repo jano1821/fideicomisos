@@ -53,7 +53,6 @@
 											<th>Numero</th>
 											<th>Estado de Registro</th>
 											<th>Operador</th>
-											<th>Acciones</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -62,20 +61,7 @@
 											<td th:text="${rol.numero}"></td>
 											<td th:text="${rol.operador}"></td>
 											<td th:text="${rol.descEstadoRegistro}"></td>
-											<td class="ui center aligned">
-												<div class="ui icon buttons">
-													<button class="ui button" data-tooltip="Editar"
-														data-position="right center" type="submit" name="editRowTelefono"
-														th:value="${rol.idTelefono}">
-														<i class="edit icon"></i>
-													</button>
-													<button class="ui button" data-tooltip="Eliminar"
-														data-position="right center" type="submit"
-														name="removeRowTelefono" th:value="${rol.idTelefono}">
-														<i class="trash alternate icon"></i>
-													</button>
-												</div>
-											</td>
+											
 										</tr>
 									</tbody>
 								</table>

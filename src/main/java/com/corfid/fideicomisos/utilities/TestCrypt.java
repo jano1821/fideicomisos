@@ -12,12 +12,13 @@ public class TestCrypt {
         BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
         //String psw;
 
-        System.out.println(pe.encode("123"));//esto es para generar codificada la clave "user" correrlo como run java aplication
+        //System.out.println(pe.encode("123"));//esto es para generar codificada la clave "user" correrlo como run java aplication
+        System.out.println(genererNombre());
+        /*
+         * psw = getPassword(12); System.out.println(psw);
+         */
 
-        /*psw = getPassword(12);
-        System.out.println(psw);*/
-
-        System.out.println(passwordVerificado(null,true,10));
+        //System.out.println(passwordVerificado(null,true,10));
     }
 
     public static String NUMEROS = "0123456789";
@@ -55,8 +56,8 @@ public class TestCrypt {
         Integer contNumero = 0, contLetraMay = 0, contLetraMin = 0, contEspecialesMin = 0;
         Map<String, String> output = new HashMap<String, String>();
         output.put("error", ConstantesError.ERROR_0);
-        String mensaje  ="";
-        Integer contador=0;
+        String mensaje = "";
+        Integer contador = 0;
 
         password = StringUtil.toBlank(password);
 
@@ -74,7 +75,7 @@ public class TestCrypt {
             mensaje = "Password muy pequeño, mínimo de 6 caracteres";
         } else {
             do {
-                
+
                 char clave;
                 contNumero = 0;
                 contLetraMay = 0;
@@ -99,20 +100,20 @@ public class TestCrypt {
                 if (!generar) {
                     if (!(contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0)) {
                         output.put("error", ConstantesError.ERROR_1);
-                        
-                        if(contLetraMay <= 0) {
+
+                        if (contLetraMay <= 0) {
                             mensaje += "Debe contener Mayúsculas<br>";
                         }
-                        if(contLetraMin <= 0) {
+                        if (contLetraMin <= 0) {
                             mensaje += "Debe contener Minúsculas<br>";
                         }
-                        if(contNumero <= 0) {
+                        if (contNumero <= 0) {
                             mensaje += "Debe contener Números<br>";
                         }
-                        if(contEspecialesMin <= 0) {
+                        if (contEspecialesMin <= 0) {
                             mensaje += "Debe contener Caracteres Especiales<br>";
                         }
-                        
+
                         output.put("mensaje", mensaje);
                     }
                 } else {
@@ -126,5 +127,9 @@ public class TestCrypt {
 
         }
         return mensaje;
+    }
+
+    public static int genererNombre() {
+        return (int) (50000 * Math.random());
     }
 }

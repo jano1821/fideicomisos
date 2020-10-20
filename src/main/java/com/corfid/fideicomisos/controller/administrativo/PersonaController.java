@@ -868,7 +868,7 @@ public class PersonaController extends InitialController {
     }
 
     @PostMapping(value = "/addtelefono", params = { "cancelarTelefono" })
-    public ModelAndView cancelarEmail(final TelefonoModel telefonoModel,
+    public ModelAndView cancelarTelefono(final TelefonoModel telefonoModel,
                                       final BindingResult bindingResult,
                                       final HttpServletRequest req) throws Exception {
         try {
@@ -897,7 +897,7 @@ public class PersonaController extends InitialController {
     }
 
     @PostMapping(value = "/addtelefono", params = { "saveRowTelefono" })
-    public ModelAndView saveEmail(final TelefonoModel telefonoModel,
+    public ModelAndView saveTelefono(final TelefonoModel telefonoModel,
                                   final BindingResult bindingResult,
                                   final HttpServletRequest req) throws Exception {
         try {
@@ -908,7 +908,7 @@ public class PersonaController extends InitialController {
     }
 
     @PostMapping(value = "/crudAccionesListaTelefonos", params = { "removeRowTelefono" })
-    public ModelAndView removeEmail(CrudTelefonoModel crudTelefonoModel,
+    public ModelAndView removeTelefono(CrudTelefonoModel crudTelefonoModel,
                                     final BindingResult bindingResult,
                                     final HttpServletRequest req) throws Exception {
         try {

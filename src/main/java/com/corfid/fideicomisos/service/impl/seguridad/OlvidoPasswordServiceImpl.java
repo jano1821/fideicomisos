@@ -49,17 +49,26 @@ public class OlvidoPasswordServiceImpl extends AbstractService implements Olvido
                                        String telefono,
                                        String correo) throws Exception {
         String codigo = null;
+        Map<String, String> output;
         try {
             if (StringUtil.equiv(opcion, "M")) {
-                enviarCorreo(numeroDocumento, Constante.CODIGO_EMAIL_PASSWORD, null, null);
-                codigo = ConstantesError.ERROR_0;
+                output = enviarPinCorreo(numeroDocumento, Constante.CODIGO_EMAIL_VALIDACION_PIN, null, null);
+
+                if (_equiv(_toStr(output.get("codigoError")), ConstantesError.ERROR_0)) {
+                    codigo = _toStr(output.get("pin"));
+                } else {
+                    codigo = _toStr(output.get("codigoError"));
+                }
+
             } else {
                 codigo = restClientInterface.getObtenerPinValidacion(telefono);
 
             }
 
             return codigo;
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             return codigo;
         }
     }
@@ -69,19 +78,35 @@ public class OlvidoPasswordServiceImpl extends AbstractService implements Olvido
         try {
             UsuarioModel usuarioModel;
             PersonaModel personaModel;
+            String correoReemplado;
+            String telefonoReemplado;
             usuarioModel = usuarioInterface.findUsuarioByUsuario(numeroDocumento);
 
             if (!StringUtil.isEmpty(usuarioModel)) {
                 personaModel = personaInterface.findPersonaByIdModel(usuarioModel.getIdPersona());
-                output.put("telefono", personaModel.getNumeroTelefono());
-                output.put("correo", personaModel.getDireccionEmail());
+
+                output.put("telefono", StringUtil.toBlank(personaModel.getNumeroTelefono(), "No Registrado"));
+                output.put("correo", StringUtil.toBlank(personaModel.getDireccionEmail(), "No Registrado"));
                 output.put("nombre", personaModel.getNombreCompleto());
 
-                String correoReemplado = personaModel.getDireccionEmail().substring(0,
-                                                                                    personaModel.getDireccionEmail().indexOf("@") - 3).replaceAll("[a-zA-Z0-9_]",
-                                                                                                                                                  "*") + personaModel.getDireccionEmail().substring(personaModel.getDireccionEmail().indexOf("@") - 3,
-                                                                                                                                                                                                    personaModel.getDireccionEmail().length());
+                if (!_isEmpty(personaModel.getDireccionEmail())) {
+                    correoReemplado = personaModel.getDireccionEmail().substring(0,
+                                                                                 personaModel.getDireccionEmail().indexOf("@") - 3).replaceAll("[a-zA-Z0-9_]",
+                                                                                                                                               "*") + personaModel.getDireccionEmail().substring(personaModel.getDireccionEmail().indexOf("@") - 3,
+                                                                                                                                                                                                 personaModel.getDireccionEmail().length());
+                } else {
+                    correoReemplado = StringUtil.toBlank(personaModel.getDireccionEmail(), "No Registrado");
+                }
+                if (!_isEmpty(personaModel.getNumeroTelefono())) {
+                    telefonoReemplado = personaModel.getNumeroTelefono().substring(0,
+                                                                                   personaModel.getNumeroTelefono().length() - 3).replaceAll("[0-9_]",
+                                                                                                                                             "*") + personaModel.getNumeroTelefono().substring(personaModel.getNumeroTelefono().length() - 3,
+                                                                                                                                                                                               personaModel.getNumeroTelefono().length());
+                } else {
+                    telefonoReemplado = StringUtil.toBlank(personaModel.getNumeroTelefono(), "No Registrado");
+                }
                 output.put("correoReemplazado", correoReemplado);
+                output.put("telefonoReemplazado", telefonoReemplado);
                 output.put("codigoError", ConstantesError.ERROR_0);
                 return output;
             } else {
@@ -94,14 +119,29 @@ public class OlvidoPasswordServiceImpl extends AbstractService implements Olvido
         }
     }
 
-    public String validarPin(String codigo, String pin, String password, String numeroDocumento) throws Exception {
+    public String validarPin(String codigo,
+                             String pin,
+                             String password,
+                             String numeroDocumento,
+                             String opcion) throws Exception {
         try {
-            codigo = restClientInterface.validarPin(codigo, pin);
+            if (StringUtil.equiv(opcion, "M")) {
+                if (StringUtil.equiv(pin, codigo)) {
+                    codigo = ConstantesError.ERROR_0;
+                    usuarioInterface.actualizarContrasenia(numeroDocumento, password);
 
-            if (_equiv(codigo, ConstantesError.ERROR_0)) {
-                usuarioInterface.actualizarContrasenia(numeroDocumento, password);
+                    enviarCorreo(numeroDocumento, Constante.CODIGO_EMAIL_CAMBIO_PIN, null, null);
+                } else {
+                    codigo = ConstantesError.ERROR_31;
+                }
+            } else {
+                codigo = restClientInterface.validarPin(codigo, pin);
 
-                enviarCorreo(numeroDocumento, Constante.CODIGO_EMAIL_CAMBIO_PIN, null, null);
+                if (_equiv(codigo, ConstantesError.ERROR_0)) {
+                    usuarioInterface.actualizarContrasenia(numeroDocumento, password);
+
+                    enviarCorreo(numeroDocumento, Constante.CODIGO_EMAIL_CAMBIO_PIN, null, null);
+                }
             }
             return obtenerMensajeError(codigo);
         } catch (Exception e) {
@@ -124,27 +164,61 @@ public class OlvidoPasswordServiceImpl extends AbstractService implements Olvido
         }
     }
 
-    public String enviarCorreo(String numeroDocumento,
-                               String codigo,
-                               String nombreEmpresa,
-                               String password) throws Exception {
+    public Map<String, String> enviarCorreo(String numeroDocumento,
+                                            String codigo,
+                                            String nombreEmpresa,
+                                            String password) throws Exception {
+        Map<String, String> resultado = new HashMap<String, String>();
         try {
             Map<String, String> output;
             String nombreCompleto;
             String correo;
+            String cuerpo;
+
+            resultado.put("codigoError", ConstantesError.ERROR_0);
 
             output = buscarUsuarioRecuperacion(numeroDocumento);
             nombreCompleto = _toStr(output.get("nombre"));
             correo = _toStr(output.get("correo"));
 
             CatalogoMailModel catalogoMailModel = catalogoMailInterface.obtenerCorreoPorCodigo(codigo);
-            envioMailInterface.sendEmail(correo,
-                                         catalogoMailModel.getAsunto(),
-                                         catalogoMailModel.getContenido().replace("NOMBRE_COMPLETO", nombreCompleto));
-
-            return ConstantesError.ERROR_0;
+            cuerpo = catalogoMailModel.getContenido().replace("NOMBRE_COMPLETO", nombreCompleto);
+            envioMailInterface.sendEmail(correo, catalogoMailModel.getAsunto(), cuerpo);
+            return resultado;
         } catch (Exception e) {
-            return ConstantesError.ERROR_1;
+            resultado.put("codigoError", ConstantesError.ERROR_1);
+            return resultado;
+        }
+    }
+
+    public Map<String, String> enviarPinCorreo(String numeroDocumento,
+                                               String codigo,
+                                               String nombreEmpresa,
+                                               String password) throws Exception {
+        Map<String, String> resultado = new HashMap<String, String>();
+        try {
+            Map<String, String> output;
+            String nombreCompleto;
+            String correo;
+            String cuerpo;
+            String pin = _toStr(50000 * Math.random());
+            pin = pin.substring(0, 4);
+
+            resultado.put("codigoError", ConstantesError.ERROR_0);
+
+            output = buscarUsuarioRecuperacion(numeroDocumento);
+            nombreCompleto = _toStr(output.get("nombre"));
+            correo = _toStr(output.get("correo"));
+
+            CatalogoMailModel catalogoMailModel = catalogoMailInterface.obtenerCorreoPorCodigo(codigo);
+            cuerpo = catalogoMailModel.getContenido().replace("NOMBRE_COMPLETO", nombreCompleto);
+            cuerpo = cuerpo.replace("PIN", pin);
+            envioMailInterface.sendEmail(correo, catalogoMailModel.getAsunto(), cuerpo);
+            resultado.put("pin", pin);
+            return resultado;
+        } catch (Exception e) {
+            resultado.put("codigoError", ConstantesError.ERROR_1);
+            return resultado;
         }
     }
 }

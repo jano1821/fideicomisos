@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.corfid.fideicomisos.entity.administrativo.Persona;
 import com.corfid.fideicomisos.model.administrativo.PersonaModel;
+import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
 import com.corfid.fideicomisos.model.cruds.CrudPersonaModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 
@@ -34,7 +35,9 @@ public interface PersonaInterface {
 
     public List<PersonaModel> obtenerPersonasNoVinculadasUsuarios() throws Exception;
 
-    public List<PersonaModel> obtenerPersonasPorNumeroDocumento(String tipoDocumento, String numeroDocumento) throws Exception;
+    public List<PersonaModel> obtenerPersonasPorNumeroDocumento(String tipoDocumento,
+                                                                String numeroDocumento) throws Exception;
 
     public PersonaModel validarFormulario(PersonaModel personaModel) throws Exception;
+
 }

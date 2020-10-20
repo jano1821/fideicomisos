@@ -51,7 +51,6 @@
 										<tr>
 											<th>Email</th>
 											<th>Estado de Registro</th>
-											<th>Acciones</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -59,20 +58,6 @@
 											th:class="${email.estadoRegistro=='N'}? 'negative'">
 											<td th:text="${email.direccionMail}"></td>
 											<td th:text="${email.descEstadoRegistro}"></td>
-											<td class="ui center aligned">
-												<div class="ui icon buttons">
-													<button class="ui button" data-tooltip="Editar"
-														data-position="right center" type="submit" name="editRowEmail"
-														th:value="${email.idMail}">
-														<i class="edit icon"></i>
-													</button>
-													<button class="ui button" data-tooltip="Eliminar"
-														data-position="right center" type="submit"
-														name="removeRowEmail" th:value="${email.idMail}">
-														<i class="trash alternate icon"></i>
-													</button>
-												</div>
-											</td>
 										</tr>
 									</tbody>
 								</table>

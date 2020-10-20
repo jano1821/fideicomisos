@@ -11,7 +11,11 @@ public interface OlvidoPasswordInterface {
 
     public Map<String, String> buscarUsuarioRecuperacion(String numeroDocumento) throws Exception;
 
-    public String validarPin(String codigo, String pin, String password, String numeroDocumento) throws Exception;
+    public String validarPin(String codigo,
+                             String pin,
+                             String password,
+                             String numeroDocumento,
+                             String opcion) throws Exception;
 
     public String validarContrasenia(String password, String password2) throws Exception;
 }

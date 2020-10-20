@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.administrativo.TelefonoConverter;
+import com.corfid.fideicomisos.entity.administrativo.Email;
 import com.corfid.fideicomisos.entity.administrativo.Telefono;
 import com.corfid.fideicomisos.model.administrativo.TelefonoModel;
 import com.corfid.fideicomisos.model.cruds.CrudTelefonoModel;
@@ -16,6 +17,7 @@ import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.TelefonoRepository;
 import com.corfid.fideicomisos.service.administrativo.TelefonoInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
+import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
 
 @Service("telefonoServiceImpl")
@@ -87,10 +89,15 @@ public class TelefonoServiceImpl extends AbstractService implements TelefonoInte
             if (_isEmpty(telefonoModel.getIdTelefono())) {
                 telefono = telefonoConverter.convertTelefonoModelToTelefono(telefonoModel);
                 setInsercionAuditoria(telefono, parametrosAuditoriaModel);
+
+                actualizarEstadoTelefonos(telefonoModel.getIdPersona());
             } else {
                 telefono = telefonoRepository.findByIdTelefono(telefonoModel.getIdTelefono());
                 telefono = telefonoConverter.convertTelefonoModelToTelefonoExistente(telefono, telefonoModel);
                 setModificacionAuditoria(telefono, parametrosAuditoriaModel);
+                if (_equiv(telefono.getEstadoRegistro(), Constante.ESTADO_REGISTRO_VIGENTE)) {
+                    actualizarEstadoTelefonos(telefonoModel.getIdPersona());
+                }
             }
 
             telefono = telefonoRepository.save(telefono);
@@ -124,10 +131,23 @@ public class TelefonoServiceImpl extends AbstractService implements TelefonoInte
                 listTelefonoModel.add(telefonoModel);
             }
 
-
             return listTelefonoModel;
         } catch (Exception e) {
             return listTelefonoModel;
+        }
+    }
+
+    public String actualizarEstadoTelefonos(Integer idPersona) throws Exception {
+        try {
+            List<Telefono> listTelefono;
+            listTelefono = telefonoRepository.findTelefonoVigenteByIdPersona(idPersona);
+            for (Telefono telefono : listTelefono) {
+                telefono.setEstadoRegistro(Constante.ESTADO_REGISTRO_NO_VIGENTE);
+                telefonoRepository.save(telefono);
+            }
+            return ConstantesError.ERROR_0;
+        } catch (Exception e) {
+            return ConstantesError.ERROR_1;
         }
     }
 }

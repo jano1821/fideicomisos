@@ -18,4 +18,6 @@ public interface EmailInterface {
                                ParametrosAuditoriaModel parametrosAuditoriaModel) throws Exception;
 
     public List<EmailModel> findEmailByIdPersona(Integer idPersona) throws Exception;
+
+    public String actualizarEstadoRegisto(Integer idPersona) throws Exception;
 }
