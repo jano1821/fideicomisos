@@ -64,7 +64,7 @@
 											<h3><label for="saldoContableActual">Saldo Contable</label></h3>
 											<div class="ui right aligned disabled input">
 												<input type="text" name="saldoContableActual" id="saldoContableActual" style="text-align:right"
-													th:value="${#numbers.formatDecimal(cuentaEntidadFinancieraModel.saldoContableActual,1,'COMMA',2,'POINT')}">
+													th:field="*{cadenaSaldoContableActual}" th:value="${cadenaSaldoContableActual}">
 											</div>
 										</div>									
 									</div>						
@@ -82,7 +82,7 @@
 											<h3><label for="saldoDisponibleActual">Saldo Disponible</label></h3>
 											<div class="ui right aligned disabled input">
 												<input type="text" name="saldoDisponibleActual" id="saldoDisponibleActual" style="text-align:right"
-												 th:value="${#numbers.formatDecimal(cuentaEntidadFinancieraModel.saldoDisponibleActual,1,'COMMA',2,'POINT')}">
+												 th:field="*{cadenaSaldoDisponibleActual}" th:value="${cadenaSaldoDisponibleActual}">
 											</div>
 										</div>
 									</div>

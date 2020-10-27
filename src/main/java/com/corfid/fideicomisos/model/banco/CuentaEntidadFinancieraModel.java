@@ -20,6 +20,8 @@ public class CuentaEntidadFinancieraModel {
 	private String codigoEstado;
 	private String descripcionEstado;
 	private Date fechaUltimaActualizacion;
+	private String cadenaSaldoContableActual;
+	private String cadenaSaldoDisponibleActual;
 
 	public Integer getIdentificadorCuentaEntidadFinanciera() {
 		return identificadorCuentaEntidadFinanciera;
@@ -147,6 +149,22 @@ public class CuentaEntidadFinancieraModel {
 
 	public void setFechaUltimaActualizacion(Date fechaUltimaActualizacion) {
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+	}
+
+	public String getCadenaSaldoContableActual() {
+		return cadenaSaldoContableActual;
+	}
+
+	public void setCadenaSaldoContableActual(String cadenaSaldoContableActual) {
+		this.cadenaSaldoContableActual = cadenaSaldoContableActual;
+	}
+
+	public String getCadenaSaldoDisponibleActual() {
+		return cadenaSaldoDisponibleActual;
+	}
+
+	public void setCadenaSaldoDisponibleActual(String cadenaSaldoDisponibleActual) {
+		this.cadenaSaldoDisponibleActual = cadenaSaldoDisponibleActual;
 	}
 
 }
