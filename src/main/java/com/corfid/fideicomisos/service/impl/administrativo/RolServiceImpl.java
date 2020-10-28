@@ -213,4 +213,22 @@ public class RolServiceImpl extends AbstractService implements RolInterface {
             return listRolModel;
         }
     }
+
+    public List<RolModel> listRolesByEmpresa(List<RolModel> listAllRolesUsuario,
+                                             Integer idEmpresaSesion) throws Exception {
+        List<RolModel> listRolModel = null;
+        try {
+            if (!_isEmpty(listAllRolesUsuario)) {
+                listRolModel = new ArrayList<RolModel>();
+                for (RolModel rolModel : listAllRolesUsuario) {
+                    if (_equiv(rolModel.getIdEmpresa(), idEmpresaSesion)) {
+                        listRolModel.add(rolModel);
+                    }
+                }
+            }
+            return listRolModel;
+        } catch (Exception e) {
+            return listRolModel;
+        }
+    }
 }

@@ -10,6 +10,8 @@ public class GenericModel {
     private String edicion;
     private Integer idEmpresaSesion;
     private Integer idUsuarioSesion;
+    private String rucEmpresaSesion;
+    private String nombreEmpresaSesion;
 
     public String getId() {
         return id;
@@ -73,6 +75,22 @@ public class GenericModel {
 
     public void setIdUsuarioSesion(Integer idUsuarioSesion) {
         this.idUsuarioSesion = idUsuarioSesion;
+    }
+
+    public String getRucEmpresaSesion() {
+        return rucEmpresaSesion;
+    }
+
+    public void setRucEmpresaSesion(String rucEmpresaSesion) {
+        this.rucEmpresaSesion = rucEmpresaSesion;
+    }
+
+    public String getNombreEmpresaSesion() {
+        return nombreEmpresaSesion;
+    }
+
+    public void setNombreEmpresaSesion(String nombreEmpresaSesion) {
+        this.nombreEmpresaSesion = nombreEmpresaSesion;
     }
 
 }

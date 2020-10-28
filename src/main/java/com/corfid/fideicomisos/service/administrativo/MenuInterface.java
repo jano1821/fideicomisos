@@ -30,5 +30,7 @@ public interface MenuInterface {
 
     public List<MenuModel> obtenerAllMenuByRol(Collection<Integer> roles);
 
-    List<MenuModel> obtenerMenuByRolAndEmpresaSeleccionada(Collection<Integer> roles, Integer idEmpresaSesion);
+    public List<MenuModel> obtenerMenuByRolAndEmpresaSeleccionada(Collection<Integer> roles, Integer idEmpresaSesion);
+
+    public List<MenuModel> obtenerMenuByRolSinEmpresa(Collection<Integer> roles);
 }

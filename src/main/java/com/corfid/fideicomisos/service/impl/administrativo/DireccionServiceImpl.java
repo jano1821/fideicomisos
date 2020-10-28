@@ -14,6 +14,7 @@ import com.corfid.fideicomisos.entity.administrativo.Direccion;
 import com.corfid.fideicomisos.entity.administrativo.Persona;
 import com.corfid.fideicomisos.entity.administrativo.Usuario;
 import com.corfid.fideicomisos.model.administrativo.DireccionModel;
+import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.cruds.CrudDireccionModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.DireccionRepository;
@@ -38,6 +39,10 @@ public class DireccionServiceImpl extends AbstractService implements DireccionIn
     @Qualifier("direccionConverter")
     DireccionConverter direccionConverter;
 
+    @Autowired
+    @Qualifier("personaServiceImpl")
+    PersonaInterface personaInterface;
+
     public CrudDireccionModel findDireccionByIdPersona(Integer idPersona,
                                                        Integer paginaActual,
                                                        Integer cantidad) throws Exception {
@@ -58,6 +63,8 @@ public class DireccionServiceImpl extends AbstractService implements DireccionIn
             listDireccion = pageDireccion.getContent();
             crudDireccionModel.setPaginaFinal(pageDireccion.getTotalPages());
             crudDireccionModel.setCantidadRegistros(_toInteger(pageDireccion.getTotalElements()));
+            PersonaModel personaModel = personaInterface.findPersonaByIdModel(idPersona);
+            crudDireccionModel.setNombreCompletoPersona(personaModel.getNombreCompleto());
 
             for (Direccion direccion : listDireccion) {
                 direccionModel = new DireccionModel();

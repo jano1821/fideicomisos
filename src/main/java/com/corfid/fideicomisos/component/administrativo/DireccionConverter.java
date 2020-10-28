@@ -61,8 +61,10 @@ public class DireccionConverter extends GenericConverter {
             direccionModel.setEstadoRegistro(direccion.getEstadoRegistro());
             if (!StringUtil.isEmpty(direccion.getPersona())) {
                 direccionModel.setIdPersona(direccion.getPersona().getIdPersona());
+                direccionModel.setNombreCompletoPersona(direccion.getPersona().getNombreCompleto());
             } else {
                 direccionModel.setIdPersona(null);
+                direccionModel.setNombreCompletoPersona("");
             }
 
             if (StringUtil.equiv(direccion.getEstadoRegistro(), "S")) {

@@ -65,8 +65,10 @@ public class TelefonoConverter extends GenericConverter {
             telefonoModel.setEstadoRegistro(telefono.getEstadoRegistro());
             if (!StringUtil.isEmpty(telefono.getPersona())) {
                 telefonoModel.setIdPersona(telefono.getPersona().getIdPersona());
+                telefonoModel.setNombreCompletoPersona(telefono.getPersona().getNombreCompleto());
             } else {
                 telefonoModel.setIdPersona(null);
+                telefonoModel.setNombreCompletoPersona("");
             }
 
             if (StringUtil.equiv(telefono.getEstadoRegistro(), "S")) {

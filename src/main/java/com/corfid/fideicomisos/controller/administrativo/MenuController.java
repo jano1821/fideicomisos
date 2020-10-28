@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -60,7 +58,6 @@ public class MenuController extends InitialController {
         CrudMenuModel crudMenuModel = new CrudMenuModel();
         try {
             datosGenerales.setModulo(Constante.MODULO_MENU);
-            //crudMenuModel.setResult(result);
             return busqueda(Constante.CONST_VACIA,
                             Constante.CONST_CERO,
                             Constante.CONST_CERO,
@@ -84,7 +81,7 @@ public class MenuController extends InitialController {
         return "redirect:" + Constante.URL_LISTA_MENUS;
     }
 
-    @PostMapping(value = "/addmenu", params = { "addRow" })
+    @PostMapping(value = "/addmenu", params = { "saveRow" })
     public ModelAndView registrarMenu(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
                                       @ModelAttribute(name = "menuModel") MenuModel menuModel,
                                       Model model) throws Exception {

@@ -32,6 +32,7 @@ import com.corfid.fideicomisos.service.administrativo.MenuInterface;
 import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
 import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
 import com.corfid.fideicomisos.utilities.Constante;
+import com.corfid.fideicomisos.utilities.ConstantesError;
 import com.corfid.fideicomisos.utilities.InitialController;
 import com.corfid.fideicomisos.utilities.StringUtil;
 
@@ -73,26 +74,32 @@ public class SeleccionController extends InitialController {
             datosGenerales.setIdUsuario(usuarioModel.getIdUsuario());
             datosGenerales.setTipoUsuarioSession(usuarioModel.getTipoUsuario());
             datosGenerales.setUsuario(user.getUsername());
+            datosGenerales.setNombreCompletoUsuario(usuarioModel.getNombreCompleto());
 
-            if (StringUtil.equiv(usuarioModel.getTipoUsuario(), Constante.TIPO_USUARIO_SUPER_ADMIN)) {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
-                for (String rol : roles) {
-                    rolesSesion.add(StringUtil.toInteger(rol));
-                }
-
-                listMenuModel = menuInterface.obtenerMenuByRol(rolesSesion);
-                datosGenerales.setListMenuModel(listMenuModel);
-                datosGenerales.setMenu(construirMenu(listMenuModel));
-
-                mav = new ModelAndView(Constante.MENU);
+            if (StringUtil.equiv(usuarioInterface.validarPrimerIngreso(usuarioModel.getIdUsuario()),ConstantesError.ERROR_1)) {
+                mav = new ModelAndView(Constante.PRIMERA_VEZ);
             } else {
-                mav = new ModelAndView(Constante.SELECCION);
-                crudPersonaModel = personaInterface.obtenerEmpresaByPersona(usuarioModel.getIdPersona());
 
-                crudPersonaModel.setUsuario(user.getUsername());
+                if (StringUtil.equiv(usuarioModel.getTipoUsuario(), Constante.TIPO_USUARIO_SUPER_ADMIN)) {
+                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                    roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
+                    for (String rol : roles) {
+                        rolesSesion.add(StringUtil.toInteger(rol));
+                    }
 
-                mav.addObject("crudMenuModel", crudPersonaModel);
+                    listMenuModel = menuInterface.obtenerMenuByRol(rolesSesion);
+                    datosGenerales.setListMenuModel(listMenuModel);
+                    datosGenerales.setMenu(construirMenu(listMenuModel));
+
+                    mav = new ModelAndView(Constante.MENU);
+                } else {
+                    mav = new ModelAndView(Constante.SELECCION);
+                    crudPersonaModel = personaInterface.obtenerEmpresaByPersona(usuarioModel.getIdPersona());
+
+                    crudPersonaModel.setUsuario(user.getUsername());
+
+                    mav.addObject("crudMenuModel", crudPersonaModel);
+                }
             }
         } catch (Exception e) {
             mav = new ModelAndView(Constante.SITIO_EN_CONSTRUCCION);

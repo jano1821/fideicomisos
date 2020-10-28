@@ -10,6 +10,7 @@ public class CrudDireccionModel extends CrudModel {
 
     private List<DireccionModel> rows = new ArrayList<DireccionModel>();
     private Integer idPersona;
+    private String nombreCompletoPersona;
 
     public List<DireccionModel> getRows() {
         return rows;
@@ -25,6 +26,14 @@ public class CrudDireccionModel extends CrudModel {
 
     public void setIdPersona(Integer idPersona) {
         this.idPersona = idPersona;
+    }
+
+    public String getNombreCompletoPersona() {
+        return nombreCompletoPersona;
+    }
+
+    public void setNombreCompletoPersona(String nombreCompletoPersona) {
+        this.nombreCompletoPersona = nombreCompletoPersona;
     }
 
 }

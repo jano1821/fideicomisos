@@ -9,12 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.administrativo.TelefonoConverter;
-import com.corfid.fideicomisos.entity.administrativo.Email;
 import com.corfid.fideicomisos.entity.administrativo.Telefono;
+import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.administrativo.TelefonoModel;
 import com.corfid.fideicomisos.model.cruds.CrudTelefonoModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.TelefonoRepository;
+import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
 import com.corfid.fideicomisos.service.administrativo.TelefonoInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
@@ -30,6 +31,10 @@ public class TelefonoServiceImpl extends AbstractService implements TelefonoInte
     @Autowired
     @Qualifier("telefonoConverter")
     TelefonoConverter telefonoConverter;
+
+    @Autowired
+    @Qualifier("personaServiceImpl")
+    PersonaInterface personaInterface;
 
     public CrudTelefonoModel findTelefonoByIdPersona(Integer idPersona,
                                                      Integer paginaActual,
@@ -51,6 +56,9 @@ public class TelefonoServiceImpl extends AbstractService implements TelefonoInte
             listTelefono = pageTelefono.getContent();
             crudTelefonoModel.setPaginaFinal(pageTelefono.getTotalPages());
             crudTelefonoModel.setCantidadRegistros(_toInteger(pageTelefono.getTotalElements()));
+
+            PersonaModel personaModel = personaInterface.findPersonaByIdModel(idPersona);
+            crudTelefonoModel.setNombreCompletoPersona(personaModel.getNombreCompleto());
 
             for (Telefono telefono : listTelefono) {
                 telefonoModel = new TelefonoModel();

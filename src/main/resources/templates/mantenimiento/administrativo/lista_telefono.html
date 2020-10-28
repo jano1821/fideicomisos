@@ -46,11 +46,11 @@
 						<div class="ui segments">
 
 							<div class="ui secondary segment">
-
+								<label th:text="${crudTelefonoModel.nombreCompletoPersona}"></label>
 								<table class="ui selectable celled table">
 									<thead>
 										<tr>
-											<th>Numero</th>
+											<th>Número</th>
 											<th>Estado de Registro</th>
 											<th>Operador</th>
 										</tr>
@@ -97,7 +97,7 @@
 
 								<button class="fluid ui primary button" type="submit"
 									name="addRowTelefono">
-									<i class="plus circle icon"></i> Agregar Rol
+									<i class="plus circle icon"></i> Agregar Telefono
 								</button>
 								<button class="fluid ui negative basic button" type="submit"
 									name="volverTelefono">

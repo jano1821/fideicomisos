@@ -149,6 +149,26 @@ public class OlvidoPasswordServiceImpl extends AbstractService implements Olvido
         }
     }
 
+    public String cambiarContrasenia(String userName, String password) throws Exception {
+        try {
+            usuarioInterface.actualizarContrasenia(userName, password);
+
+            return obtenerMensajeError(ConstantesError.ERROR_0);
+        } catch (Exception e) {
+            return ConstantesError.ERROR_1;
+        }
+    }
+    
+    public String cambiarContraseniaAndIndicador(String userName, String password) throws Exception {
+        try {
+            usuarioInterface.actualizarContraseniaAndIndicador(userName, password);
+
+            return obtenerMensajeError(ConstantesError.ERROR_0);
+        } catch (Exception e) {
+            return ConstantesError.ERROR_1;
+        }
+    }
+
     public String validarContrasenia(String password, String password2) throws Exception {
         try {
             String error;

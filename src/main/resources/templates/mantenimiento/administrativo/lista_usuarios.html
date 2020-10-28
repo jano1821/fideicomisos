@@ -57,13 +57,11 @@
 							</div>
 							<div class="ui secondary segment">
 
-
-
-
-								<table class="ui selectable celled table">
+								<table class="ui selectable celled table" id="lista-usuarios">
 									<thead>
 										<tr>
-											<th>Usuario</th>
+											<th>Nombre del Usuario</th>
+											<th>Usuario Acceso</th>
 											<th>Tipo</th>
 											<th>Actividad</th>
 											<th>Estado</th>
@@ -71,7 +69,9 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="user : ${crudUsuarioModel.rows}" th:class="${user.estadoRegistro=='N'}? 'negative'">
+										<tr th:each="user : ${crudUsuarioModel.rows}"
+											th:class="${user.estadoRegistro=='N'}? 'negative'">
+											<td th:text="${user.nombreCompleto}"></td>
 											<td th:text="${user.usuario}"></td>
 											<td th:text="${user.descTipoUsuario}"></td>
 											<td th:text="${user.descEstadoActividad}"></td>
@@ -79,12 +79,14 @@
 											<td class="ui center aligned">
 												<div class="ui icon buttons" id="evaluate">
 													<button class="ui button" data-tooltip="Editar"
-														data-position="right center" type="submit" name="editRow" 
+														data-position="right center" type="submit" name="editRow"
 														th:value="${user.idUsuario}">
 														<i class="edit icon"></i>
 													</button>
-													<button class="ui button" data-tooltip="Enviar Correo con Credenciales"
-														data-position="right center" type="button" id="emailRow" name="emailRow" onclick="enviarMail(this);"
+													<button class="ui button"
+														data-tooltip="Enviar Correo con Credenciales"
+														data-position="right center" type="button" id="emailRow"
+														name="emailRow" onclick="abrirVentana(this);"
 														th:value="${user.idPersona}">
 														<i class="at icon"></i>
 													</button>
@@ -99,7 +101,8 @@
 								<div class="ui pagination menu">
 
 									<button class="button" type="submit" name="leftRow">
-										<a class="icon item" data-tooltip="Mover a la Izquierda" data-position="top center"> <i class="left arrow icon"></i>
+										<a class="icon item" data-tooltip="Mover a la Izquierda"
+											data-position="top center"> <i class="left arrow icon"></i>
 										</a>
 									</button>
 
@@ -112,7 +115,8 @@
 									<a th:text="${crudUsuarioModel.paginaFinal}" class="item">
 
 									</a>
-									<button class="button" data-tooltip="Mover a la Derecha" data-position="top center" type="submit" name="rightRow">
+									<button class="button" data-tooltip="Mover a la Derecha"
+										data-position="top center" type="submit" name="rightRow">
 										<a class="icon item"> <i class="right arrow icon"></i>
 										</a>
 									</button>
@@ -134,9 +138,19 @@
 							</div>
 						</div>
 
-
+						<div class="ui mini test modal" id="ventana-emergente">
+							<i class="close icon"></i>
+							<div class="header">Mensaje de Confirmación</div>
+							<div class="content">
+								<div class="description">¿Está seguro de enviar correo con
+									nuevas credenciales al usuario?</div>
+							</div>
+							<div class="actions">
+								<div class="ui negative button">Cancelar</div>
+								<div class="ui positive right labeled icon button">Enviar</div>
+							</div>
+						</div>
 					</form>
-
 				</div>
 				<div class="one wide column"></div>
 			</div>
@@ -146,6 +160,15 @@
 
 
 	<script>
+	function abrirVentana(object){
+		$('#ventana-emergente').modal({
+		    closable  : false,
+		    onApprove : function() {
+		    	enviarMail(object.value);
+		    }
+  		}).modal('show');
+	}
+	
 	function toggleSidebar(){
 		$("#app .ui.sidebar")
 		.sidebar({context:$("#app")})
@@ -160,20 +183,14 @@
 		$('#abrir_menu').click(function(){
 			toggleSidebar();
 		});
-
-		/*$(".ui.button").click(function(){
-			enviarMail($(this).val())
-	   })*/
 	});	  
-
+	
 	function enviarMail(idPersona){
-		var datosPersona = idPersona.value
-		
 		$.ajax({
 		    type: "POST",
 		    contentType: "application/json",
 		    url: "/usuario/enviarMailCredenciales",
-		    data: JSON.stringify(datosPersona),
+		    data: JSON.stringify(idPersona),
 		    dataType: 'json',
 		    cache: false,
 		    timeout: 600000,

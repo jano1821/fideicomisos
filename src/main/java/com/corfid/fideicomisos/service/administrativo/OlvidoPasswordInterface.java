@@ -17,5 +17,9 @@ public interface OlvidoPasswordInterface {
                              String numeroDocumento,
                              String opcion) throws Exception;
 
+    public String cambiarContrasenia(String userName, String password) throws Exception;
+
+    public String cambiarContraseniaAndIndicador(String userName, String password) throws Exception;
+
     public String validarContrasenia(String password, String password2) throws Exception;
 }

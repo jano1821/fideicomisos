@@ -23,7 +23,6 @@ import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.UsuarioRepository;
 import com.corfid.fideicomisos.service.administrativo.CatalogoMailInterface;
 import com.corfid.fideicomisos.service.administrativo.ClienteEmpresaInterface;
-import com.corfid.fideicomisos.service.administrativo.EmpresaInterface;
 import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
 import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
 import com.corfid.fideicomisos.service.administrativo.UsuarioRolInterface;
@@ -32,7 +31,6 @@ import com.corfid.fideicomisos.service.utilities.EnvioMailInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
-import com.corfid.fideicomisos.utilities.StringUtil;
 
 @Service("usuarioServiceImpl")
 public class UsuarioServiceImpl extends AbstractService implements UsuarioInterface {
@@ -222,7 +220,6 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
                         clienteEmpresaInterface.removerClienteEmpresa(_toInteger(usuarioModel.getPersona()),
                                                                       usuarioModel.getIdEmpresaSesion());
                         usuarioModel.setEstadoRegistro(Constante.ESTADO_REGISTRO_VIGENTE);
-                        //usuarioModel.setEstadoActividad(Constante.INDICADOR_ACTIVIDAD);
                     }
                 } else {
                     if (_equiv(usuarioModel.getEstadoRegistro(), Constante.ESTADO_REGISTRO_NO_VIGENTE)) {
@@ -247,6 +244,8 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
                         cuerpoMail = catalogoMailModel.getContenido().replace("NOMBRE_COMPLETO",
                                                                               usuarioModelActual.getNombreCompleto());
                         cuerpoMail = cuerpoMail.replace("PASSWORD", _toStr(password.get("mensaje")));
+                        cuerpoMail = cuerpoMail.replace("RUC", usuarioModel.getRucEmpresaSesion());
+                        cuerpoMail = cuerpoMail.replace("RAZON_SOCIAL", usuarioModel.getNombreEmpresaSesion());
 
                         envioMailInterface.sendEmail(usuarioModelActual.getCorreo(),
                                                      catalogoMailModel.getAsunto(),
@@ -352,6 +351,32 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
             return ConstantesError.ERROR_1;
         }
     }
+    
+    public String actualizarContraseniaAndIndicador(String userName, String password) throws Exception {
+        try {
+            if (_isEmpty(userName)) {
+                throw new ErrorControladoException(ConstantesError.ERROR_9);
+            }
+
+            Usuario usuario = findUsuarioByUserName(userName);
+            if (null != usuario) {
+                BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
+                usuario.setPassword(pe.encode(password));
+                usuario.setIndicadorPrimerIngreso(false);
+
+                usuario = usuarioRepository.save(usuario);
+                if (_isEmpty(usuario)) {
+                    throw new ErrorControladoException(ConstantesError.ERROR_9);
+                }
+            }
+
+            return ConstantesError.ERROR_0;
+        } catch (ErrorControladoException e) {
+            return e.getCodigoError();
+        } catch (Exception e) {
+            return ConstantesError.ERROR_1;
+        }
+    }
 
     @Override
     public String validarContrasenia(String password, String password2) throws Exception {
@@ -436,6 +461,20 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
             return usuarioModel;
         } catch (Exception e) {
             return usuarioModel;
+        }
+    }
+
+    public String validarPrimerIngreso(Integer idUsuario) throws Exception {
+        Usuario usuario = null;
+        try {
+            usuario = usuarioRepository.findByIdUsuario(idUsuario);
+            if (usuario.isIndicadorPrimerIngreso()) {
+                return ConstantesError.ERROR_1;
+            } else {
+                return ConstantesError.ERROR_0;
+            }
+        } catch (Exception e) {
+            return ConstantesError.ERROR_1;
         }
     }
 }

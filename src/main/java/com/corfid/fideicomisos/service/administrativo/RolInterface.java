@@ -32,4 +32,7 @@ public interface RolInterface {
     public List<RolModel> listAllRolesByEstadoRegistro(String estadoRegistro,
                                                        String tipoUsuarioSesion,
                                                        Integer idEmpresaSesion) throws Exception;
+
+    public List<RolModel> listRolesByEmpresa(List<RolModel> listAllRolesUsuario,
+                                             Integer idEmpresaSesion) throws Exception;
 }

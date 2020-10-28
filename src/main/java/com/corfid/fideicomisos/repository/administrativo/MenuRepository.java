@@ -17,14 +17,29 @@ import com.corfid.fideicomisos.entity.administrativo.Menu;
 public interface MenuRepository extends JpaRepository<Menu, Serializable> {
 	public abstract Menu findByIdMenu(Integer id);
 
-    @Query(value = "select m from Menu m where m.descripcion like :descripcion", countQuery = "select count(m) from Menu m where m.descripcion like :descripcion")
+    @Query(value = "select m from Menu m where m.descripcion like :descripcion", 
+           countQuery = "select count(m) from Menu m where m.descripcion like :descripcion")
     public abstract Page<Menu> listMenuByDescripcionPaginado(@Param("descripcion") String descripcion,
                                                              Pageable pageable);
 
-    @Query(value = "SELECT m FROM Menu m INNER JOIN MenuRol r ON m.idMenu = r.menu.idMenu WHERE r.rol.idRol IN (:roles) AND m.estadoRegistro='S' ORDER BY m.idMenuPadre, m.tipoMenu desc, m.idMenu ")
+    @Query(value = "SELECT m FROM Menu m " + 
+                    "INNER JOIN MenuRol r " + 
+                    "ON m.idMenu = r.menu.idMenu " + 
+                    "WHERE r.rol.idRol IN (:roles) "+ 
+                    "AND m.estadoRegistro='S' " + 
+                    "ORDER BY m.idMenuPadre, m.tipoMenu desc, m.idMenu ")
     public abstract List<Menu> listMenuPorRoles(@Param("roles") Collection<Integer> roles);
+    
+    @Query(value = "SELECT m FROM Menu m " + 
+                    "INNER JOIN MenuRol r " + 
+                    "ON m.idMenu = r.menu.idMenu " + 
+                    "WHERE r.rol.idRol IN (:roles) "+ 
+                    "AND m.estadoRegistro='S' " +
+                    "AND r.rol.empresa.idEmpresa IS NULL " +
+                    "ORDER BY m.idMenuPadre, m.tipoMenu desc, m.idMenu ")
+    public abstract List<Menu> listMenuPorRolesSinEmpresa(@Param("roles") Collection<Integer> roles);
 
-    @Query(value = "SELECT m FROM Menu m INNER JOIN MenuRol r ON m.idMenu = r.menu.idMenu WHERE r.rol.idRol IN (:roles)")
+    @Query(value = "SELECT m FROM Menu m INNER JOIN MenuRol r ON m.idMenu = r.menu.idMenu WHERE r.rol.idRol IN (:roles) ")
     public abstract List<Menu> listAllMenuPorRoles(@Param("roles") Collection<Integer> roles);
 
     @Query(value = "SELECT m FROM Menu m WHERE m.tipoMenu = 'P' AND m.tipoUsuario.idTipoUsuario like :tipoUsuarioSesion ORDER BY m.idMenuPadre ")

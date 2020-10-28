@@ -61,8 +61,10 @@ public class EmailConverter extends GenericConverter {
             emailModel.setEstadoRegistro(email.getEstadoRegistro());
             if (!StringUtil.isEmpty(email.getPersona())) {
                 emailModel.setIdPersona(email.getPersona().getIdPersona());
+                emailModel.setNombreCompletoPersona(email.getPersona().getNombreCompleto());
             } else {
                 emailModel.setIdPersona(null);
+                emailModel.setNombreCompletoPersona("");
             }
 
             if (StringUtil.equiv(email.getEstadoRegistro(), "S")) {

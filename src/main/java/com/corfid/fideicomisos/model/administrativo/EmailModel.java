@@ -11,6 +11,7 @@ public class EmailModel extends GenericModel {
     private Integer idPersona;
     private String estadoRegistro;
     private String descEstadoRegistro;
+    private String nombreCompletoPersona;
 
     public Integer getIdMail() {
         return idMail;
@@ -58,6 +59,14 @@ public class EmailModel extends GenericModel {
 
     public void setDescEstadoRegistro(String descEstadoRegistro) {
         this.descEstadoRegistro = descEstadoRegistro;
+    }
+
+    public String getNombreCompletoPersona() {
+        return nombreCompletoPersona;
+    }
+
+    public void setNombreCompletoPersona(String nombreCompletoPersona) {
+        this.nombreCompletoPersona = nombreCompletoPersona;
     }
 
 }

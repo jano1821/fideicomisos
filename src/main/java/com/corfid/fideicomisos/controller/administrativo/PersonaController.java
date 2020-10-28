@@ -503,8 +503,6 @@ public class PersonaController extends InitialController {
         try {
             PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
-            //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
             crudDireccionModelPaginado = direccionInterface.findDireccionByIdPersona(idPersona,
                                                                                      paginadoModel.getPaginaActual(),
                                                                                      Constante.PAGINADO_5_ROWS);
@@ -1013,8 +1011,6 @@ public class PersonaController extends InitialController {
         try {
             PaginadoModel paginadoModel = obtenerMovimientoAndPagina(pagina, fin, izquierda, derecha);
 
-            //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
             crudTelefonoModelPaginado = telefonoInterface.findTelefonoByIdPersona(idPersona,
                                                                                   paginadoModel.getPaginaActual(),
                                                                                   Constante.PAGINADO_5_ROWS);
@@ -1052,7 +1048,6 @@ public class PersonaController extends InitialController {
             crudTelefonoModelPaginado.setIdPersona(idPersona);
 
             mav.addObject("crudTelefonoModel", crudTelefonoModelPaginado);
-            //mav.addObject("usuario", user.getUsername());
 
             return mav;
         } catch (Exception e) {

@@ -183,6 +183,8 @@ public class UsuarioController extends InitialController {
             usuarioModel.setTipoUsuarioSesion(datosGenerales.getTipoUsuarioSession());
             usuarioModel.setIdEmpresaSesion(datosGenerales.getIdEmpresa());
             usuarioModel.setIdUsuarioSesion(datosGenerales.getIdUsuario());
+            usuarioModel.setRucEmpresaSesion(datosGenerales.getRucEmpresa());
+            usuarioModel.setNombreEmpresaSesion(datosGenerales.getNombreEmpresa());
 
             if (StringUtil.isEmpty(usuarioModel.getEstadoActividad())) {
                 usuarioModel.setEstadoActividad("1");
@@ -327,6 +329,7 @@ public class UsuarioController extends InitialController {
             }
             if (StringUtil.equiv(usuarioModel.getEdicion(), Constante.MODO_EDICION)) {
                 listRolModelVinculado = usuarioModel.getListRoles();
+                listRolModelVinculado = rolInterface.listRolesByEmpresa(listRolModelVinculado, idEmpresaSesion);
                 if (!StringUtil.isEmpty(listRolModelVinculado)) {
                     listGenericRolModelVinculado = new ArrayList<GenericModel>();
 
@@ -451,7 +454,7 @@ public class UsuarioController extends InitialController {
             personaModelResponse = personaInterface.findPersonaByIdModel(personaModel.getIdPersona());
 
             if (!StringUtil.isEmpty(personaModelResponse)) {
-                result.setMsg(personaModelResponse.getTipoDocumento()+personaModelResponse.getNumeroDocumento());
+                result.setMsg(personaModelResponse.getTipoDocumento() + personaModelResponse.getNumeroDocumento());
             } else {
                 result.setMsg(Constante.CONST_VACIA);
             }
@@ -476,10 +479,6 @@ public class UsuarioController extends InitialController {
                 result.setMsg(errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.joining(",")));
                 return ResponseEntity.badRequest().body(result);
             }
-
-            /*
-             * PersonaModel personaModel = new PersonaModel(); personaModel = personaInterface.findPersonaByIdModel(StringUtil.toInteger(idPersona));
-             */
 
             usuarioModel = usuarioInterface.findUsuarioByPersona(StringUtil.toInteger(idPersona));
 

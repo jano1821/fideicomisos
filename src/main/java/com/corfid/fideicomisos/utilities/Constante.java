@@ -4,6 +4,8 @@ public class Constante {
     //URL's
     public static final String MENU = "principal";
     public static final String OLVIDO = "mantenimiento/administrativo/cambio_password_ingreso_numero_doc";
+    public static final String PRIMERA_VEZ = "mantenimiento/administrativo/cambio_password_primera_vez";
+    public static final String INTERNO = "mantenimiento/administrativo/cambio_password_interno";
     public static final String SELECCION_MODO_RECUPERACION = "mantenimiento/administrativo/cambio_password_seleccion_modo";
     public static final String SELECCION_CAMBIO_PASSWORD = "mantenimiento/administrativo/cambio_password";
     public static final String SELECCION_CAMBIO_PASSWORD_CONFIRMACION = "mantenimiento/administrativo/cambio_password_confirmacion";
@@ -104,4 +106,5 @@ public class Constante {
     public static final String CODIGO_EMAIL_PASSWORD = "CON_PASSWORD";
     public static final String CODIGO_EMAIL_BIENVENIDA = "CON_BIENVENIDA";
     public static final String CODIGO_EMAIL_VALIDACION_PIN = "CON_PIN";
+    public static final String MODULO_CAMBIO_INTERNO = "Cambio de Password";
 }

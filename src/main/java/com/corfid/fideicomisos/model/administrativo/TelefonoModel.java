@@ -14,6 +14,7 @@ public class TelefonoModel extends GenericModel {
     private String descOperador;
     private String estadoRegistro;
     private String descEstadoRegistro;
+    private String nombreCompletoPersona;
 
     public Integer getIdTelefono() {
         return idTelefono;
@@ -85,6 +86,14 @@ public class TelefonoModel extends GenericModel {
 
     public void setDescEstadoRegistro(String descEstadoRegistro) {
         this.descEstadoRegistro = descEstadoRegistro;
+    }
+
+    public String getNombreCompletoPersona() {
+        return nombreCompletoPersona;
+    }
+
+    public void setNombreCompletoPersona(String nombreCompletoPersona) {
+        this.nombreCompletoPersona = nombreCompletoPersona;
     }
 
 }

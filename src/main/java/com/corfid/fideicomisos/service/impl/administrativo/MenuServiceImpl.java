@@ -160,10 +160,14 @@ public class MenuServiceImpl extends AbstractService implements MenuInterface {
         List<Menu> listMenu = new ArrayList<Menu>();
 
         listMenu = menuRepository.listMenuPorRolesAndEmpresaSeleccionada(roles, idEmpresaSesion);
-
-        for (Menu menu : listMenu) {
-            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+        if (!_isEmpty(listMenu)) {
+            for (Menu menu : listMenu) {
+                listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+            }
+        } else {
+            listMenuModel = obtenerMenuByRolSinEmpresa(roles);
         }
+
         return listMenuModel;
     }
 
@@ -190,6 +194,20 @@ public class MenuServiceImpl extends AbstractService implements MenuInterface {
         List<Menu> listMenu = new ArrayList<Menu>();
 
         listMenu = menuRepository.listAllMenuPorRoles(roles);
+
+        for (Menu menu : listMenu) {
+            listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));
+        }
+        return listMenuModel;
+    }
+
+    //Obtiene los menus si tiene un rol asignado sin empresa
+    @Override
+    public List<MenuModel> obtenerMenuByRolSinEmpresa(Collection<Integer> roles) {
+        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
+        List<Menu> listMenu = new ArrayList<Menu>();
+
+        listMenu = menuRepository.listMenuPorRolesSinEmpresa(roles);
 
         for (Menu menu : listMenu) {
             listMenuModel.add(menuConverter.convertMenuToMenuModel(menu));

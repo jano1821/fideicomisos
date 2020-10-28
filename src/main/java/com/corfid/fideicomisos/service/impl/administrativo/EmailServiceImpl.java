@@ -14,12 +14,14 @@ import com.corfid.fideicomisos.entity.administrativo.Direccion;
 import com.corfid.fideicomisos.entity.administrativo.Email;
 import com.corfid.fideicomisos.model.administrativo.DireccionModel;
 import com.corfid.fideicomisos.model.administrativo.EmailModel;
+import com.corfid.fideicomisos.model.administrativo.PersonaModel;
 import com.corfid.fideicomisos.model.cruds.CrudDireccionModel;
 import com.corfid.fideicomisos.model.cruds.CrudEmailModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.repository.administrativo.DireccionRepository;
 import com.corfid.fideicomisos.repository.administrativo.EmailRepository;
 import com.corfid.fideicomisos.service.administrativo.EmailInterface;
+import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
 import com.corfid.fideicomisos.utilities.AbstractService;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
@@ -34,6 +36,10 @@ public class EmailServiceImpl extends AbstractService implements EmailInterface 
     @Autowired
     @Qualifier("emailConverter")
     EmailConverter emailConverter;
+
+    @Autowired
+    @Qualifier("personaServiceImpl")
+    PersonaInterface personaInterface;
 
     public CrudEmailModel findEmailByIdPersona(Integer idPersona,
                                                Integer paginaActual,
@@ -55,6 +61,8 @@ public class EmailServiceImpl extends AbstractService implements EmailInterface 
             listEmail = pageEmail.getContent();
             crudEmailModel.setPaginaFinal(pageEmail.getTotalPages());
             crudEmailModel.setCantidadRegistros(_toInteger(pageEmail.getTotalElements()));
+            PersonaModel personaModel = personaInterface.findPersonaByIdModel(idPersona);
+            crudEmailModel.setNombreCompletoPersona(personaModel.getNombreCompleto());
 
             for (Email email : listEmail) {
                 emailModel = new EmailModel();

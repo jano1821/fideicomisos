@@ -21,6 +21,7 @@ public class DatosGenerales {
     private String nombreEmpresa;
     private String usuario;
     private String modulo;
+    private String nombreCompletoUsuario;
 
     public List<MenuModel> getListMenuModel() {
         return listMenuModel;
@@ -116,6 +117,14 @@ public class DatosGenerales {
 
     public void setModulo(String modulo) {
         this.modulo = modulo;
+    }
+
+    public String getNombreCompletoUsuario() {
+        return nombreCompletoUsuario;
+    }
+
+    public void setNombreCompletoUsuario(String nombreCompletoUsuario) {
+        this.nombreCompletoUsuario = nombreCompletoUsuario;
     }
 
 }

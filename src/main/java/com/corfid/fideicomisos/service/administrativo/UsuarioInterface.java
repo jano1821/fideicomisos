@@ -39,9 +39,13 @@ public interface UsuarioInterface {
 
     public abstract String actualizarContrasenia(String userName, String password) throws Exception;
 
+    public String actualizarContraseniaAndIndicador(String userName, String password) throws Exception;
+
     public abstract String validarContrasenia(String password, String password2) throws Exception;
 
     public UsuarioModel findUsuarioByPersona(Integer idPersona) throws Exception;
 
     public Map<String, String> actualizarAndDevolverContrasenia(Integer IdUsuario) throws Exception;
+
+    public String validarPrimerIngreso(Integer idUsuario) throws Exception;
 }

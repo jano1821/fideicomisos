@@ -10,6 +10,7 @@ public class CrudEmailModel extends CrudModel {
 
     private List<EmailModel> rows = new ArrayList<EmailModel>();
     private Integer idPersona;
+    private String nombreCompletoPersona;
 
     public List<EmailModel> getRows() {
         return rows;
@@ -25,6 +26,14 @@ public class CrudEmailModel extends CrudModel {
 
     public void setIdPersona(Integer idPersona) {
         this.idPersona = idPersona;
+    }
+
+    public String getNombreCompletoPersona() {
+        return nombreCompletoPersona;
+    }
+
+    public void setNombreCompletoPersona(String nombreCompletoPersona) {
+        this.nombreCompletoPersona = nombreCompletoPersona;
     }
 
 }
