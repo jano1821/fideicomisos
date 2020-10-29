@@ -26,6 +26,7 @@ public class MenuConverter {
         menu.setUrl(menuModel.getUrl());
         menu.setTipoMenu(menuModel.getTipoMenu());
         menu.setIdMenuPadre(menuModel.getIdMenuPadre());
+        menu.setOrden(menuModel.getOrden());
         menu.setEstadoRegistro(menuModel.getEstadoRegistro());
 
         tipoUsuario = tipoUsuarioInterface.findTipoUsuarioById(menuModel.getTipoUsuario());
@@ -45,6 +46,7 @@ public class MenuConverter {
         menu.setTipoMenu(menuModel.getTipoMenu());
         menu.setIdMenuPadre(menuModel.getIdMenuPadre());
         menu.setEstadoRegistro(menuModel.getEstadoRegistro());
+        menu.setOrden(menuModel.getOrden());
 
         tipoUsuario = tipoUsuarioInterface.findTipoUsuarioById(menuModel.getTipoUsuario());
 
@@ -64,6 +66,7 @@ public class MenuConverter {
         menuModel.setIdMenuPadre(menu.getIdMenuPadre());
         menuModel.setEstadoRegistro(menu.getEstadoRegistro());
         menuModel.setTipoUsuario(menu.getTipoUsuario().getIdTipoUsuario());
+        menuModel.setOrden(menu.getOrden());
 
         if (StringUtil.equiv(menu.getEstadoRegistro(), "S")) {
             menuModel.setDescEstadoRegistro("Vigente");

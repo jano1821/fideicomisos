@@ -24,6 +24,8 @@ public class MenuModel extends GenericModel {
 
     private String tipoUsuario;
 
+    private Integer orden;
+
     public Integer getIdMenu() {
         return idMenu;
     }
@@ -102,6 +104,14 @@ public class MenuModel extends GenericModel {
 
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
     }
 
 }

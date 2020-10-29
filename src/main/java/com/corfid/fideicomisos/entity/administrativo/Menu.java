@@ -21,101 +21,113 @@ import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 @Entity
 @Table(name = "admcmenu")
 public class Menu extends Auditoria {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "n_idmenu", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
-	private Integer idMenu;
 
-	@Column(name = "c_descri", nullable = false, length = 100, insertable = true, updatable = true)
-	private String descripcion;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "n_idmenu", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
+    private Integer idMenu;
 
-	@Column(name = "c_urlmen", nullable = false, length = 100, insertable = true, updatable = true)
-	private String url;
+    @Column(name = "c_descri", nullable = false, length = 100, insertable = true, updatable = true)
+    private String descripcion;
 
-	@Column(name = "c_tipmen", nullable = false, length = 100, insertable = true, updatable = true)
-	private String tipoMenu;
+    @Column(name = "c_urlmen", nullable = false, length = 100, insertable = true, updatable = true)
+    private String url;
 
-	@Column(name = "n_idmede", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
-	private Integer idMenuPadre;
+    @Column(name = "c_tipmen", nullable = false, length = 100, insertable = true, updatable = true)
+    private String tipoMenu;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "c_idtius", nullable = false, insertable = true, updatable = true)
-	private TipoUsuario tipoUsuario;
+    @Column(name = "n_idmede", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
+    private Integer idMenuPadre;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "admmerol", joinColumns = @JoinColumn(name = "n_idmenu"), inverseJoinColumns = @JoinColumn(name = "n_iderol"))
-	private Set<Rol> roles = new HashSet<Rol>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "c_idtius", nullable = false, insertable = true, updatable = true)
+    private TipoUsuario tipoUsuario;
 
-	public Integer getIdMenu() {
-		return idMenu;
-	}
+    @Column(name = "n_ordmen", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
+    private Integer orden;
 
-	public void setIdMenu(Integer idMenu) {
-		this.idMenu = idMenu;
-	}
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "admmerol", joinColumns = @JoinColumn(name = "n_idmenu"), inverseJoinColumns = @JoinColumn(name = "n_iderol"))
+    private Set<Rol> roles = new HashSet<Rol>();
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public Integer getIdMenu() {
+        return idMenu;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public void setIdMenu(Integer idMenu) {
+        this.idMenu = idMenu;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public String getTipoMenu() {
-		return tipoMenu;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setTipoMenu(String tipoMenu) {
-		this.tipoMenu = tipoMenu;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public Integer getIdMenuPadre() {
-		return idMenuPadre;
-	}
+    public String getTipoMenu() {
+        return tipoMenu;
+    }
 
-	public void setIdMenuPadre(Integer idMenuPadre) {
-		this.idMenuPadre = idMenuPadre;
-	}
+    public void setTipoMenu(String tipoMenu) {
+        this.tipoMenu = tipoMenu;
+    }
 
-	public Set<Rol> getRoles() {
-		return roles;
-	}
+    public Integer getIdMenuPadre() {
+        return idMenuPadre;
+    }
 
-	public void setRoles(Set<Rol> roles) {
-		this.roles = roles;
-	}
+    public void setIdMenuPadre(Integer idMenuPadre) {
+        this.idMenuPadre = idMenuPadre;
+    }
 
-	public TipoUsuario getTipoUsuario() {
-		return tipoUsuario;
-	}
+    public Set<Rol> getRoles() {
+        return roles;
+    }
 
-	public void setTipoUsuario(TipoUsuario tipoUsuario) {
-		this.tipoUsuario = tipoUsuario;
-	}
+    public void setRoles(Set<Rol> roles) {
+        this.roles = roles;
+    }
 
-	public Menu(Integer idMenu, String descripcion, String url, String tipoMenu, Integer idMenuPadre,
-			TipoUsuario tipoUsuario, Set<Rol> roles) {
-		super();
-		this.idMenu = idMenu;
-		this.descripcion = descripcion;
-		this.url = url;
-		this.tipoMenu = tipoMenu;
-		this.idMenuPadre = idMenuPadre;
-		this.tipoUsuario = tipoUsuario;
-		this.roles = roles;
-	}
+    public TipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
 
-	public Menu() {
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
 
-	}
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
+    }
+
+    public Menu(Integer idMenu, String descripcion, String url, String tipoMenu, Integer idMenuPadre, TipoUsuario tipoUsuario, Integer orden, Set<Rol> roles) {
+        super();
+        this.idMenu = idMenu;
+        this.descripcion = descripcion;
+        this.url = url;
+        this.tipoMenu = tipoMenu;
+        this.idMenuPadre = idMenuPadre;
+        this.tipoUsuario = tipoUsuario;
+        this.orden = orden;
+        this.roles = roles;
+    }
+
+    public Menu() {
+
+    }
 
 }

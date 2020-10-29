@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 </head>
-<body>
+<body onload="mostrar();">
 	<div class="ui grid" th:fragment="header">
 		<div class="ui four column row">
 			<div class="left floated column">
@@ -16,9 +16,10 @@
 					<!-- <i class="industry icon"></i> -->
 					<div class="content"> 
 						<span
-							th:text="${session.datosGenerales.nombreEmpresa == null} ? '' : ${session.datosGenerales.nombreEmpresa}"></span>
-						<div class="sub header"
-							th:text="${session.datosGenerales.nombreCompletoUsuario == null} ? '' : 'Usuario en Gestión: ' + ${session.datosGenerales.nombreCompletoUsuario}"></div>
+							th:text="${session.datosGenerales.nombreEmpresa == null} ? 'Administrador del Sistema' : ${session.datosGenerales.nombreEmpresa}"></span>
+						<!-- <div class="sub header"
+							th:text="${session.datosGenerales.nombreCompletoUsuario == null} ? '' : 'Usuario en Gestión: ' + ${session.datosGenerales.nombreCompletoUsuario}">
+						</div> -->
 					</div>
 				</h2>
 				<h3 class="ui center aligned header">
@@ -27,11 +28,16 @@
 			</div>
 			<div class="ui center aligned right floated column">
 				<form th:action="@{/logout}" method="POST" id="myForm" name="myForm">
+					
 					<div class="ui icon button" onclick="document.myForm.submit()"
 						data-tooltip="Presione para Cerrar Sesión" data-inverted=""
 						data-position="bottom center">
 						<i class="power off icon"></i>
 					</div>
+					<div class=""
+							th:text="${session.datosGenerales.nombreCompletoUsuario == null} ? '' : ${session.datosGenerales.nombreCompletoUsuario}">
+					</div>
+					<div id="reloj"></div>
 				</form>
 			</div>
 		</div>
