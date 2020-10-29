@@ -49,21 +49,21 @@
 									<div class="inline fields">
 										<div class="four wide field">
 											<h3><label for="numeroCuentaEntidadFinanciera">N° Cuenta</label></h3>
-											<div class="ui disabled input">
-												<input type="text" name="numeroCuentaEntidadFinanciera" id="numeroCuentaEntidadFinanciera"
+											<div class="ui input">
+												<input type="text" name="numeroCuentaEntidadFinanciera" id="numeroCuentaEntidadFinanciera" readonly
 													th:field="*{numeroCuentaEntidadFinanciera}" th:value="${numeroCuentaEntidadFinanciera}">
 											</div>
-										</div>
+										</div>										
 										<div class="eight wide field">											
-											<div class="ui disabled input">
-												<input type="text" name="descripcionCuentaEntidadFinanciera" id="descripcionCuentaEntidadFinanciera"
-													th:field="*{descripcionCuentaEntidadFinanciera}" th:value="${descripcionCuentaEntidadFinanciera}">
+											<div class="ui input">
+												<input type="text" name="nombreEntidadFinanciera" id="nombreEntidadFinanciera" readonly
+													th:field="*{nombreEntidadFinanciera}" th:value="${nombreEntidadFinanciera}">
 											</div>
-										</div>
+										</div>										
 										<div class="four wide field">
 											<h3><label for="saldoContableActual">Saldo Contable</label></h3>
-											<div class="ui right aligned disabled input">
-												<input type="text" name="saldoContableActual" id="saldoContableActual" style="text-align:right"
+											<div class="ui right aligned input">
+												<input type="text" name="saldoContableActual" id="saldoContableActual" style="text-align:right" readonly
 													th:field="*{cadenaSaldoContableActual}" th:value="${cadenaSaldoContableActual}">
 											</div>
 										</div>									
@@ -72,16 +72,21 @@
 									<div class="inline fields">
 										<div class="four wide field">
 											<h3><label for="descripcionMonedaIntegrada">Moneda</label></h3>
-											<div class="ui disabled input">
-												<input type="text" name="descripcionMonedaIntegrada" id="descripcionMonedaIntegrada"
+											<div class="ui input">
+												<input type="text" name="descripcionMonedaIntegrada" id="descripcionMonedaIntegrada" readonly
 													th:field="*{descripcionMonedaIntegrada}" th:value="${descripcionMonedaIntegrada}">
 											</div>
 										</div>
-										<div class="eight wide field"></div>
+										<div class="eight wide field">											
+											<div class="ui input">
+												<input type="text" name="descripcionCuentaEntidadFinanciera" id="descripcionCuentaEntidadFinanciera" readonly
+													th:field="*{descripcionCuentaEntidadFinanciera}" th:value="${descripcionCuentaEntidadFinanciera}">
+											</div>
+										</div>																														
 										<div class="four wide field">
 											<h3><label for="saldoDisponibleActual">Saldo Disponible</label></h3>
-											<div class="ui right aligned disabled input">
-												<input type="text" name="saldoDisponibleActual" id="saldoDisponibleActual" style="text-align:right"
+											<div class="ui right aligned input">
+												<input type="text" name="saldoDisponibleActual" id="saldoDisponibleActual" style="text-align:right" readonly
 												 th:field="*{cadenaSaldoDisponibleActual}" th:value="${cadenaSaldoDisponibleActual}">
 											</div>
 										</div>
@@ -158,6 +163,11 @@
 								<input type="hidden" th:field="*{paginaFinal}" th:value="${paginaFinal}">
 								<input type="hidden" th:field="*{identificadorCuentaEntidadFinanciera}" th:value="${identificadorCuentaEntidadFinanciera}">								
 							</div>
+							<div class="ui secondary segment">
+								<button class="fluid ui negative basic button" type="submit" name="backListaFideicomiso">
+									<i class="reply icon"></i> Retroceder
+								</button>
+							</div>
 						</div>
 					</form>
 					
@@ -204,12 +214,18 @@
 							</div>						
 						</div>												
 						<div class="actions">
-							<div class="ui black deny button">Cancel</div>
+							<div class="ui black deny button">Cerrar</div>
 						</div>	
-					</div>
-					<div class="ui modal segments" id="modalSecundario">	
-						<h4>No existe detalle de movimiento de la cuenta</h4>
-					</div>	
+					</div>										
+					<div class="ui mini test modal" id="modalSecundario">							
+							<div class="header">Atención!</div>
+							<div class="content">
+								<div class="description"><h4>No existe detalle de movimiento en la cuenta</h4></div>
+							</div>
+							<div class="actions">
+								<div class="ui negative button">Cerrar</div>								
+							</div>
+					</div>					
 				</div>
 				<div class="one wide column"></div>
 			</div>
@@ -269,10 +285,7 @@
 							$('#modalSecundario').modal('show');	
 						}
 			    },
-				error: function (e) {
-					
-					alert(e);
-				}
+				error: function (e) {}
 			});						
 		}	
 	</script>

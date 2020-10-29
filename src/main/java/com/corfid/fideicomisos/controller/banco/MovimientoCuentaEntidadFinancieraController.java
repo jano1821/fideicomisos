@@ -21,7 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.banco.CuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.banco.MovimientoCuentaEntidadFinancieraModel;
+import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
 import com.corfid.fideicomisos.model.banco.SaldoTotalMonedaModel;
+import com.corfid.fideicomisos.model.cruds.CrudTelefonoModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.service.banco.CuentaEntidadFinancieraInterface;
@@ -151,6 +153,17 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 
 		return ResponseEntity.ok(movimientoCuentaEntidadFinancieraModel);
 
+	}
+
+	@PostMapping(value = "/buscarMovimientoCuenta", params = { "backListaFideicomiso" })
+	public String retrocederListaFideicomiso(PosicionBancoModel posicionBancoModel,
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel, BindingResult bindingResult) throws Exception {
+		
+		System.out.println("ENTRO");
+		System.out.println("moneda: " + cuentaEntidadFinancieraModel.getCodigoEstado());
+		
+		return "redirect:/fideicomiso/getListFideicomisos";// + Constante.URL_LISTA_FIDEICOMISO;
+		//return new ModelAndView(Constante.URL_LISTA_FIDEICOMISO);
 	}
 
 }

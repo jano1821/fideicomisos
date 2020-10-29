@@ -18,7 +18,7 @@ public class PosicionBancoModel extends PaginacionGeneralModel {
 	private String descripcionCuentaEntidadFinanciera;
 	private Double saldoContableActual;
 	private Double saldoDisponibleActual;
-	private Date fechaUltimaActualizacion;
+	private String fechaUltimaActualizacion;
 
 	public List<PosicionBancoModel> rows = new ArrayList<PosicionBancoModel>();
 
@@ -118,11 +118,11 @@ public class PosicionBancoModel extends PaginacionGeneralModel {
 		this.saldoDisponibleActual = saldoDisponibleActual;
 	}
 
-	public Date getFechaUltimaActualizacion() {
+	public String getFechaUltimaActualizacion() {
 		return fechaUltimaActualizacion;
 	}
 
-	public void setFechaUltimaActualizacion(Date fechaUltimaActualizacion) {
+	public void setFechaUltimaActualizacion(String fechaUltimaActualizacion) {
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
 	}
 

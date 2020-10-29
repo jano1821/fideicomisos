@@ -1,6 +1,7 @@
 package com.corfid.fideicomisos.component.banco;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.springframework.stereotype.Component;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
@@ -11,6 +12,9 @@ public class PosicionBancoConverter {
 	public PosicionBancoModel convertToPosicionBancoModel(Object[] objectPosicionBanco) {
 
 		PosicionBancoModel posicionBancoModel = new PosicionBancoModel();
+		
+		String strDateFormat = "dd-MM-yyyy HH:mm";
+		SimpleDateFormat oSimpleDateFormat = new SimpleDateFormat(strDateFormat);
 
 		posicionBancoModel.setIdentificadorFideicomiso((Integer) objectPosicionBanco[0]);
 		posicionBancoModel.setNombreFideicomiso((String) objectPosicionBanco[1]);
@@ -20,7 +24,7 @@ public class PosicionBancoConverter {
 		posicionBancoModel.setDescripcionCuentaEntidadFinanciera((String) objectPosicionBanco[5]);
 		posicionBancoModel.setSaldoContableActual(((BigDecimal) objectPosicionBanco[6]).doubleValue());
 		posicionBancoModel.setSaldoDisponibleActual(((BigDecimal) objectPosicionBanco[7]).doubleValue());
-		posicionBancoModel.setFechaUltimaActualizacion((Date) objectPosicionBanco[8]);
+		posicionBancoModel.setFechaUltimaActualizacion(oSimpleDateFormat.format((Date) objectPosicionBanco[8]));
 		posicionBancoModel.setIdentificadorCuentaEntidadFinanciera((Integer) objectPosicionBanco[9]);
 
 		return posicionBancoModel;
