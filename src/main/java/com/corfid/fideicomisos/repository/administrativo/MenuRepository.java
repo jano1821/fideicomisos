@@ -27,7 +27,7 @@ public interface MenuRepository extends JpaRepository<Menu, Serializable> {
                     "ON m.idMenu = r.menu.idMenu " + 
                     "WHERE r.rol.idRol IN (:roles) "+ 
                     "AND m.estadoRegistro='S' " + 
-                    "ORDER BY m.idMenuPadre, m.tipoMenu desc, m.idMenu ")
+                    "ORDER BY m.orden ")
     public abstract List<Menu> listMenuPorRoles(@Param("roles") Collection<Integer> roles);
     
     @Query(value = "SELECT m FROM Menu m " + 
@@ -36,7 +36,7 @@ public interface MenuRepository extends JpaRepository<Menu, Serializable> {
                     "WHERE r.rol.idRol IN (:roles) "+ 
                     "AND m.estadoRegistro='S' " +
                     "AND r.rol.empresa.idEmpresa IS NULL " +
-                    "ORDER BY m.idMenuPadre, m.tipoMenu desc, m.idMenu ")
+                    "ORDER BY m.orden ")
     public abstract List<Menu> listMenuPorRolesSinEmpresa(@Param("roles") Collection<Integer> roles);
 
     @Query(value = "SELECT m FROM Menu m INNER JOIN MenuRol r ON m.idMenu = r.menu.idMenu WHERE r.rol.idRol IN (:roles) ")
@@ -54,8 +54,7 @@ public interface MenuRepository extends JpaRepository<Menu, Serializable> {
 	                + "WHERE r.rol.idRol IN (:roles) "
 	                + "AND m.estadoRegistro='S' "
 	                + "AND r.rol.empresa.idEmpresa=:idEmpresaSesion "
-	                + "ORDER BY m.idMenuPadre, "
-	                + "m.tipoMenu desc, m.idMenu ")
+	                + "ORDER BY m.orden ")
     public abstract List<Menu> listMenuPorRolesAndEmpresaSeleccionada(@Param("roles") Collection<Integer> roles,
                                                                       @Param("idEmpresaSesion") Integer idEmpresaSesion);
 }

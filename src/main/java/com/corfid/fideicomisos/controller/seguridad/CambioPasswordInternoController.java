@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +21,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 import com.corfid.fideicomisos.model.administrativo.MenuModel;
+import com.corfid.fideicomisos.model.administrativo.UsuarioModel;
+import com.corfid.fideicomisos.model.cruds.CrudPersonaModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.service.administrativo.MenuInterface;
 import com.corfid.fideicomisos.service.administrativo.OlvidoPasswordInterface;
+import com.corfid.fideicomisos.service.administrativo.PersonaInterface;
+import com.corfid.fideicomisos.service.administrativo.UsuarioInterface;
 import com.corfid.fideicomisos.service.utilities.CatalogoConstraintInterface;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.ConstantesError;
@@ -44,6 +49,14 @@ public class CambioPasswordInternoController extends InitialController {
     @Autowired
     @Qualifier("menuServiceImpl")
     MenuInterface menuInterface;
+
+    @Autowired
+    @Qualifier("personaServiceImpl")
+    PersonaInterface personaInterface;
+
+    @Autowired
+    @Qualifier("usuarioServiceImpl")
+    UsuarioInterface usuarioInterface;
 
     @GetMapping("/cambioPassword")
     public ModelAndView cambioPassword(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales) {
@@ -99,24 +112,25 @@ public class CambioPasswordInternoController extends InitialController {
                                                  @SessionAttribute("datosGenerales") DatosGenerales datosGenerales) throws Exception {
         ModelAndView mav;
         String result;
-        List<MenuModel> listMenuModel = new ArrayList<MenuModel>();
-        Collection<Integer> rolesSesion = new ArrayList<Integer>();
-        Set<String> roles;
+        CrudPersonaModel crudPersonaModel;
+        UsuarioModel usuarioModel = new UsuarioModel();
 
         String respuesta = olvidoPasswordInterface.validarContrasenia(password, password2);
         if (StringUtil.equiv(respuesta, ConstantesError.ERROR_0)) {
             result = olvidoPasswordInterface.cambiarContraseniaAndIndicador(datosGenerales.getUsuario(), password);
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            roles = authentication.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
-            for (String rol : roles) {
-                rolesSesion.add(StringUtil.toInteger(rol));
-            }
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            usuarioModel = usuarioInterface.findUsuarioByUsuario(user.getUsername());
 
-            listMenuModel = menuInterface.obtenerMenuByRol(rolesSesion);
-            datosGenerales.setListMenuModel(listMenuModel);
-            datosGenerales.setMenu(construirMenu(listMenuModel));
+            datosGenerales.setIdUsuario(usuarioModel.getIdUsuario());
+            datosGenerales.setTipoUsuarioSession(usuarioModel.getTipoUsuario());
+            datosGenerales.setUsuario(user.getUsername());
+            datosGenerales.setNombreCompletoUsuario(usuarioModel.getNombreCompleto());
+            mav = new ModelAndView(Constante.SELECCION);
+            crudPersonaModel = personaInterface.obtenerEmpresaByPersona(usuarioModel.getIdPersona());
 
-            mav = new ModelAndView(Constante.MENU);
+            crudPersonaModel.setUsuario(user.getUsername());
+
+            mav.addObject("crudMenuModel", crudPersonaModel);
         } else {
             result = respuesta;
             mav = new ModelAndView(Constante.PRIMERA_VEZ);

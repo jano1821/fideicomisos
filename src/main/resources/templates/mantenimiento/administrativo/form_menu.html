@@ -43,7 +43,7 @@
 							<input type="hidden" th:field="*{idMenu}" th:value="${idMenu}"></input>
 							<div class="required field">
 								<label>Descripcion y URL</label>
-								<div class="two fields">
+								<div class="three fields">
 									<div class="field">
 										<input type="text" name="descripcion"
 											placeholder="Descripcion" th:field="*{descripcion}"
@@ -52,6 +52,10 @@
 									<div class="field">
 										<input type="text" name="url" placeholder="URL"
 											th:field="*{url}" th:value="${url}">
+									</div>
+									<div class="field">
+										<input type="number" name="orden" placeholder="Orden de Visualizacion"
+											th:field="*{orden}" th:value="${orden}" onKeyPress="if(this.value.length==3) return false;" min="0" max="999">
 									</div>
 								</div>
 							</div>

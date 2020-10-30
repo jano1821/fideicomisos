@@ -39,6 +39,9 @@ public class Menu extends Auditoria {
     @Column(name = "n_idmede", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
     private Integer idMenuPadre;
 
+    @Column(name = "c_codmen", nullable = true, insertable = true, updatable = true, length = 45)
+    private Integer codigoMenu;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "c_idtius", nullable = false, insertable = true, updatable = true)
     private TipoUsuario tipoUsuario;
@@ -114,13 +117,22 @@ public class Menu extends Auditoria {
         this.orden = orden;
     }
 
-    public Menu(Integer idMenu, String descripcion, String url, String tipoMenu, Integer idMenuPadre, TipoUsuario tipoUsuario, Integer orden, Set<Rol> roles) {
+    public Integer getCodigoMenu() {
+        return codigoMenu;
+    }
+
+    public void setCodigoMenu(Integer codigoMenu) {
+        this.codigoMenu = codigoMenu;
+    }
+
+    public Menu(Integer idMenu, String descripcion, String url, String tipoMenu, Integer idMenuPadre, Integer codigoMenu, TipoUsuario tipoUsuario, Integer orden, Set<Rol> roles) {
         super();
         this.idMenu = idMenu;
         this.descripcion = descripcion;
         this.url = url;
         this.tipoMenu = tipoMenu;
         this.idMenuPadre = idMenuPadre;
+        this.codigoMenu = codigoMenu;
         this.tipoUsuario = tipoUsuario;
         this.orden = orden;
         this.roles = roles;
