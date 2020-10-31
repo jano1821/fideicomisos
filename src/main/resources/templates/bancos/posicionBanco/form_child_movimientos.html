@@ -34,7 +34,7 @@
 			<div class="row">
 				<div class="one wide column"></div>
 				<div class="fourteen wide column">
-					<h2><span th:text="${nombreFideicomisario}"></span></h2>
+					<h2><span th:text="${nombreFideicomiso}"></span></h2>
 										
 					<form class="ui form" action="#"
 						th:action="@{/movimientoCuentaEntidadFinanciera/buscarMovimientoCuenta}"
@@ -238,9 +238,39 @@
 				context : $("#app")
 			}).sidebar("setting", "transition", "overlay").sidebar("toggle");
 		}
+		
 		document.addEventListener("DOMContentLoaded", function() {
-			//toggleSidebar();
+			startTime();
 		});
+
+		function startTime(){
+			var date = new Date();
+			var d  = date.getDate();
+			var day = (d < 10) ? '0' + d : d;
+			var m = date.getMonth() + 1;
+			var month = (m < 10) ? '0' + m : m;
+			var yy = date.getYear();
+			var year = (yy < 1000) ? yy + 1900 : yy;
+			var fecha = day + "/" + month + "/" + year;
+			
+			var h=date.getHours();
+			var m=date.getMinutes();
+			var s=date.getSeconds();
+			m=checkTime(m);
+			s=checkTime(s);
+			var hora = h+":"+m+":"+s;
+
+			$("#reloj").text(fecha + " " + hora);
+			
+			t=setTimeout('startTime()',500);
+		}
+		
+		function checkTime(i){
+			if (i<10) {
+				i="0" + i;
+			}
+			return i;
+		}
 
 		$(document).ready(function() {
 			$('#abrir_menu').click(function() {

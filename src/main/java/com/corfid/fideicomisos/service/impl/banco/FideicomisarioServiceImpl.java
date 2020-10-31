@@ -22,6 +22,7 @@ public class FideicomisarioServiceImpl extends AbstractService implements Fideic
 	private FideicomisarioRepository fideicomisarioRepository;
 
 	public FideicomisarioModel getFideicomisarioByNumeroDocumento(String numeroDocumento) {
+
 		return fideicomisarioConverter.convertFideicomisarioToFideicomisarioModel(
 				fideicomisarioRepository.findByNumeroDocumento(numeroDocumento));
 	}

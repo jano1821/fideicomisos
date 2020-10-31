@@ -2,6 +2,7 @@ package com.corfid.fideicomisos.service.banco;
 
 import java.util.Date;
 
+import com.corfid.fideicomisos.model.banco.FideicomisoModel;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
 import com.corfid.fideicomisos.model.banco.SaldoTotalMonedaModel;
 
@@ -38,4 +39,5 @@ public interface FideicomisoInterface {
 	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
 			Integer identificadorFideicomisario, String nombreFideicomiso, String codigoMoneda, Date fechaProceso);
 
+	public FideicomisoModel getFideicomisoModel(Integer identificadorCuentaEntidadFinanciera);
 }

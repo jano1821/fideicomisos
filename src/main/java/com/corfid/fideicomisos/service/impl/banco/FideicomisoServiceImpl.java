@@ -11,10 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.corfid.fideicomisos.component.banco.PosicionBancoConverter;
+import com.corfid.fideicomisos.entity.banco.CuentaEntidadFinanciera;
 import com.corfid.fideicomisos.model.banco.FideicomisarioModel;
+import com.corfid.fideicomisos.model.banco.FideicomisoModel;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
 import com.corfid.fideicomisos.model.banco.SaldoTotalMonedaModel;
 import com.corfid.fideicomisos.model.banco.TipoCambioSBSModel;
+import com.corfid.fideicomisos.repository.banco.CuentaEntidadFinancieraRepository;
 import com.corfid.fideicomisos.repository.banco.FideicomisoRepository;
 import com.corfid.fideicomisos.service.banco.FideicomisarioInterface;
 import com.corfid.fideicomisos.service.banco.FideicomisoInterface;
@@ -41,6 +44,10 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 	@Autowired
 	@Qualifier("tipoCambioSBSServiceImpl")
 	private TipoCambioSBSInterface tipoCambioSBSInterface;
+
+	@Autowired
+	@Qualifier("cuentaEntidadFinancieraRepository")
+	private CuentaEntidadFinancieraRepository cuentaEntidadFinancieraRepository;
 
 	public PosicionBancoModel getListaFideicomiso(String cadenaBusqueda, String numeroDocumento, String codigoMoneda,
 			Integer pagina, Integer cantRegistros) {
@@ -528,6 +535,24 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 				.setSaldoTotalConsolidadoDisponibleDolares(saldoConsolidadoDisponibleDolaresCuentaFideicomiso);
 
 		return saldoTotalMonedaModel;
+	}
+
+	public FideicomisoModel getFideicomisoModel(Integer identificadorCuentaEntidadFinanciera) {
+
+		FideicomisoModel fideicomisoModel = new FideicomisoModel();
+
+		CuentaEntidadFinanciera cuentaEntidadFinanciera = new CuentaEntidadFinanciera();
+
+		cuentaEntidadFinanciera = cuentaEntidadFinancieraRepository
+				.findByIdentificadorCuentaEntidadFinanciera(identificadorCuentaEntidadFinanciera);
+
+		fideicomisoModel
+				.setIdentificadorFideicomiso(cuentaEntidadFinanciera.getFideicomiso().getIdentificadorFideicomiso());
+		fideicomisoModel.setNombreFideicomiso(cuentaEntidadFinanciera.getFideicomiso().getNombreFideicomiso());
+		fideicomisoModel.setCodigoEstado(cuentaEntidadFinanciera.getFideicomiso().getCodigoEstado());
+		fideicomisoModel.setDescripcionEstado(cuentaEntidadFinanciera.getFideicomiso().getDescripcionEstado());
+
+		return fideicomisoModel;
 	}
 
 }

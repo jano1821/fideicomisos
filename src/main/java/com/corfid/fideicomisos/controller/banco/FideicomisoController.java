@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.banco.CuentaEntidadFinancieraModel;
+import com.corfid.fideicomisos.model.banco.FideicomisoModel;
 import com.corfid.fideicomisos.model.banco.MovimientoCuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
 import com.corfid.fideicomisos.model.banco.SaldoTotalMonedaModel;
@@ -223,9 +224,12 @@ public class FideicomisoController extends InitialController {
 	@PostMapping(value = "/buscarFideicomiso", params = { "detailRow" })
 	public ModelAndView visualizarMovimientoCuenta(
 			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
-			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel,
-			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel, final BindingResult bindingResult,
 			final HttpServletRequest request) {
+
+		String nombreFideicomiso = null;
+
+		FideicomisoModel fideicomisoModel = new FideicomisoModel();
 
 		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
 
@@ -234,9 +238,9 @@ public class FideicomisoController extends InitialController {
 
 		Integer identificadorCuentaEntidadFinanciera = StringUtil.toInteger(request.getParameter("detailRow"));
 
-		String numeroDocumento = datosGenerales.getRucEmpresa();
-		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
-				.getNombreFideicomisario();
+		fideicomisoModel = fideicomisoInterface.getFideicomisoModel(identificadorCuentaEntidadFinanciera);
+
+		nombreFideicomiso = fideicomisoModel.getNombreFideicomiso();
 
 		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
@@ -244,7 +248,7 @@ public class FideicomisoController extends InitialController {
 
 		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
 				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
-		
+
 		cuentaEntidadFinancieraModel.setFormularioOrigen(Constante.FORMULARIO_FIDEICOMISO);
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -256,7 +260,7 @@ public class FideicomisoController extends InitialController {
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
 		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
-		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);		
+		modelAndView.addObject("nombreFideicomiso", nombreFideicomiso);
 		modelAndView.addObject("usuario", user.getUsername());
 
 		return modelAndView;
@@ -265,9 +269,12 @@ public class FideicomisoController extends InitialController {
 	@PostMapping(value = "/buscarFideicomisoSoles", params = { "detailRow" })
 	public ModelAndView visualizarMovimientoCuentaS(
 			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
-			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel,
-			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel, final BindingResult bindingResult,
 			final HttpServletRequest request) {
+
+		String nombreFideicomiso = null;
+
+		FideicomisoModel fideicomisoModel = new FideicomisoModel();
 
 		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
 
@@ -276,9 +283,9 @@ public class FideicomisoController extends InitialController {
 
 		Integer identificadorCuentaEntidadFinanciera = StringUtil.toInteger(request.getParameter("detailRow"));
 
-		String numeroDocumento = datosGenerales.getRucEmpresa();
-		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
-				.getNombreFideicomisario();
+		fideicomisoModel = fideicomisoInterface.getFideicomisoModel(identificadorCuentaEntidadFinanciera);
+
+		nombreFideicomiso = fideicomisoModel.getNombreFideicomiso();
 
 		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
@@ -286,7 +293,7 @@ public class FideicomisoController extends InitialController {
 
 		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
 				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
-		
+
 		cuentaEntidadFinancieraModel.setFormularioOrigen(Constante.FORMULARIO_FIDEICOMISO_SOLES);
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -298,7 +305,7 @@ public class FideicomisoController extends InitialController {
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
 		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
-		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);		
+		modelAndView.addObject("nombreFideicomiso", nombreFideicomiso);
 		modelAndView.addObject("usuario", user.getUsername());
 
 		return modelAndView;
@@ -307,9 +314,12 @@ public class FideicomisoController extends InitialController {
 	@PostMapping(value = "/buscarFideicomisoDolares", params = { "detailRow" })
 	public ModelAndView visualizarMovimientoCuentaD(
 			MovimientoCuentaEntidadFinancieraModel movimientoCuentaEntidadFinancieraModel,
-			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel,
-			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales, final BindingResult bindingResult,
+			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel, final BindingResult bindingResult,
 			final HttpServletRequest request) {
+
+		String nombreFideicomiso = null;
+
+		FideicomisoModel fideicomisoModel = new FideicomisoModel();
 
 		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
 
@@ -318,9 +328,9 @@ public class FideicomisoController extends InitialController {
 
 		Integer identificadorCuentaEntidadFinanciera = StringUtil.toInteger(request.getParameter("detailRow"));
 
-		String numeroDocumento = datosGenerales.getRucEmpresa();
-		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
-				.getNombreFideicomisario();
+		fideicomisoModel = fideicomisoInterface.getFideicomisoModel(identificadorCuentaEntidadFinanciera);
+
+		nombreFideicomiso = fideicomisoModel.getNombreFideicomiso();
 
 		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
@@ -328,7 +338,7 @@ public class FideicomisoController extends InitialController {
 
 		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
 				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
-		
+
 		cuentaEntidadFinancieraModel.setFormularioOrigen(Constante.FORMULARIO_FIDEICOMISO_DOLARES);
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -340,7 +350,7 @@ public class FideicomisoController extends InitialController {
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
 		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
-		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
+		modelAndView.addObject("nombreFideicomiso", nombreFideicomiso);
 		modelAndView.addObject("usuario", user.getUsername());
 
 		return modelAndView;
@@ -376,7 +386,8 @@ public class FideicomisoController extends InitialController {
 	}
 
 	@PostMapping("/obtenerSaldoTotalMonedaSoles")
-	public ResponseEntity<?> obtenerSaldoTotalMonedaSoles(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+	public ResponseEntity<?> obtenerSaldoTotalMonedaSoles(
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
 			@Valid @RequestBody SaldoTotalMonedaModel saldoTotalMonedaModel, final BindingResult bindingResult,
 			final HttpServletRequest request, Errors errors) {
 
@@ -403,9 +414,10 @@ public class FideicomisoController extends InitialController {
 		return ResponseEntity.ok(saldoTotalMonedaModel);
 
 	}
-	
+
 	@PostMapping("/obtenerSaldoTotalMonedaDolares")
-	public ResponseEntity<?> obtenerSaldoTotalMonedaDolares(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+	public ResponseEntity<?> obtenerSaldoTotalMonedaDolares(
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
 			@Valid @RequestBody SaldoTotalMonedaModel saldoTotalMonedaModel, final BindingResult bindingResult,
 			final HttpServletRequest request, Errors errors) {
 
@@ -423,7 +435,8 @@ public class FideicomisoController extends InitialController {
 			}
 
 			saldoTotalMonedaModel = fideicomisoInterface.obtenerSaldoTotalMonedaFideicomiso(
-					saldoTotalMonedaModel.getBusqueda(), numeroDocumento, Constante.CODIGO_MONEDA_DOLARES, fechaProceso);
+					saldoTotalMonedaModel.getBusqueda(), numeroDocumento, Constante.CODIGO_MONEDA_DOLARES,
+					fechaProceso);
 
 		} catch (Exception ex) {
 			System.out.println(ex);
