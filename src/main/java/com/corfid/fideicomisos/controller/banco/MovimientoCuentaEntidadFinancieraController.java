@@ -158,12 +158,20 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 	@PostMapping(value = "/buscarMovimientoCuenta", params = { "backListaFideicomiso" })
 	public String retrocederListaFideicomiso(PosicionBancoModel posicionBancoModel,
 			CuentaEntidadFinancieraModel cuentaEntidadFinancieraModel, BindingResult bindingResult) throws Exception {
-		
-		System.out.println("ENTRO");
-		System.out.println("moneda: " + cuentaEntidadFinancieraModel.getCodigoEstado());
-		
-		return "redirect:/fideicomiso/getListFideicomisos";// + Constante.URL_LISTA_FIDEICOMISO;
-		//return new ModelAndView(Constante.URL_LISTA_FIDEICOMISO);
+
+		String urlOrigen = null;
+
+		String formularioOrigen = cuentaEntidadFinancieraModel.getFormularioOrigen();
+
+		if (StringUtil.equiv(Constante.FORMULARIO_FIDEICOMISO, formularioOrigen))
+			urlOrigen = Constante.URL_FIDEICOMISO;
+		else if (StringUtil.equiv(Constante.FORMULARIO_FIDEICOMISO_SOLES, formularioOrigen))
+			urlOrigen = Constante.URL_FIDEICOMISO_SOLES;
+		else
+			urlOrigen = Constante.URL_FIDEICOMISO_DOLARES;
+
+		return "redirect:" + urlOrigen;
+
 	}
 
 }

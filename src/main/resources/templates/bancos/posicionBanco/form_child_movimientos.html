@@ -34,18 +34,18 @@
 			<div class="row">
 				<div class="one wide column"></div>
 				<div class="fourteen wide column">
-					<h2><span th:text="${nombreFideicomisario}"></span></h2>					
+					<h2><span th:text="${nombreFideicomisario}"></span></h2>
+										
 					<form class="ui form" action="#"
 						th:action="@{/movimientoCuentaEntidadFinanciera/buscarMovimientoCuenta}"
 						th:object="${movimientoCuentaEntidadFinancieraModel}" method="POST"
 						id="frm-movimientoCuenta">						
-						<div class="ui segments">						
-						
+						<div class="ui segments">													
 							<div class="ui secondary segment">
-							
+								
 								<form class="ui form" action="" id="frm-child-movimientoCuenta" 
 									th:object="${cuentaEntidadFinancieraModel}">	
-									
+									<div><input type="hidden" th:field="*{formularioOrigen}" th:value="${formularioOrigen}"></div>
 									<div class="inline fields">
 										<div class="four wide field">
 											<h3><label for="numeroCuentaEntidadFinanciera">N° Cuenta</label></h3>
@@ -74,7 +74,7 @@
 											<h3><label for="descripcionMonedaIntegrada">Moneda</label></h3>
 											<div class="ui input">
 												<input type="text" name="descripcionMonedaIntegrada" id="descripcionMonedaIntegrada" readonly
-													th:field="*{descripcionMonedaIntegrada}" th:value="${descripcionMonedaIntegrada}">
+													th:field="*{descripcionMonedaIntegrada}" th:value="${descripcionMonedaIntegrada}">												
 											</div>
 										</div>
 										<div class="eight wide field">											

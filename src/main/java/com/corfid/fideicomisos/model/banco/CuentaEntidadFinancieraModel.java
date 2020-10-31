@@ -2,7 +2,9 @@ package com.corfid.fideicomisos.model.banco;
 
 import java.util.Date;
 
-public class CuentaEntidadFinancieraModel {
+import com.corfid.fideicomisos.model.utilities.DatosGenerales;
+
+public class CuentaEntidadFinancieraModel extends DatosGenerales{
 
 	private Integer identificadorCuentaEntidadFinanciera;
 	private Integer identificadorFideicomiso;

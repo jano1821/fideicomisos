@@ -31,6 +31,9 @@ public class Constante {
     public static final String FORM_DIRECCION = "mantenimiento/administrativo/form_direccion";
     public static final String FORM_EMAIL = "mantenimiento/administrativo/form_email";
     public static final String FORM_TELEFONO = "mantenimiento/administrativo/form_telefono";
+    public static final String URL_FIDEICOMISO = "/fideicomiso/getListFideicomisos";
+    public static final String URL_FIDEICOMISO_SOLES = "/fideicomiso/getListFideicomisosSoles";
+    public static final String URL_FIDEICOMISO_DOLARES = "/fideicomiso/getListFideicomisosDolares";
     public static final String URL_LISTA_FIDEICOMISO = "bancos/posicionBanco/form_fideicomiso";
     public static final String URL_LISTA_FIDEICOMISO_SOLES = "bancos/posicionBanco/form_fideicomiso_soles";
     public static final String URL_LISTA_FIDEICOMISO_DOLARES = "bancos/posicionBanco/form_fideicomiso_dolares";
@@ -93,6 +96,9 @@ public class Constante {
     public static final String CODIGO_MONEDA_DOLARES = "2";
     public static final String ESTADO_ACTIVIDAD_ACTIVO = "1";
     public static final String ESTADO_ACTIVIDAD_BLOQUEADO = "0";
+    public static final String FORMULARIO_FIDEICOMISO = "FIDEICOMISO";
+    public static final String FORMULARIO_FIDEICOMISO_SOLES = "FIDEICOMISO_SOLES";
+    public static final String FORMULARIO_FIDEICOMISO_DOLARES = "FIDEICOMISO_DOLARES";
     
     //NOMBRE DE MODULOS
     public static final String MODULO_MENU = "Menús";

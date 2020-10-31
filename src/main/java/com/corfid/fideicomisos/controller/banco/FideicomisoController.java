@@ -244,6 +244,8 @@ public class FideicomisoController extends InitialController {
 
 		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
 				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
+		
+		cuentaEntidadFinancieraModel.setFormularioOrigen(Constante.FORMULARIO_FIDEICOMISO);
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -254,7 +256,7 @@ public class FideicomisoController extends InitialController {
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
 		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
-		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
+		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);		
 		modelAndView.addObject("usuario", user.getUsername());
 
 		return modelAndView;
@@ -284,6 +286,8 @@ public class FideicomisoController extends InitialController {
 
 		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
 				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
+		
+		cuentaEntidadFinancieraModel.setFormularioOrigen(Constante.FORMULARIO_FIDEICOMISO_SOLES);
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -294,7 +298,7 @@ public class FideicomisoController extends InitialController {
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
 		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
-		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
+		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);		
 		modelAndView.addObject("usuario", user.getUsername());
 
 		return modelAndView;
@@ -324,6 +328,8 @@ public class FideicomisoController extends InitialController {
 
 		cuentaEntidadFinancieraModel = cuentaEntidadFinancieraInterface
 				.getCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera);
+		
+		cuentaEntidadFinancieraModel.setFormularioOrigen(Constante.FORMULARIO_FIDEICOMISO_DOLARES);
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
