@@ -39,7 +39,7 @@
 
 						<form class="ui form" action="#" th:action="@{/persona/addemail}"
 							th:object="${emailModel}" method="POST" id="frm-email">
-							<h4 class="ui dividing header">Formulario de Email</h4>
+							<h4 class="ui dividing header"  th:text="${emailModel.nombreCompletoPersona}">Formulario de Email</h4>
 							<input type="hidden" th:field="*{idMail}" th:value="${idMail}"></input>
 							<input type="hidden" th:field="*{idPersona}" th:value="${idPersona}"></input>
 							<div class="required field">

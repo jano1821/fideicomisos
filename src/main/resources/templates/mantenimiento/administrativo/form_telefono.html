@@ -39,7 +39,7 @@
 
 						<form class="ui form" action="#" th:action="@{/persona/addtelefono}"
 							th:object="${telefonoModel}" method="POST" id="frm-telefono">
-							<h4 class="ui dividing header">Formulario de Telefono</h4>
+							<h4 class="ui dividing header" th:text="${telefonoModel.nombreCompletoPersona}">Formulario de Telefono</h4>
 							<input type="hidden" th:field="*{idTelefono}" th:value="${idTelefono}"></input>
 							<input type="hidden" th:field="*{idPersona}" th:value="${idPersona}"></input>
 							<div class="required field">

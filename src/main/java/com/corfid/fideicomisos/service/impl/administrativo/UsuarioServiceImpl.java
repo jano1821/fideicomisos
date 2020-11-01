@@ -404,7 +404,7 @@ public class UsuarioServiceImpl extends AbstractService implements UsuarioInterf
         } catch (ErrorControladoException e) {
             return e.getMensajeError();
         } catch (Exception e) {
-            return ConstantesError.ERROR_1;
+            return "Error en la validación de contraseña";
         }
     }
 

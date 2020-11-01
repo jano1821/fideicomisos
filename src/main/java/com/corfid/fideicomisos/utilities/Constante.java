@@ -113,4 +113,7 @@ public class Constante {
     public static final String CODIGO_EMAIL_BIENVENIDA = "CON_BIENVENIDA";
     public static final String CODIGO_EMAIL_VALIDACION_PIN = "CON_PIN";
     public static final String MODULO_CAMBIO_INTERNO = "Cambio de Password";
+    public static final String TAMANIO_MINIMO_PASSWORD = "TAM_MIN_PASS";
+    public static final String TAMANIO_MAXIMO_PASSWORD = "TAM_MAX_PAS";
+    public static final String CANTIDAD_REGISTROS_X_PAGINA = "CANT_PAG";
 }

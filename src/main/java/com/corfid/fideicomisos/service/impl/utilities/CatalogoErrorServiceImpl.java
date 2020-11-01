@@ -12,21 +12,20 @@ import com.corfid.fideicomisos.service.utilities.CatalogoErrorInterface;
 @Service("catalogoErrorServiceImpl")
 public class CatalogoErrorServiceImpl implements CatalogoErrorInterface {
 
-	@Autowired
-	@Qualifier("catalogoErrorRepository")
-	CatalogoErrorRepository catalogoErrorRepository;
+    @Autowired
+    @Qualifier("catalogoErrorRepository")
+    CatalogoErrorRepository catalogoErrorRepository;
 
-	@Autowired
-	@Qualifier("catalogoErrorConverter")
-	CatalogoErrorConverter catalogoErrorConverter;
+    @Autowired
+    @Qualifier("catalogoErrorConverter")
+    CatalogoErrorConverter catalogoErrorConverter;
 
-	public CatalogoErrorModel obtenerMensajeError(String codigoError) throws Exception {
+    public CatalogoErrorModel obtenerMensajeError(String codigoError) throws Exception {
 
-		CatalogoErrorModel catalogoErrorModel = new CatalogoErrorModel();
+        CatalogoErrorModel catalogoErrorModel = new CatalogoErrorModel();
 
-		catalogoErrorModel = catalogoErrorConverter
-				.convertCatalogoErrorToCatalogoErrorModel(catalogoErrorRepository.findByCodigoError(codigoError));
-		return catalogoErrorModel;
-	}
+        catalogoErrorModel = catalogoErrorConverter.convertCatalogoErrorToCatalogoErrorModel(catalogoErrorRepository.findByCodigoError(codigoError));
+        return catalogoErrorModel;
+    }
 
 }

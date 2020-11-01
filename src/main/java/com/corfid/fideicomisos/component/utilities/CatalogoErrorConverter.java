@@ -7,20 +7,21 @@ import com.corfid.fideicomisos.model.utilities.CatalogoErrorModel;
 
 @Component("catalogoErrorConverter")
 public class CatalogoErrorConverter {
-	public CatalogoError convertCatalogoErrorModelToCatalogoError(CatalogoErrorModel catalogoErrorModel) {
-		CatalogoError catalogoError = new CatalogoError();
-		catalogoError.setCodigoError(catalogoErrorModel.getCodigoError());
-		catalogoError.setMensaje(catalogoErrorModel.getMensaje());
 
-		return catalogoError;
-	}
+    public CatalogoError convertCatalogoErrorModelToCatalogoError(CatalogoErrorModel catalogoErrorModel) {
+        CatalogoError catalogoError = new CatalogoError();
+        catalogoError.setCodigoError(catalogoErrorModel.getCodigoError());
+        catalogoError.setMensaje(catalogoErrorModel.getMensaje());
 
-	public CatalogoErrorModel convertCatalogoErrorToCatalogoErrorModel(CatalogoError catalogoError) {
-		CatalogoErrorModel catalogoErrorModel = new CatalogoErrorModel();
+        return catalogoError;
+    }
 
-		catalogoErrorModel.setCodigoError(catalogoError.getCodigoError());
-		catalogoErrorModel.setMensaje(catalogoError.getMensaje());
+    public CatalogoErrorModel convertCatalogoErrorToCatalogoErrorModel(CatalogoError catalogoError) {
+        CatalogoErrorModel catalogoErrorModel = new CatalogoErrorModel();
 
-		return catalogoErrorModel;
-	}
+        catalogoErrorModel.setCodigoError(catalogoError.getCodigoError());
+        catalogoErrorModel.setMensaje(catalogoError.getMensaje());
+
+        return catalogoErrorModel;
+    }
 }

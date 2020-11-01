@@ -1,5 +1,5 @@
 <!doctype html>
-<html  xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
 <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -13,6 +13,7 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Spartan:wght@300;600&display=swap"
 	rel="stylesheet">
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <!-- Custom styles for this template -->
@@ -35,8 +36,8 @@
 								th:src="@{/imgs/Image_1_P_D.png}" />
 							<div class="carousel-caption d-none d-md-block">
 								<h5>Extranet Corporación Fiduciaria</h5>
-								<p>Realice sus operaciones como persona natural sin demora,
-									de forma sencilla y desde su móvil</p>
+								<!--<p>Realice sus operaciones como persona natural sin demora,
+									de forma sencilla y desde su móvil</p>-->
 							</div>
 						</div>
 					</div>
@@ -60,37 +61,51 @@
 					<h1 class="font-weight-bold mb-4">Inicio de Sesión</h1>
 					<form th:action="@{/logincheck}" method="POST" id="target">
 						<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" />
-						<input type="hidden" name="username" id="username"
-							value="" />
-							
+							value="${_csrf.token}" /> <input type="hidden" name="username"
+							id="username" value="" />
+
 						<div class="mb-4">
-							<label for="tipoDoc" class="form-label font-weight-bold">Tipo de Documento</label>
-							<select name="tipoDoc" id="tipoDoc" class="form-control">
+							<label for="tipoDoc" class="form-label font-weight-bold">Tipo
+								de Documento</label> <select name="tipoDoc" id="tipoDoc"
+								class="form-control">
 								<option value="">Seleccione..</option>
 								<option value="DNI">DNI</option>
-								<option value="RUC">RUC</option>
+								<option value="RUC">CE</option>
+								<option value="RUC">PAS</option>
 							</select>
 						</div>
-						
+
 						<div class="mb-4">
-							<label for="usuario" class="form-label font-weight-bold">Número de Documento</label>
-							<input type="text" class="form-control"
-								placeholder="Ingrese Número de Documento" name="usuario" id="usuario">
+							<label for="usuario" class="form-label font-weight-bold">Número
+								de Documento</label> <input type="text" class="form-control"
+								placeholder="Ingrese Número de Documento" name="usuario"
+								id="usuario">
 						</div>
 						<div class="mb-4">
 							<label for="password" class="form-label font-weight-bold">Contraseña</label>
-							<input type="password" class="form-control mb-2"
-								placeholder="Ingrese Contraseña" name="password" id="password" />
-							<a th:href="@{/olvido/olvidoPassword}" class="form-text text-muted text-decoration">¿Olvidaste
-								tu contraseña?</a>
+
+							<div class="input-group">
+								<input class="form-control mb-2" type="password" name="password"
+									id="password" placeholder="Ingrese Contraseña">
+								<div class="input-group-append">
+									<button class="input-group-text" type="button"
+										id="texto" onclick="mostrarContrasena('1');">Mostrar</button>
+								</div>
+								
+
+							</div>
+
+							<a th:href="@{/olvido/olvidoPassword}"
+								class="form-text text-muted text-decoration">¿Olvidaste tu
+								contraseña?</a>
 						</div>
 						<div class="mb-4 form-check">
 							<input type="checkbox" class="form-check-input" id="comprobacion">
 							<label class="form-check-label" for="comprobacion">No soy
 								un robot</label>
 						</div>
-						<button class="btn btn-primary w-100" type="button" name="ingresar" id="ingresar">Ingresar</button>
+						<button class="btn btn-primary w-100" type="button"
+							name="ingresar" id="ingresar">Ingresar</button>
 					</form>
 				</div>
 				<div class="text-center px-lg-5 pt-lg-3 pb-lg-4 p-4 w-100 mt-auto">
@@ -111,7 +126,7 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
 		integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
 		crossorigin="anonymous"></script>
-	
+
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#ingresar").click(function(e) {
@@ -130,6 +145,19 @@
 			   }
 			});
 		});
+	</script>
+	<script>
+	  function mostrarContrasena(caja){
+		  var tipo;
+		  if(caja=='1'){
+			  tipo = document.getElementById("password");
+		      if(tipo.type == "password"){
+		          tipo.type = "text";
+		      }else{
+		          tipo.type = "password";
+		      }
+		  }
+	  }
 	</script>
 </body>
 </html>

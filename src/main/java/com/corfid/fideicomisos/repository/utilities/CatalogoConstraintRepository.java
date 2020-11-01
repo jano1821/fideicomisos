@@ -11,10 +11,12 @@ import org.springframework.stereotype.Repository;
 import com.corfid.fideicomisos.entity.utilities.CatalogoConstraint;
 
 @Repository("catalogoConstraintRepository")
-public interface CatalogoConstraintRepository extends JpaRepository<CatalogoConstraint, Serializable>  {
-	public abstract List<CatalogoConstraint> findByNombreTabla(String nombreTabla);
-	
-	@Query(value = "SELECT c FROM CatalogoConstraint c WHERE c.nombreTabla = :nombreTabla AND c.nombreConstraint = :nombreCampo ")
-	public abstract List<CatalogoConstraint> findByNombreTablaAndNombreCampo(@Param("nombreTabla") String nombreTabla, @Param("nombreCampo") String nombreCampo);
+public interface CatalogoConstraintRepository extends JpaRepository<CatalogoConstraint, Serializable> {
+
+    public abstract List<CatalogoConstraint> findByNombreTabla(String nombreTabla);
+
+    @Query(value = "SELECT c FROM CatalogoConstraint c WHERE c.nombreTabla = :nombreTabla AND c.nombreConstraint = :nombreCampo ")
+    public abstract List<CatalogoConstraint> findByNombreTablaAndNombreCampo(@Param("nombreTabla") String nombreTabla,
+                                                                             @Param("nombreCampo") String nombreCampo);
 
 }

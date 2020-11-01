@@ -13,309 +13,328 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import com.corfid.fideicomisos.component.utilities.CatalogoErrorConverter;
 import com.corfid.fideicomisos.entity.auditoria.Auditoria;
 import com.corfid.fideicomisos.model.utilities.CatalogoErrorModel;
+import com.corfid.fideicomisos.model.utilities.ConstantesSistemaModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
 import com.corfid.fideicomisos.service.utilities.CatalogoErrorInterface;
+import com.corfid.fideicomisos.service.utilities.ConstantesSistemaInterface;
 
 public class AbstractService {
 
-	@Autowired
-	@Qualifier("catalogoErrorServiceImpl")
-	CatalogoErrorInterface catalogoErrorInterface;
+    @Autowired
+    @Qualifier("catalogoErrorServiceImpl")
+    CatalogoErrorInterface catalogoErrorInterface;
 
-	protected Long _toLong(Object objeto) {
-		return StringUtil.toLong(objeto);
-	}
+    @Autowired
+    @Qualifier("constantesSistemaImpl")
+    ConstantesSistemaInterface constantesSistemaInterface;
 
-	protected Integer _toInteger(Object objeto) {
-		return StringUtil.toInteger(objeto);
-	}
+    protected Long _toLong(Object objeto) {
+        return StringUtil.toLong(objeto);
+    }
 
-	protected Short _toShort(Object objeto) {
-		return StringUtil.toShort(objeto);
-	}
+    protected Integer _toInteger(Object objeto) {
+        return StringUtil.toInteger(objeto);
+    }
 
-	protected Double _toDouble(Object objeto) {
-		return StringUtil.toDouble(objeto);
-	}
+    protected Short _toShort(Object objeto) {
+        return StringUtil.toShort(objeto);
+    }
 
-	protected Float _toFloat(Object objeto) {
-		return StringUtil.toFloat(objeto);
-	}
+    protected Double _toDouble(Object objeto) {
+        return StringUtil.toDouble(objeto);
+    }
 
-	protected String _toBlank(String cadena) {
-		return StringUtil.toBlank(cadena);
-	}
+    protected Float _toFloat(Object objeto) {
+        return StringUtil.toFloat(objeto);
+    }
 
-	protected String _toBlankObject(Object object) {
-		return StringUtil.toBlankObject(object);
-	}
+    protected String _toBlank(String cadena) {
+        return StringUtil.toBlank(cadena);
+    }
 
-	protected String _toStr(Object object) {
-		return StringUtil.toStr(object);
-	}
+    protected String _toBlankObject(Object object) {
+        return StringUtil.toBlankObject(object);
+    }
 
-	protected boolean _isEmpty(Object object) {
-		return StringUtil.isEmpty(object);
-	}
+    protected String _toStr(Object object) {
+        return StringUtil.toStr(object);
+    }
 
-	protected String _subStr(String cadena, int indexFin) {
-		return StringUtil.subStr(cadena, indexFin);
-	}
+    protected boolean _isEmpty(Object object) {
+        return StringUtil.isEmpty(object);
+    }
 
-	protected String _subStr(String cadena, int indexInicio, int indexFin) {
-		return StringUtil.subStr(cadena, indexInicio, indexFin);
-	}
+    protected String _subStr(String cadena, int indexFin) {
+        return StringUtil.subStr(cadena, indexFin);
+    }
 
-	protected String _isEmpty(String object, String defaultValue) {
-		return _isEmpty(object) ? defaultValue : object;
-	}
+    protected String _subStr(String cadena, int indexInicio, int indexFin) {
+        return StringUtil.subStr(cadena, indexInicio, indexFin);
+    }
 
-	protected boolean _equiv(Object cadena1, Object cadena2) {
-		return StringUtil.equiv(cadena1, cadena2);
-	}
+    protected String _isEmpty(String object, String defaultValue) {
+        return _isEmpty(object) ? defaultValue : object;
+    }
 
-	protected boolean _inList(String cadena, String... valores) {
-		return StringUtil.inList(cadena, valores);
-	}
+    protected boolean _equiv(Object cadena1, Object cadena2) {
+        return StringUtil.equiv(cadena1, cadena2);
+    }
 
-	/**
-	 * Metodo setea los campos de Auditoria de Insercion a una entidad
-	 *
-	 * @param auditable
-	 * @param beanParametrosAuditoria
-	 */
-	protected void setInsercionAuditoria(Auditoria auditoria, ParametrosAuditoriaModel parametrosAuditoriaModel) {
-		Date fechaInsercion;
-		String usuarioInsercion;
-		String ipInsercion;
+    protected boolean _inList(String cadena, String... valores) {
+        return StringUtil.inList(cadena, valores);
+    }
 
-		fechaInsercion = parametrosAuditoriaModel.getFechaInsercion();
-		usuarioInsercion = parametrosAuditoriaModel.getUsuarioInsercion();
-		ipInsercion = parametrosAuditoriaModel.getIpInsercion();
+    /**
+     * Metodo setea los campos de Auditoria de Insercion a una entidad
+     *
+     * @param auditable
+     * @param beanParametrosAuditoria
+     */
+    protected void setInsercionAuditoria(Auditoria auditoria, ParametrosAuditoriaModel parametrosAuditoriaModel) {
+        Date fechaInsercion;
+        String usuarioInsercion;
+        String ipInsercion;
 
-		auditoria.setFechaInsercion(fechaInsercion);
-		auditoria.setUsuarioInsercion(usuarioInsercion);
-		auditoria.setIpInsercion(ipInsercion);
-	}
+        fechaInsercion = parametrosAuditoriaModel.getFechaInsercion();
+        usuarioInsercion = parametrosAuditoriaModel.getUsuarioInsercion();
+        ipInsercion = parametrosAuditoriaModel.getIpInsercion();
 
-	/**
-	 * Metodo setea los campos de Auditoria de modificacion a una entidad
-	 *
-	 * @param auditable
-	 * @param beanParametrosAuditoria
-	 */
-	protected void setModificacionAuditoria(Auditoria auditoria, ParametrosAuditoriaModel parametrosAuditoriaModel) {
-		Date fechaModificacion;
-		String usuarioModificacion;
-		String ipModificacion;
+        auditoria.setFechaInsercion(fechaInsercion);
+        auditoria.setUsuarioInsercion(usuarioInsercion);
+        auditoria.setIpInsercion(ipInsercion);
+    }
 
-		fechaModificacion = parametrosAuditoriaModel.getFechaModificacion();
-		usuarioModificacion = parametrosAuditoriaModel.getUsuarioModificacion();
-		ipModificacion = parametrosAuditoriaModel.getIpModificacion();
+    /**
+     * Metodo setea los campos de Auditoria de modificacion a una entidad
+     *
+     * @param auditable
+     * @param beanParametrosAuditoria
+     */
+    protected void setModificacionAuditoria(Auditoria auditoria, ParametrosAuditoriaModel parametrosAuditoriaModel) {
+        Date fechaModificacion;
+        String usuarioModificacion;
+        String ipModificacion;
 
-		auditoria.setFechaModificacion(fechaModificacion);
-		auditoria.setUsuarioModificacion(usuarioModificacion);
-		auditoria.setIpModificacion(ipModificacion);
-	}
+        fechaModificacion = parametrosAuditoriaModel.getFechaModificacion();
+        usuarioModificacion = parametrosAuditoriaModel.getUsuarioModificacion();
+        ipModificacion = parametrosAuditoriaModel.getIpModificacion();
 
-	/**
-	 * Este metodo devuelbe una clase Pageable con datos cargados segun parametros
-	 * 
-	 * @param pagina
-	 * @param cantidad
-	 * @param campo
-	 * @param ordenar
-	 * @param descendente
-	 * @return
-	 */
-	protected Pageable obtenerIndexPorPagina(Integer pagina, Integer cantidad, String campo, boolean ordenar,
-			boolean descendente) {
-		Integer index = 0;
-		Pageable pageable;
+        auditoria.setFechaModificacion(fechaModificacion);
+        auditoria.setUsuarioModificacion(usuarioModificacion);
+        auditoria.setIpModificacion(ipModificacion);
+    }
 
-		index = (pagina - 1);
+    /**
+     * Este metodo devuelbe una clase Pageable con datos cargados segun parametros
+     * 
+     * @param pagina
+     * @param cantidad
+     * @param campo
+     * @param ordenar
+     * @param descendente
+     * @return
+     */
+    protected Pageable obtenerIndexPorPagina(Integer pagina,
+                                             Integer cantidad,
+                                             String campo,
+                                             boolean ordenar,
+                                             boolean descendente) {
+        Integer index = 0;
+        Pageable pageable;
 
-		if (ordenar) {
-			if (descendente) {
-				pageable = PageRequest.of(index, cantidad, Sort.by(campo).descending());
-			} else {
-				pageable = PageRequest.of(index, cantidad, Sort.by(campo));
-			}
-		} else {
-			pageable = PageRequest.of(index, cantidad);
-		}
-		return pageable;
-	}
+        index = (pagina - 1);
 
-	protected String obtenerMensajeError(String codigoError) throws Exception {
-		CatalogoErrorModel catalogoErrorModel = new CatalogoErrorModel();
+        if (ordenar) {
+            if (descendente) {
+                pageable = PageRequest.of(index, cantidad, Sort.by(campo).descending());
+            } else {
+                pageable = PageRequest.of(index, cantidad, Sort.by(campo));
+            }
+        } else {
+            pageable = PageRequest.of(index, cantidad);
+        }
+        return pageable;
+    }
 
-		catalogoErrorModel = catalogoErrorInterface.obtenerMensajeError(codigoError);
-		return catalogoErrorModel.getMensaje();
-	}
+    protected String obtenerMensajeError(String codigoError) throws Exception {
+        CatalogoErrorModel catalogoErrorModel = new CatalogoErrorModel();
 
-	protected String getPinNumber() {
-		return getPassword(Constante.NUMEROS, 4);
-	}
+        catalogoErrorModel = catalogoErrorInterface.obtenerMensajeError(codigoError);
+        return catalogoErrorModel.getMensaje();
+    }
 
-	protected String getPassword() {
-		return getPassword(8);
-	}
+    protected String getPinNumber() {
+        return getPassword(Constante.NUMEROS, 4);
+    }
 
-	protected String getPassword(int length) {
-		return getPassword(Constante.NUMEROS + Constante.MAYUSCULAS + Constante.MINUSCULAS + Constante.ESPECIALES,
-				length);
-	}
+    protected String getPassword() {
+        return getPassword(8);
+    }
 
-	protected String getPassword(String key, int length) {
-		String pswd = "";
+    protected String getPassword(int length) {
+        return getPassword(Constante.NUMEROS + Constante.MAYUSCULAS + Constante.MINUSCULAS + Constante.ESPECIALES,
+                           length);
+    }
 
-		for (int i = 0; i < length; i++) {
-			pswd += (key.charAt((int) (Math.random() * key.length())));
-		}
+    protected String getPassword(String key, int length) {
+        String pswd = "";
 
-		return pswd;
-	}
+        for (int i = 0; i < length; i++) {
+            pswd += (key.charAt((int) (Math.random() * key.length())));
+        }
 
-	protected Map<String, String> passwordVerificado(String password, boolean generar, Integer tamanio) {
-		Integer contNumero = 0, contLetraMay = 0, contLetraMin = 0, contEspecialesMin = 0;
-		Map<String, String> output = new HashMap<String, String>();
-		output.put("error", ConstantesError.ERROR_0);
-		String mensaje = "";
-		Integer contador = 0;
+        return pswd;
+    }
 
-		password = _toBlank(password);
+    protected Map<String, String> passwordVerificado(String password,
+                                                     boolean generar,
+                                                     Integer tamanio) throws Exception {
+        Integer contNumero = 0, contLetraMay = 0, contLetraMin = 0, contEspecialesMin = 0;
+        Map<String, String> output = new HashMap<String, String>();
+        output.put("error", ConstantesError.ERROR_0);
+        String mensaje = "";
+        Integer contador = 0;
+        ConstantesSistemaModel constantesSistemaModelMin = constantesSistemaInterface.obtenerConstanteByNombre(Constante.TAMANIO_MINIMO_PASSWORD);
+        ConstantesSistemaModel constantesSistemaModelMax = constantesSistemaInterface.obtenerConstanteByNombre(Constante.TAMANIO_MAXIMO_PASSWORD);
 
-		if ((!generar && _isEmpty(password))) {
-			output.put("error", ConstantesError.ERROR_1);
-			output.put("mensaje", "Password vacío");
-		} else if (generar && tamanio < 6) {
-			output.put("error", ConstantesError.ERROR_1);
-			output.put("mensaje", "Tamaño a generar en muy pequeño");
-		} else if (!generar && password.length() < 6) {
-			output.put("error", ConstantesError.ERROR_1);
-			output.put("mensaje", "Password muy pequeño, mínimo de 6 caracteres");
-		} else {
-			do {
-				char clave;
-				contNumero = 0;
-				contLetraMay = 0;
-				contLetraMin = 0;
-				contEspecialesMin = 0;
-				if (_isEmpty(_toBlank(password))
-						|| ((generar && !StringUtil.isEmpty(_toBlank(password))) && contador > 0)) {
-					password = getPassword(tamanio);
-				}
-				for (byte i = 0; i < password.length(); i++) {
-					clave = password.charAt(i);
-					String passValue = String.valueOf(clave);
-					if (passValue.matches("[A-Z]")) {
-						contLetraMay++;
-					} else if (passValue.matches("[a-z]")) {
-						contLetraMin++;
-					} else if (passValue.matches("[0-9]")) {
-						contNumero++;
-					} else if (passValue.matches("[@#$%^&+=]")) {
-						contEspecialesMin++;
-					}
-				}
-				if (!generar) {
-					if (!(contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0)) {
-						output.put("error", ConstantesError.ERROR_1);
+        password = _toBlank(password);
 
-						if (contLetraMay <= 0) {
-							mensaje += "Debe contener Mayúsculas<br>";
-						}
-						if (contLetraMin <= 0) {
-							mensaje += "Debe contener Minúsculas<br>";
-						}
-						if (contNumero <= 0) {
-							mensaje += "Debe contener Números<br>";
-						}
-						if (contEspecialesMin <= 0) {
-							mensaje += "Debe contener Caracteres Especiales<br>";
-						}
+        if ((!generar && _isEmpty(password))) {
+            output.put("error", ConstantesError.ERROR_1);
+            output.put("mensaje", "Password vacío");
+        } else if (generar && tamanio < 8) {
+            output.put("error", ConstantesError.ERROR_1);
+            output.put("mensaje", "Tamaño a generar en muy pequeño");
+        } else if (!generar && password.length() < _toInteger(constantesSistemaModelMin.getValor())) {
+            output.put("error", ConstantesError.ERROR_1);
+            output.put("mensaje",
+                       "Password muy pequeño, mínimo de " + constantesSistemaModelMin.getValor() + " caracteres");
+            mensaje = "Password muy pequeño, mínimo de " + constantesSistemaModelMin.getValor() + " caracteres";
+        } else if (!generar && password.length() > _toInteger(constantesSistemaModelMax.getValor())) {
+            output.put("error", ConstantesError.ERROR_1);
+            output.put("mensaje",
+                       "Password muy grande, máximo de " + constantesSistemaModelMin.getValor() + " caracteres");
+            mensaje = "Password muy grande, máximo de "
+                            + "" + constantesSistemaModelMin.getValor() + " caracteres";
+        } else {
+            do {
+                char clave;
+                contNumero = 0;
+                contLetraMay = 0;
+                contLetraMin = 0;
+                contEspecialesMin = 0;
+                if (_isEmpty(_toBlank(password)) || ((generar && !StringUtil.isEmpty(_toBlank(password))) && contador > 0)) {
+                    password = getPassword(tamanio);
+                }
+                for (byte i = 0; i < password.length(); i++) {
+                    clave = password.charAt(i);
+                    String passValue = String.valueOf(clave);
+                    if (passValue.matches("[A-Z]")) {
+                        contLetraMay++;
+                    } else if (passValue.matches("[a-z]")) {
+                        contLetraMin++;
+                    } else if (passValue.matches("[0-9]")) {
+                        contNumero++;
+                    } else if (passValue.matches("[@#$%^&+=]")) {
+                        contEspecialesMin++;
+                    }
+                }
+                if (!generar) {
+                    if (!(contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0)) {
+                        output.put("error", ConstantesError.ERROR_1);
 
-						output.put("mensaje", mensaje);
-					}
-				} else {
-					if (contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0) {
-						output.put("mensaje", password);
-					}
-				}
+                        if (contLetraMay <= 0) {
+                            mensaje += "Contraseña ingresada debe contener Mayúsculas<br>";
+                        }
+                        if (contLetraMin <= 0) {
+                            mensaje += "Contraseña ingresada debe contener Minúsculas<br>";
+                        }
+                        if (contNumero <= 0) {
+                            mensaje += "Contraseña ingresada debe contener Números<br>";
+                        }
+                        if (contEspecialesMin <= 0) {
+                            mensaje += "Contraseña ingresada debe contener Caracteres Especiales<br>";
+                        }
 
-				contador++;
-			} while (!(contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0) && generar);
+                        output.put("mensaje", mensaje);
+                    }
+                } else {
+                    if (contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0) {
+                        output.put("mensaje", password);
+                    }
+                }
 
-		}
-		return output;
-	}
+                contador++;
+            } while (!(contLetraMay > 0 && contLetraMin > 0 && contNumero > 0 && contEspecialesMin > 0) && generar);
 
-	protected Map<String, String> passwordVerificado(String password, boolean generar) {
-		return passwordVerificado(password, generar, 6);
-	}
+        }
+        return output;
+    }
 
-	protected Map<String, String> passwordVerificado(Integer tamanio) {
-		return passwordVerificado("", true, tamanio);
-	}
+    protected Map<String, String> passwordVerificado(String password, boolean generar) throws Exception {
+        return passwordVerificado(password, generar, 6);
+    }
 
-	protected Map<String, String> passwordVerificado() {
-		return passwordVerificado("", true, 6);
-	}
+    protected Map<String, String> passwordVerificado(Integer tamanio) throws Exception {
+        return passwordVerificado("", true, tamanio);
+    }
 
-	protected String dateUtilToStringYYYYMMDD(java.util.Date date) {
-		if (date == null)
-			return null;
-		return new SimpleDateFormat("dd/MM/yyyy").format(date);
-	}
+    protected Map<String, String> passwordVerificado() throws Exception {
+        return passwordVerificado("", true, 6);
+    }
 
-	protected Date stringToDateyyyyMMdd(String fecha) {
-		Date dFecha = null;
-		if (fecha == null)
-			return null;
+    protected String dateUtilToStringYYYYMMDD(java.util.Date date) {
+        if (date == null)
+            return null;
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    }
 
-		try {
-			dFecha = new SimpleDateFormat("yyyy/MM/dd").parse(fecha);
-		} catch (Exception e) {
-			e.printStackTrace();
-			dFecha = null;
-		}
-		return dFecha;
-	}
+    protected Date stringToDateyyyyMMdd(String fecha) {
+        Date dFecha = null;
+        if (fecha == null)
+            return null;
 
-	public static String rellenar(String cadena, String relleno, int cantidad, String direccion) {
-		while (cadena.length() < cantidad)
-			if (direccion == "0")// derecha
-				cadena = cadena + relleno;
-			else // izquierda
-				cadena = relleno + cadena;
-		return cadena;
-	}
+        try {
+            dFecha = new SimpleDateFormat("yyyy/MM/dd").parse(fecha);
+        } catch (Exception e) {
+            e.printStackTrace();
+            dFecha = null;
+        }
+        return dFecha;
+    }
 
-	public static String formatoImpresionDecimal(double valor, int numeroDecimales) {
-		DecimalFormat df = null;
-		DecimalFormatSymbols dformater_rules = new DecimalFormatSymbols();
-		dformater_rules.setDecimalSeparator('.');
-		dformater_rules.setGroupingSeparator(',');
-		String strResultado = null;
-		String formato = "";
-		String strDec = "";
-		if (numeroDecimales <= 2) {
-			formato = "###,###,##0.00";
-		} else {
+    public static String rellenar(String cadena, String relleno, int cantidad, String direccion) {
+        while (cadena.length() < cantidad)
+            if (direccion == "0")// derecha
+                cadena = cadena + relleno;
+            else // izquierda
+                cadena = relleno + cadena;
+        return cadena;
+    }
 
-			strDec = rellenar(strDec, "0", numeroDecimales, "0");
-			formato = "###,###,##0." + strDec;
-		}
-		try {
-			df = new DecimalFormat(formato, dformater_rules);
-			strResultado = df.format(valor);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return strResultado;
-	}
+    public static String formatoImpresionDecimal(double valor, int numeroDecimales) {
+        DecimalFormat df = null;
+        DecimalFormatSymbols dformater_rules = new DecimalFormatSymbols();
+        dformater_rules.setDecimalSeparator('.');
+        dformater_rules.setGroupingSeparator(',');
+        String strResultado = null;
+        String formato = "";
+        String strDec = "";
+        if (numeroDecimales <= 2) {
+            formato = "###,###,##0.00";
+        } else {
+
+            strDec = rellenar(strDec, "0", numeroDecimales, "0");
+            formato = "###,###,##0." + strDec;
+        }
+        try {
+            df = new DecimalFormat(formato, dformater_rules);
+            strResultado = df.format(valor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strResultado;
+    }
 }

@@ -13,12 +13,12 @@ public class TestCrypt {
         //String psw;
 
         //System.out.println(pe.encode("123"));//esto es para generar codificada la clave "user" correrlo como run java aplication
-        System.out.println(genererNombre());
-        /*
-         * psw = getPassword(12); System.out.println(psw);
-         */
+        //System.out.println(genererNombre());
+        
+         //psw = getPassword(12); System.out.println(psw);
+        
 
-        //System.out.println(passwordVerificado(null,true,10));
+        System.out.println(passwordVerificado("3288Caridad",false,0));
     }
 
     public static String NUMEROS = "0123456789";
@@ -73,6 +73,10 @@ public class TestCrypt {
             output.put("error", ConstantesError.ERROR_1);
             output.put("mensaje", "Password muy pequeño, mínimo de 6");
             mensaje = "Password muy pequeño, mínimo de 6 caracteres";
+        } else if (!generar && password.length() >12) {
+                output.put("error", ConstantesError.ERROR_1);
+                output.put("mensaje", "Password muy pequeño, mínimo de 6");
+                mensaje = "Password muy grande, máximo de 12 caracteres";
         } else {
             do {
 
@@ -102,16 +106,16 @@ public class TestCrypt {
                         output.put("error", ConstantesError.ERROR_1);
 
                         if (contLetraMay <= 0) {
-                            mensaje += "Debe contener Mayúsculas<br>";
+                            mensaje += "Contraseña ingresada debe contener Mayúsculas<br>";
                         }
                         if (contLetraMin <= 0) {
-                            mensaje += "Debe contener Minúsculas<br>";
+                            mensaje += "Contraseña ingresada debe contener Minúsculas<br>";
                         }
                         if (contNumero <= 0) {
-                            mensaje += "Debe contener Números<br>";
+                            mensaje += "Contraseña ingresada debe contener Números<br>";
                         }
                         if (contEspecialesMin <= 0) {
-                            mensaje += "Debe contener Caracteres Especiales<br>";
+                            mensaje += "Contraseña ingresada debe contener Caracteres Especiales<br>";
                         }
 
                         output.put("mensaje", mensaje);
