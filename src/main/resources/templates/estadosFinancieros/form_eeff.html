@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Formulario de Usuarios</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+</head>
+
+<body>
+	<div class="ui one column stackable grid">
+		<div class="column">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
+
+					<div class="ui secondary segment">
+
+
+						<form class="ui form" action="#" th:action="@{/menu/addmenu}"
+							th:object="${menuModel}" method="POST" id="frm-menu">
+							<h4 class="ui dividing header">Formulario de Menu</h4>
+							<input type="hidden" th:field="*{idMenu}" th:value="${idMenu}"></input>
+							<div class="required field">
+								<label>Descripcion y URL</label>
+								<div class="three fields">
+									<div class="field">
+										<input type="text" name="descripcion"
+											placeholder="Descripcion" th:field="*{descripcion}"
+											th:value="${descripcion}">
+									</div>
+									<div class="field">
+										<input type="text" name="url" placeholder="URL"
+											th:field="*{url}" th:value="${url}">
+									</div>
+									<div class="field">
+										<input type="number" name="orden" placeholder="Orden de Visualizacion"
+											th:field="*{orden}" th:value="${orden}" onKeyPress="if(this.value.length==3) return false;" min="0" max="999">
+									</div>
+								</div>
+							</div>
+
+							<div class="four fields">
+								<div class="required field">
+									<label>Tipo de menu</label> <select class="ui dropdown"
+										name="tipoMenu" id="tipoMenu" th:field="*{tipoMenu}">
+										<option value="">Seleccionar...</option>
+										<option th:each="tipo : ${listTipoMenu}"
+											th:value="${tipo.valorConstraint}"
+											th:text="${tipo.descConstraint}"
+											th:selected="${tipo.valorConstraint==tipoMenu}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Estado del Menu</label> <select class="ui dropdown"
+										name="estadoRegistro" id="estadoRegistro"
+										th:field="*{estadoRegistro}">
+										<option value="">Seleccionar...</option>
+										<option th:each="estado : ${listEstado}"
+											th:value="${estado.valorConstraint}"
+											th:text="${estado.descConstraint}"
+											th:selected="${estado.valorConstraint==estadoRegistro}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Tipo de Usuario para Seleccion</label> <select
+										class="ui dropdown" name="tipoUsuario" id="tipoUsuario"
+										th:field="*{tipoUsuario}">
+										<option value="">Seleccionar...</option>
+										<option th:each="tipoUsuario : ${listTipoUsuario}"
+											th:value="${tipoUsuario.valorConstraint}"
+											th:text="${tipoUsuario.descConstraint}"
+											th:selected="${tipoUsuario.valorConstraint==tipoUsuario}"></option>
+									</select>
+								</div>
+								<div class="required field">
+									<label>Menu Contenedor</label> <select class="ui dropdown"
+										name="idMenuPadre" id="idMenuPadre" th:field="*{idMenuPadre}">
+										<option value="">Seleccionar...</option>
+										<option th:each="padre : ${listMenuModelPadre}"
+											th:value="${padre.idMenu}" th:text="${padre.descripcion}"
+											th:selected="${padre.idMenu==idMenuPadre}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="ui center aligned field">
+								<div class="ui buttons">
+									<button class="fluid ui primary button active" type="submit"
+										id="saveRow" name="saveRow">Guardar</button>
+									<div class="or" data-text="O"></div>
+
+									<button class="fluid ui negative basic button" type="submit"
+										id="cancelar" name="cancelar">Cancelar</button>
+								</div>
+							</div>
+							<div class="ui error message"></div>
+						</form>
+					</div>
+				</div>
+				<div class="one wide column"></div>
+			</div>
+
+		</div>
+	</div>
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+		startTime();
+	});
+
+	function startTime(){
+		var date = new Date();
+		var d  = date.getDate();
+		var day = (d < 10) ? '0' + d : d;
+		var m = date.getMonth() + 1;
+		var month = (m < 10) ? '0' + m : m;
+		var yy = date.getYear();
+		var year = (yy < 1000) ? yy + 1900 : yy;
+		var fecha = day + "/" + month + "/" + year;
+		
+		var h=date.getHours();
+		var m=date.getMinutes();
+		var s=date.getSeconds();
+		m=checkTime(m);
+		s=checkTime(s);
+		var hora = h+":"+m+":"+s;
+
+		$("#reloj").text(fecha + " " + hora);
+		
+		t=setTimeout('startTime()',500);
+	}
+	
+	function checkTime(i){
+		if (i<10) {
+			i="0" + i;
+		}
+		return i;
+	}
+	
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});	  
+	</script>
+	<script type="text/javascript">
+		$('.ui.dropdown').dropdown();
+	</script>
+	<script type="text/javascript">
+		$('.ui.checkbox').checkbox();
+	</script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$("#saveRow").click(function(e) {
+			$('#frm-menu').form({
+				on : 'blur',
+				fields : {
+					descripcion : {
+						identifier : 'descripcion',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor Ingrese Descripcion'
+						} ]
+					},
+					tipoMenu : {
+						identifier : 'tipoMenu',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Tipo de Menu'
+						} ]
+					},
+					estadoRegistro : {
+						identifier : 'estadoRegistro',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Estado de Registro'
+						} ]
+					},
+					idMenuPadre : {
+						identifier : 'idMenuPadre',
+						rules : [ {
+							type : 'empty',
+							prompt : 'Por Favor seleccione Menu Contenedor'
+						} ]
+					}
+				}
+			});
+		 });
+	});
+	</script>
+</body>
+
+
+</html>

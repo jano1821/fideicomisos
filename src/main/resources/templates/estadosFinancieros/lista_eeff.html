@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Estados financieros</title>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+
+</head>
+
+<body>
+	<div class="ui one column stackable grid">
+		<div class="column">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
+
+
+					<form class="ui form" action="#"
+						th:action="@{/eeff/crudAccionesListaEEFF}"
+						th:object="${crudEstadosFinancierosModel}" method="POST" id="frm-eeff">
+
+
+						<div class="ui segments">
+							<div class="ui segment">
+								<div class="ui fluid action input">
+									<select class="ui fluid search dropdown"
+											name="busqueda" id="busqueda"
+											th:field="*{busqueda}">
+										<option selected value="">Seleccionar Fideicomiso...</option>
+										<option th:each="fideicomiso : ${comboFideicomisarios}"
+												th:value="${fideicomiso.identificadorFideicomiso}"
+												th:text="${fideicomiso.nombreFideicomiso}"
+												th:selected="${fideicomiso.identificadorFideicomiso==busqueda}"></option>
+									</select>
+									<button name="findRow" class="ui icon button"
+										data-tooltip="Buscar" data-position="bottom center">
+										<i class="search icon"></i>Búsqueda
+									</button>
+								</div>
+							</div>
+							<div class="ui secondary segment">
+								<table class="ui selectable celled table">
+									<thead>
+										<tr>
+											<th class="ui center aligned">Fecha de Corte</th>
+											<th class="ui center aligned">Tipo de Informe</th>
+											<th class="ui center aligned">Estado</th>
+											<th class="ui center aligned">Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="eeff : ${crudEstadosFinancierosModel.rows}"
+											th:class="${eeff.estadoRegistro=='N'}? 'negative'">
+											<td th:text="${eeff.fechaCorte}"></td>
+											<td class="ui center aligned" th:text="${eeff.descTipoInforme}"></td>
+											<td class="ui center aligned"
+												th:text="${eeff.descEstado}"></td>
+											<td class="ui center aligned">
+												<div class="ui icon buttons">
+													<button class="ui button" data-tooltip="Descargar"
+														data-position="right center" type="submit" name="descargarRow"
+														th:value="${eeff.idEstadosFinancieros}">
+														<i class="edit icon"></i>
+													</button>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+							<div class="ui right aligned secondary segment">
+								<div class="ui pagination menu">
+
+									<button class="button" type="submit" name="leftRow">
+										<a class="icon item" data-tooltip="Mover a la Izquierda" data-position="top center"> <i class="left arrow icon"></i>
+										</a>
+									</button>
+
+									<a th:text="${crudEstadosFinancierosModel.paginaActual}" class="active item">
+									</a>
+									<div class="disabled item">...</div>
+									<a th:text="${crudEstadosFinancierosModel.cantidadRegistros + ' Reg.'}"
+										class="disabled item"> </a>
+									<div class="disabled item">...</div>
+									<a th:text="${crudEstadosFinancierosModel.paginaFinal}" class="item"> </a>
+									<button class="button" type="submit" name="rightRow">
+										<a class="icon item" data-tooltip="Mover a la Derecha" data-position="top center"> <i class="right arrow icon"></i>
+										</a>
+									</button>
+								</div>
+							</div>
+							<div class="ui secondary segment">
+								<div th:if="${crudEstadosFinancierosModel.codigoError != null }"
+									th:utext="${crudEstadosFinancierosModel.mensaje}"></div>
+
+								<input type="hidden" th:field="*{paginaActual}"
+									th:value="${paginaActual}"> <input type="hidden"
+									th:field="*{paginaFinal}" th:value="${paginaFinal}">
+
+							</div>
+						</div>
+
+
+					</form>
+
+				</div>
+				<div class="one wide column"></div>
+			</div>
+
+		</div>
+	</div>
+
+
+	<script>
+	function toggleSidebar(){
+		$("#app .ui.sidebar")
+		.sidebar({context:$("#app")})
+		.sidebar("setting", "transition", "overlay")
+		.sidebar("toggle");
+	}	
+	document.addEventListener("DOMContentLoaded", function() {
+		startTime();
+	});
+
+	function startTime(){
+		var date = new Date();
+		var d  = date.getDate();
+		var day = (d < 10) ? '0' + d : d;
+		var m = date.getMonth() + 1;
+		var month = (m < 10) ? '0' + m : m;
+		var yy = date.getYear();
+		var year = (yy < 1000) ? yy + 1900 : yy;
+		var fecha = day + "/" + month + "/" + year;
+		
+		var h=date.getHours();
+		var m=date.getMinutes();
+		var s=date.getSeconds();
+		m=checkTime(m);
+		s=checkTime(s);
+		var hora = h+":"+m+":"+s;
+
+		$("#reloj").text(fecha + " " + hora);
+		
+		t=setTimeout('startTime()',500);
+	}
+	
+	function checkTime(i){
+		if (i<10) {
+			i="0" + i;
+		}
+		return i;
+	}
+	
+	$(document).ready(function(){
+		  $('#abrir_menu').click(function(){
+			  toggleSidebar();
+		  });
+	});
+</script>
+<script type="text/javascript">
+	$('.ui.dropdown').dropdown();
+</script>
+<script type="text/javascript">
+	/*$('#busqueda').change(function() {
+		var end = this.value;
+		//alert(end);
+	  
+	});*/
+</script>
+</body>
+</html>
