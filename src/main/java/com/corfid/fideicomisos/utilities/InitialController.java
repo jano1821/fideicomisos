@@ -4,17 +4,24 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 
 import com.corfid.fideicomisos.model.administrativo.MenuModel;
+import com.corfid.fideicomisos.model.utilities.ConstantesSistemaModel;
 import com.corfid.fideicomisos.model.utilities.GenericModel;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.model.utilities.ParametrosAuditoriaModel;
+import com.corfid.fideicomisos.service.utilities.ConstantesSistemaInterface;
 
 public class InitialController {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    @Qualifier("constantesSistemaImpl")
+    ConstantesSistemaInterface constantesSistemaInterface;
 
     private Date fechaInsercion;
 
@@ -239,5 +246,13 @@ public class InitialController {
 
     protected String obtenerIp() {
         return environment.getProperty("local.server.port");
+    }
+
+    protected String obtenerConstante(String key) throws Exception {
+        String valor;
+        ConstantesSistemaModel constantesSistemaModel = constantesSistemaInterface.obtenerConstanteByNombre(key);
+        valor = constantesSistemaModel.getValor();
+
+        return valor;
     }
 }

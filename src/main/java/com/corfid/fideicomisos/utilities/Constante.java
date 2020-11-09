@@ -38,6 +38,7 @@ public class Constante {
     public static final String URL_LISTA_FIDEICOMISO_SOLES = "bancos/posicionBanco/form_fideicomiso_soles";
     public static final String URL_LISTA_FIDEICOMISO_DOLARES = "bancos/posicionBanco/form_fideicomiso_dolares";
     public static final String URL_LISTA_MOVIMIENTOS_CUENTA = "bancos/posicionBanco/form_child_movimientos";
+    public static final String LISTA_EEFF = "estadosFinancieros/lista_eeff";
     
     //TABLAS
     public static final String TABLA_USUARIO = "admusuar";
@@ -116,4 +117,7 @@ public class Constante {
     public static final String TAMANIO_MINIMO_PASSWORD = "TAM_MIN_PASS";
     public static final String TAMANIO_MAXIMO_PASSWORD = "TAM_MAX_PAS";
     public static final String CANTIDAD_REGISTROS_X_PAGINA = "CANT_PAG";
+    public static final String MODULO_EEFF = "Estado Financiero";
+    public static final String ORIGEN_ARC = "ORIGEN_ARC";
+    public static final String POR_FTP = "S";
 }

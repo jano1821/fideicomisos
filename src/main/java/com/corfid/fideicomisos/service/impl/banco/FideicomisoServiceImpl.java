@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import com.corfid.fideicomisos.component.banco.FideicomisoConverter;
 import com.corfid.fideicomisos.component.banco.PosicionBancoConverter;
 import com.corfid.fideicomisos.entity.banco.CuentaEntidadFinanciera;
+import com.corfid.fideicomisos.entity.banco.Fideicomiso;
 import com.corfid.fideicomisos.model.banco.FideicomisarioModel;
 import com.corfid.fideicomisos.model.banco.FideicomisoModel;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
@@ -48,6 +50,10 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 	@Autowired
 	@Qualifier("cuentaEntidadFinancieraRepository")
 	private CuentaEntidadFinancieraRepository cuentaEntidadFinancieraRepository;
+	
+	@Autowired
+    @Qualifier("fideicomisoConverter")
+    private FideicomisoConverter fideicomisoConverter;
 
 	public PosicionBancoModel getListaFideicomiso(String cadenaBusqueda, String numeroDocumento, String codigoMoneda,
 			Integer pagina, Integer cantRegistros) {
@@ -555,4 +561,23 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 		return fideicomisoModel;
 	}
 
+    public List<FideicomisoModel> getFideicomisoModel(String rucFideicomisario) throws Exception {
+        FideicomisoModel fideicomisoModel;
+        List<FideicomisoModel> listFideicomisoModel = new ArrayList<FideicomisoModel>();
+        List<Fideicomiso> listFideicomiso = new ArrayList<Fideicomiso>();
+        try {
+
+            listFideicomiso = fideicomisoRepository.getListFideicomisoByRucFideicomisario(rucFideicomisario);
+
+            for (Fideicomiso fideicomiso : listFideicomiso) {
+                fideicomisoModel = new FideicomisoModel();
+                fideicomisoModel = fideicomisoConverter.convertFideicomisoToFideicomisoModel(fideicomiso);
+                listFideicomisoModel.add(fideicomisoModel);
+            }
+        } catch (Exception e) {
+            listFideicomisoModel = new ArrayList<FideicomisoModel>();
+        }
+
+        return listFideicomisoModel;
+    }
 }

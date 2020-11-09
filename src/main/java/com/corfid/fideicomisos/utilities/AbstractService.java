@@ -337,4 +337,12 @@ public class AbstractService {
         }
         return strResultado;
     }
+
+    protected String obtenerConstante(String key) throws Exception {
+        String valor;
+        ConstantesSistemaModel constantesSistemaModel = constantesSistemaInterface.obtenerConstanteByNombre(key);
+        valor = constantesSistemaModel.getValor();
+
+        return valor;
+    }
 }

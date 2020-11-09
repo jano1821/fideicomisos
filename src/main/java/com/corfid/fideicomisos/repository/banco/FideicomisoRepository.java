@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.corfid.fideicomisos.entity.administrativo.Usuario;
 import com.corfid.fideicomisos.entity.banco.Fideicomiso;
 
 @Repository("fideicomisoRepository")
@@ -115,5 +114,13 @@ public interface FideicomisoRepository extends JpaRepository<Fideicomiso, Serial
 	public abstract List<Object> getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
 			@Param("identificadorFideicomisario") Integer identificadorFideicomisario,
 			@Param("codigoMoneda") String codigoMoneda, @Param("nombreFideicomiso") String nombreFideicomiso);
+	
+    @Query(value = "SELECT fico FROM Fideicomiso fico " +
+                	"INNER JOIN FideicomisoFideicomisario fifo "+
+                    "ON fifo.fideicomiso.identificadorFideicomiso = fico.identificadorFideicomiso "+
+                    "INNER JOIN Fideicomisario fisa "+
+                    "ON fisa.identificadorFideicomisario = fifo.fideicomisario.identificadorFideicomisario "+
+                    "WHERE fisa.numeroDocumento = :rucFideicomisario")
+    public abstract List<Fideicomiso> getListFideicomisoByRucFideicomisario(@Param("rucFideicomisario") String rucFideicomisario);
 
 }

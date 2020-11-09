@@ -1,6 +1,7 @@
 package com.corfid.fideicomisos.service.banco;
 
 import java.util.Date;
+import java.util.List;
 
 import com.corfid.fideicomisos.model.banco.FideicomisoModel;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
@@ -40,4 +41,6 @@ public interface FideicomisoInterface {
 			Integer identificadorFideicomisario, String nombreFideicomiso, String codigoMoneda, Date fechaProceso);
 
 	public FideicomisoModel getFideicomisoModel(Integer identificadorCuentaEntidadFinanciera);
+	
+    public List<FideicomisoModel> getFideicomisoModel(String rucFideicomisario) throws Exception;
 }
