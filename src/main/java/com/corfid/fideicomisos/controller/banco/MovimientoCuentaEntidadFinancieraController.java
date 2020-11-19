@@ -20,14 +20,13 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.banco.CuentaEntidadFinancieraModel;
+import com.corfid.fideicomisos.model.banco.FideicomisoModel;
 import com.corfid.fideicomisos.model.banco.MovimientoCuentaEntidadFinancieraModel;
 import com.corfid.fideicomisos.model.banco.PosicionBancoModel;
-import com.corfid.fideicomisos.model.banco.SaldoTotalMonedaModel;
-import com.corfid.fideicomisos.model.cruds.CrudTelefonoModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.service.banco.CuentaEntidadFinancieraInterface;
-import com.corfid.fideicomisos.service.banco.FideicomisarioInterface;
+import com.corfid.fideicomisos.service.banco.FideicomisoInterface;
 import com.corfid.fideicomisos.service.banco.MovimientoCuentaEntidadFinancieraInterface;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.InitialController;
@@ -38,8 +37,8 @@ import com.corfid.fideicomisos.utilities.StringUtil;
 public class MovimientoCuentaEntidadFinancieraController extends InitialController {
 
 	@Autowired
-	@Qualifier("fideicomisarioServiceImpl")
-	private FideicomisarioInterface fideicomisarioInterface;
+	@Qualifier("fideicomisoServiceImpl")
+	private FideicomisoInterface fideicomisoInterface;
 
 	@Autowired
 	@Qualifier("cuentaEntidadFinancieraServiceImpl")
@@ -97,8 +96,10 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 
 		ModelAndView modelAndView = new ModelAndView(Constante.URL_LISTA_MOVIMIENTOS_CUENTA);
 
-		String nombreFideicomisario = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento)
-				.getNombreFideicomisario();
+		FideicomisoModel fideicomisoModel = new FideicomisoModel();
+		fideicomisoModel = fideicomisoInterface.getFideicomisoModel(identificadorCuentaEntidadFinanciera);
+
+		String nombreFideicomiso = fideicomisoModel.getNombreFideicomiso();
 
 		movimientoCuentaEntidadFinancieraModel = movimientoCuentaEntidadFinancieraInterface
 				.getMovimientoCuentaEntidadFinancieraByIdCuenta(identificadorCuentaEntidadFinanciera,
@@ -123,7 +124,7 @@ public class MovimientoCuentaEntidadFinancieraController extends InitialControll
 
 		modelAndView.addObject("movimientoCuentaEntidadFinancieraModel", movimientoCuentaEntidadFinancieraModel);
 		modelAndView.addObject("cuentaEntidadFinancieraModel", cuentaEntidadFinancieraModel);
-		modelAndView.addObject("nombreFideicomisario", nombreFideicomisario);
+		modelAndView.addObject("nombreFideicomiso", nombreFideicomiso);
 		modelAndView.addObject("usuario", user.getUsername());
 
 		return modelAndView;

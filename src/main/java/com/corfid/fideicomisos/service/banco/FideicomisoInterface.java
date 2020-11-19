@@ -42,5 +42,7 @@ public interface FideicomisoInterface {
 
 	public FideicomisoModel getFideicomisoModel(Integer identificadorCuentaEntidadFinanciera);
 	
+	public FideicomisoModel getFideicomisoByIdFideicomisoModel(Integer identificadorFideicomiso);
+	
     public List<FideicomisoModel> getFideicomisoModel(String rucFideicomisario) throws Exception;
 }

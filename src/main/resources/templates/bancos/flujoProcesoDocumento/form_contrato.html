@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Contratos</title>
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</head>
+
+<body>
+	<div class="ui one column stackable grid">
+		<div class="column">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
+					<h2>
+						<span th:text="${nombreFideicomisario}"></span>
+					</h2>
+					<form class="ui form" id="frm-contrato" action="#" th:action="@{/contrato/buscarFideicomiso}"
+					      th:object="${flujoProcesoDocumentoFideicomisoModel}" method="POST">
+						<div class="ui segments">
+							<div class="ui segment">
+								<div class="ui fluid icon input">
+									<input type="text" th:field="*{busqueda}"
+										th:value="${busqueda}"
+										placeholder="Búsqueda por Nombre Fideicomiso...">
+									<button name="findRow" class="ui icon button">
+										<i class="search icon"></i>
+									</button>
+								</div>
+							</div>
+							<div class="ui secondary segment">
+								<h3>POSICIÓN DE FORMALIDAD CONTRACTUAL</h3>
+								<table class="ui selectable celled table">
+									<thead>
+										<tr>
+											<th></th>
+											<th>Id</th>
+											<th>Fideicomiso</th>
+											<th>Estado</th>
+											<th class="ui center aligned">Convenio Retribución</th>
+											<th class="ui center aligned">Contrato Fideicomiso</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="flujoProcesoDocumentoFideicomiso : ${flujoProcesoDocumentoFideicomisoModel.rows}">
+											<td class="ui center aligned">
+												<div class="ui icon buttons">
+													<button class="ui button" data-tooltip="Detalle Contratos"
+														data-position="right center" type="submit"
+														name="detailRow"
+														th:value="${flujoProcesoDocumentoFideicomiso.identificadorFideicomiso}">
+														<i class="list ul icon"></i>
+													</button>
+												</div>
+											</td>
+											<td th:text="${flujoProcesoDocumentoFideicomiso.identificadorFideicomiso}"></td>
+											<td th:text="${flujoProcesoDocumentoFideicomiso.nombreFideicomiso}"></td>
+											<td th:text="${flujoProcesoDocumentoFideicomiso.descripcionEstado}"></td>
+											<td class="ui center aligned" th:utext="${flujoProcesoDocumentoFideicomiso.cantidadRegistrosConvenioRetribucion > 0 } ? '<div class=\'ui read-only checkbox\'><input type=\'checkbox\' checked ></div>' : '<div class=\'ui read-only checkbox\'><input type=\'checkbox\' ></div>'"></td>
+											<td class="ui center aligned" th:utext="${flujoProcesoDocumentoFideicomiso.cantidadRegistrosContratoFideicomiso > 0 } ? '<div class=\'ui read-only checkbox\'><input type=\'checkbox\' checked ></div>' : '<div class=\'ui read-only checkbox\'><input type=\'checkbox\' ></div>'"></td>											
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui right aligned secondary segment">
+								<div class="ui pagination menu">
+									<button class="button" type="submit" name="leftRow">
+										<a class="icon item"> <i class="left arrow icon"></i></a>
+									</button>
+									<a th:text="${flujoProcesoDocumentoFideicomisoModel.paginaActual}"
+										class="active item"> </a>
+									<div class="disabled item">...</div>
+									<a th:text="${flujoProcesoDocumentoFideicomisoModel.cantidadRegistros + ' reg.'}"
+										class="disabled item"> </a>
+									<div class="disabled item">...</div>
+									<a th:text="${flujoProcesoDocumentoFideicomisoModel.paginaFinal}" class="item"></a>
+									<button class="button" type="submit" name="rightRow">
+										<a class="icon item"> <i class="right arrow icon"></i></a>
+									</button>
+								</div>
+							</div>
+							<div class="ui secondary segment">
+								<div th:if="${flujoProcesoDocumentoFideicomisoModel.result == '2'}"
+									class="ui info message">
+									<i class="close icon"></i>
+									<div class="header">Mensaje de información</div>
+									<p>No hay más registros a la derecha...</p>
+								</div>
+								<div th:if="${flujoProcesoDocumentoFideicomisoModel.result == '3'}"
+									class="ui info message">
+									<i class="close icon"></i>
+									<div class="header">Mensaje de información</div>
+									<p>No hay más registros a la izquierda...</p>
+								</div>
+								<input type="hidden" th:field="*{paginaActual}"
+									th:value="${paginaActual}"> <input type="hidden"
+									th:field="*{paginaFinal}" th:value="${paginaFinal}">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="one wide column"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function toggleSidebar() {
+			$("#app .ui.sidebar").sidebar({
+				context : $("#app")
+			}).sidebar("setting", "transition", "overlay").sidebar("toggle");
+		}
+
+		document.addEventListener("DOMContentLoaded", function() {
+			startTime();
+		});
+
+		function startTime(){
+			var date = new Date();
+			var d  = date.getDate();
+			var day = (d < 10) ? '0' + d : d;
+			var m = date.getMonth() + 1;
+			var month = (m < 10) ? '0' + m : m;
+			var yy = date.getYear();
+			var year = (yy < 1000) ? yy + 1900 : yy;
+			var fecha = day + "/" + month + "/" + year;
+			
+			var h=date.getHours();
+			var m=date.getMinutes();
+			var s=date.getSeconds();
+			m=checkTime(m);
+			s=checkTime(s);
+			var hora = h+":"+m+":"+s;
+
+			$("#reloj").text(fecha + " " + hora);
+			
+			t=setTimeout('startTime()',500);
+		}
+		
+		function checkTime(i){
+			if (i<10) {
+				i="0" + i;
+			}
+			return i;
+		}
+
+		$(document).ready(function() {
+			$('#abrir_menu').click(function() {
+				toggleSidebar();
+			});
+		});
+	</script>	
+	
+	<script type="text/javascript">
+		$('.ui.checkbox').checkbox();
+	</script>	
+</body>

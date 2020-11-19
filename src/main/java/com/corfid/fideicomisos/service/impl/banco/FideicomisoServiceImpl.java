@@ -560,6 +560,22 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 
 		return fideicomisoModel;
 	}
+	
+	public FideicomisoModel getFideicomisoByIdFideicomisoModel(Integer identificadorFideicomiso) {
+		
+		FideicomisoModel fideicomisoModel = new FideicomisoModel();
+		
+		Fideicomiso fideicomiso = new Fideicomiso();
+		
+		fideicomiso = fideicomisoRepository.findByIdentificadorFideicomiso(identificadorFideicomiso);
+		
+		fideicomisoModel.setIdentificadorFideicomiso(fideicomiso.getIdentificadorFideicomiso());
+		fideicomisoModel.setNombreFideicomiso(fideicomiso.getNombreFideicomiso());
+		fideicomisoModel.setCodigoEstado(fideicomiso.getCodigoEstado());
+		fideicomisoModel.setDescripcionEstado(fideicomiso.getDescripcionEstado());
+		
+		return fideicomisoModel;
+	}
 
     public List<FideicomisoModel> getFideicomisoModel(String rucFideicomisario) throws Exception {
         FideicomisoModel fideicomisoModel;

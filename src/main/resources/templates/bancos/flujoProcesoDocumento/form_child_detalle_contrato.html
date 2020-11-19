@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Detalle Contratos</title>
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</head>
+
+<body>
+	<div class="ui one column stackable grid">
+		<div class="column">
+			<div class="ui segment">
+				<div th:replace="~{layout/header :: header}"></div>
+			</div>
+		</div>
+	</div>
+	<div id="app">
+		<div class="ui top attached demo menu">
+			<button id="abrir_menu">
+				<i class="sidebar icon"></i> Menú
+			</button>
+		</div>
+		<div th:replace="~{layout/menu :: menu}"></div>
+		<div class="ui internally celled grid">
+			<div class="row">
+				<div class="one wide column"></div>
+				<div class="fourteen wide column">
+					<form class="ui form" id="frm-container-contrato" action="#" th:action="@{/detalleContrato/buscarDetalleContrato}" method="POST">	
+						<h2>
+							<span th:text="${nombreFideicomiso}"></span>
+						</h2>
+						<form class="ui form" id="frm-contrato_CR" action="#" th:action="@{/detalleContrato/buscarDetalleContrato}"
+						      th:object="${documentoFideicomisoConvenioRetribucionModel}" method="POST">
+							<div class="ui segments">							
+								<div class="ui secondary segment">
+									<h3>CONVENIO RETRIBUCIÓN</h3>
+									<table class="ui selectable celled table">
+										<thead>
+											<tr>
+												<th></th>
+												<th>Estado</th>
+												<th class="ui center aligned">Firmado</th>
+												<th class="ui center aligned">Adenda</th>
+												<th class="ui center aligned">Documento</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="documentoFideicomisoConvenioRetribucion : ${documentoFideicomisoConvenioRetribucionModel.rows}">
+												<td class="ui center aligned">
+													<div class="ui icon buttons">
+														<button class="ui button" data-tooltip="Actividades" data-position="right center" type="button" onclick="mostrarDetalleDocumentoFideicomiso(this)"
+																id="detailRow" name="detailRow" th:value="${documentoFideicomisoConvenioRetribucion.identificadorDocumentoFideicomiso}">
+															<i class="list ul icon"></i>
+														</button>
+													</div>
+												</td>
+												<td th:text="${documentoFideicomisoConvenioRetribucion.descripcionEstado}"></td>
+												<td class="ui center aligned" th:text="${documentoFideicomisoConvenioRetribucion.fechaFirmaDocumento}"></td>
+												<td class="ui center aligned" th:text="${documentoFideicomisoConvenioRetribucion.indicadorAdenda}"></td>
+												<td class="ui center aligned">
+													<div class="ui icon buttons">
+														<button class="ui button" data-tooltip="Descargar" data-position="right center" type="submit" name="descargarRow"
+																th:value="${documentoFideicomisoConvenioRetribucion.identificadorDocumentoFideicomiso}">
+															<i class="download icon"></i>
+														</button>
+													</div>
+												</td>			
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="ui right aligned secondary segment">
+									<div class="ui pagination menu">
+										<button class="button" type="submit" name="leftRow">
+											<a class="icon item"> <i class="left arrow icon"></i></a>
+										</button>
+										<a th:text="${documentoFideicomisoConvenioRetribucionModel.paginaActual}"
+											class="active item"> </a>
+										<div class="disabled item">...</div>
+										<a th:text="${documentoFideicomisoConvenioRetribucionModel.cantidadRegistros + ' reg.'}"
+											class="disabled item"> </a>
+										<div class="disabled item">...</div>
+										<a th:text="${documentoFideicomisoConvenioRetribucionModel.paginaFinal}" class="item"></a>
+										<button class="button" type="submit" name="rightRow">
+											<a class="icon item"> <i class="right arrow icon"></i></a>
+										</button>
+									</div>
+								</div>
+								<div class="ui secondary segment">
+									<div th:if="${documentoFideicomisoConvenioRetribucionModel.result == '2'}"
+										class="ui info message">
+										<i class="close icon"></i>
+										<div class="header">Mensaje de información</div>
+										<p>No hay más registros a la derecha...</p>
+									</div>
+									<div th:if="${documentoFideicomisoConvenioRetribucionModel.result == '3'}"
+										class="ui info message">
+										<i class="close icon"></i>
+										<div class="header">Mensaje de información</div>
+										<p>No hay más registros a la izquierda...</p>
+									</div>
+									<input type="hidden" th:field="*{paginaActual}" th:value="${paginaActual}"> 
+									<input type="hidden" th:field="*{paginaFinal}" th:value="${paginaFinal}">
+									<input type="hidden" th:field="*{identificadorFideicomiso}" th:value="${identificadorFideicomiso}">
+									<input type="hidden" id="tipoDocumento" name="tipoDocumento" value="CR">
+								</div>
+							</div>
+						</form>
+						<div class="ui hidden divider"></div>
+						<form class="ui form" id="frm-contrato_CF" action="#" th:action="@{/detalleContrato/buscarDetalleContrato}"
+						      th:object="${documentoFideicomisoContratoFideicomisoModel}" method="POST">
+						    <div class="ui segments">							
+								<div class="ui secondary segment">
+									<h3>CONTRATO FIDEICOMISO</h3>
+									<table class="ui selectable celled table">
+										<thead>
+											<tr>
+												<th></th>
+												<th>Estado</th>
+												<th class="ui center aligned">Firmado</th>
+												<th class="ui center aligned">Adenda</th>
+												<th class="ui center aligned">Documento</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="documentoFideicomisoContratoFideicomiso : ${documentoFideicomisoContratoFideicomisoModel.rows}">
+												<td class="ui center aligned">
+													<div class="ui icon buttons">
+														<button class="ui button" data-tooltip="Actividades" data-position="right center" type="button" onclick="mostrarDetalleDocumentoFideicomiso(this)"
+														id="detailRow" name="detailRow" th:value="${documentoFideicomisoContratoFideicomiso.identificadorDocumentoFideicomiso}">
+															<i class="list ul icon"></i>
+														</button>
+													</div>													
+												</td>
+												<td th:text="${documentoFideicomisoContratoFideicomiso.descripcionEstado}"></td>
+												<td class="ui center aligned" th:text="${documentoFideicomisoContratoFideicomiso.fechaFirmaDocumento}"></td>
+												<td class="ui center aligned" th:text="${documentoFideicomisoContratoFideicomiso.indicadorAdenda}"></td>
+												<td class="ui center aligned">
+													<div class="ui icon buttons">
+														<button class="ui button" data-tooltip="Descargar" data-position="right center" type="submit" name="descargarRow"
+																th:value="${documentoFideicomisoContratoFideicomiso.identificadorDocumentoFideicomiso}">
+															<i class="download icon"></i>
+														</button>
+													</div>
+												</td>															
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="ui right aligned secondary segment">
+									<div class="ui pagination menu">
+										<button class="button" type="submit" name="leftRow">
+											<a class="icon item"> <i class="left arrow icon"></i></a>
+										</button>
+										<a th:text="${documentoFideicomisoContratoFideicomisoModel.paginaActual}"
+											class="active item"> </a>
+										<div class="disabled item">...</div>
+										<a th:text="${documentoFideicomisoContratoFideicomisoModel.cantidadRegistros + ' reg.'}"
+											class="disabled item"> </a>
+										<div class="disabled item">...</div>
+										<a th:text="${documentoFideicomisoContratoFideicomisoModel.paginaFinal}" class="item"></a>
+										<button class="button" type="submit" name="rightRow">
+											<a class="icon item"> <i class="right arrow icon"></i></a>
+										</button>
+									</div>
+								</div>
+								<div class="ui secondary segment">
+									<div th:if="${documentoFideicomisoContratoFideicomisoModel.result == '2'}"
+										class="ui info message">
+										<i class="close icon"></i>
+										<div class="header">Mensaje de información</div>
+										<p>No hay más registros a la derecha...</p>
+									</div>
+									<div th:if="${documentoFideicomisoContratoFideicomisoModel.result == '3'}"
+										class="ui info message">
+										<i class="close icon"></i>
+										<div class="header">Mensaje de información</div>
+										<p>No hay más registros a la izquierda...</p>
+									</div>
+									<input type="hidden" th:field="*{paginaActual}" th:value="${paginaActual}"> 
+									<input type="hidden" th:field="*{paginaFinal}" th:value="${paginaFinal}">
+									<input type="hidden" th:field="*{identificadorFideicomiso}" th:value="${identificadorFideicomiso}">
+									<input type="hidden" id="tipoDocumento" name="tipoDocumento" value="CF">
+								</div>
+							</div>
+						</form>
+						<div class="ui hidden divider"></div>	
+						<div>					
+							<button class="fluid ui negative basic button" type="submit" name="backListaContratoFideicomiso">
+								<i class="reply icon"></i> Retroceder
+							</button>
+						</div>						
+					</form>
+					
+					<div class="ui fullscreen modal" id="modalPrincipal">
+						<div class="ui form">							
+							<h3><label>FORMALIZACIÓN CONTRACTUAL</label></h3>																										
+							<div class="ui secondary segment">
+								<h4>ACTIVIDADES</h4>
+								<table class="ui celled table">
+									<thead>
+										<tr>
+											<th>Actividad</th>
+											<th class="ui center aligned">Inicio</th>
+											<th>Estado</th>
+											<th class="ui center aligned">Fin</th>
+											<th>Responsable</th>
+											<th class="ui center aligned">Observación</th>																	
+										</tr>							
+									</thead>
+									<tbody id="tDetalleDocumentoFideicomiso"></tbody>
+								</table>
+							</div>
+						</div>	
+						<div class="actions">
+							<div class="ui black deny button">Cerrar</div>
+						</div>						
+					</div>
+					
+					<div class="ui mini test modal" id="modalSecundario">							
+							<div class="header">Atención!</div>
+							<div class="content">
+								<div class="description"><h4>No existe detalle de movimiento en la cuenta</h4></div>
+							</div>
+							<div class="actions">
+								<div class="ui negative button">Cerrar</div>								
+							</div>
+					</div>	
+				</div>
+				<div class="one wide column"></div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function toggleSidebar() {
+			$("#app .ui.sidebar").sidebar({
+				context : $("#app")
+			}).sidebar("setting", "transition", "overlay").sidebar("toggle");
+		}
+
+		document.addEventListener("DOMContentLoaded", function() {
+			startTime();
+		});
+
+		function startTime(){
+			var date = new Date();
+			var d  = date.getDate();
+			var day = (d < 10) ? '0' + d : d;
+			var m = date.getMonth() + 1;
+			var month = (m < 10) ? '0' + m : m;
+			var yy = date.getYear();
+			var year = (yy < 1000) ? yy + 1900 : yy;
+			var fecha = day + "/" + month + "/" + year;
+			
+			var h=date.getHours();
+			var m=date.getMinutes();
+			var s=date.getSeconds();
+			m=checkTime(m);
+			s=checkTime(s);
+			var hora = h+":"+m+":"+s;
+
+			$("#reloj").text(fecha + " " + hora);
+			
+			t=setTimeout('startTime()',500);
+		}
+		
+		function checkTime(i){
+			if (i<10) {
+				i="0" + i;
+			}
+			return i;
+		}
+
+		$(document).ready(function() {
+			$('#abrir_menu').click(function() {
+				toggleSidebar();
+			});
+		});
+	</script>
+	<script type="text/javascript">
+		function mostrarDetalleDocumentoFideicomiso(object){				
+			var id = object.value;
+			var datosGenerales = {};
+			datosGenerales["identificadorDocumentoFideicomiso"] = id;
+			$.ajax({
+				type: "POST",
+				contentType: "application/json",
+			    url: "/detalleContrato/mostrarDetalleDocumentoFideicomiso",
+			    data: JSON.stringify(datosGenerales),
+			    dataType: 'json',
+			    cache: false,
+			    timeout: 600000,
+				success: function (data) {						
+						var listDetalleDocumentoFideicomiso = data['rows'];
+						if (listDetalleDocumentoFideicomiso.length > 0){						
+							var detalleTabla = "";
+							for (var i=0;i<listDetalleDocumentoFideicomiso.length;i++){
+								detalleTabla += "<tr>";
+								detalleTabla += 	"<td>" + listDetalleDocumentoFideicomiso[i]['descripcionActividad'] + "</td>";
+								detalleTabla += 	"<td class=\"ui center aligned\">" + listDetalleDocumentoFideicomiso[i]['fechaInicioActividad'] + "</td>";
+								detalleTabla += 	"<td>" + listDetalleDocumentoFideicomiso[i]['descripcionEstadoActividad'] + "</td>";
+								detalleTabla += 	"<td class=\"ui center aligned\">" + listDetalleDocumentoFideicomiso[i]['fechaFinActividad'] + "</td>";
+								detalleTabla += 	"<td>" + listDetalleDocumentoFideicomiso[i]['nombreResponsable'] + "</td>";
+								detalleTabla += 	"<td class=\"ui center aligned\">" + listDetalleDocumentoFideicomiso[i]['flagAtencion'] + "</td>";
+								detalleTabla += "</tr>";
+							}
+							$('#tDetalleDocumentoFideicomiso').html(detalleTabla);
+							$('#modalPrincipal').modal('show');
+						} else {
+							$('#modalSecundario').modal('show');	
+						}
+			    },
+				error: function (e) {}
+			});						
+		}	
+	</script>	
+</body>

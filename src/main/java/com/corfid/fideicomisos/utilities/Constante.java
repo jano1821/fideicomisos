@@ -39,6 +39,9 @@ public class Constante {
     public static final String URL_LISTA_FIDEICOMISO_DOLARES = "bancos/posicionBanco/form_fideicomiso_dolares";
     public static final String URL_LISTA_MOVIMIENTOS_CUENTA = "bancos/posicionBanco/form_child_movimientos";
     public static final String LISTA_EEFF = "estadosFinancieros/lista_eeff";
+    public static final String URL_CONTRATO = "/contrato/getListContratos";
+    public static final String URL_LISTA_CONTRATO = "bancos/flujoProcesoDocumento/form_contrato";
+    public static final String URL_LISTA_DETALLE_CONTRATO = "bancos/flujoProcesoDocumento/form_child_detalle_contrato";
     
     //TABLAS
     public static final String TABLA_USUARIO = "admusuar";
@@ -100,6 +103,10 @@ public class Constante {
     public static final String FORMULARIO_FIDEICOMISO = "FIDEICOMISO";
     public static final String FORMULARIO_FIDEICOMISO_SOLES = "FIDEICOMISO_SOLES";
     public static final String FORMULARIO_FIDEICOMISO_DOLARES = "FIDEICOMISO_DOLARES";
+    public static final String DOCUMENTO_FIDEICOMISO_CONVENIO_RETRIBUCION = "CR";
+    public static final String DOCUMENTO_FIDEICOMISO_CONTRATO_FIDEICOMISO = "CF";
+    public static final String FORMA_ACCESO_BASE_DATOS = "BD";
+    public static final String FORMA_ACCESO_RUTA_DIRECTORIO = "RD";
     
     //NOMBRE DE MODULOS
     public static final String MODULO_MENU = "Menús";
