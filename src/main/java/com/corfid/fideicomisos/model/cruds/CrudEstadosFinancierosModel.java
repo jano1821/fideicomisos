@@ -9,6 +9,8 @@ import com.corfid.fideicomisos.model.utilities.CrudModel;
 public class CrudEstadosFinancierosModel extends CrudModel {
 
     private String busqueda;
+    private String mesFechaCorte;
+    private String anioFechaCorte;
     private List<EstadosFinancierosModel> rows = new ArrayList<EstadosFinancierosModel>();
 
     public String getBusqueda() {
@@ -17,6 +19,22 @@ public class CrudEstadosFinancierosModel extends CrudModel {
 
     public void setBusqueda(String busqueda) {
         this.busqueda = busqueda;
+    }
+
+    public String getMesFechaCorte() {
+        return mesFechaCorte;
+    }
+
+    public void setMesFechaCorte(String mesFechaCorte) {
+        this.mesFechaCorte = mesFechaCorte;
+    }
+
+    public String getAnioFechaCorte() {
+        return anioFechaCorte;
+    }
+
+    public void setAnioFechaCorte(String anioFechaCorte) {
+        this.anioFechaCorte = anioFechaCorte;
     }
 
     public List<EstadosFinancierosModel> getRows() {

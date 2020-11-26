@@ -5,7 +5,10 @@ import com.corfid.fideicomisos.model.eeff.EstadosFinancierosModel;
 
 public interface EstadosFinancierosInterface {
 
-    public CrudEstadosFinancierosModel listEEFFByFideicomisoPaginado(Integer fideicomiso,
+    public CrudEstadosFinancierosModel listEEFFByFideicomisoPaginado(String fideicomiso,
+                                                                     String mesFechaCorte,
+                                                                     String anioFechaCorte,
+                                                                     String rucFideicomisario,
                                                                      Integer pagina,
                                                                      Integer cant) throws Exception;
 

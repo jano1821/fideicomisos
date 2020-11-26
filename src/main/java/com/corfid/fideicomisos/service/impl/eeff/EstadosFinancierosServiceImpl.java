@@ -1,6 +1,9 @@
 package com.corfid.fideicomisos.service.impl.eeff;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +32,79 @@ public class EstadosFinancierosServiceImpl extends AbstractService implements Es
     private EstadosFinancierosConverter estadosFinancierosConverter;
     
     @Override
-    public CrudEstadosFinancierosModel listEEFFByFideicomisoPaginado(Integer fideicomiso,
-                                                       Integer pagina,
-                                                       Integer cant) throws Exception {
+    public CrudEstadosFinancierosModel listEEFFByFideicomisoPaginado(String fideicomiso,
+                                                                     String mesFechaCorte,
+                                                                     String anioFechaCorte,
+                                                                     String rucFideicomisario,
+                                                                     Integer pagina,
+                                                                     Integer cant) throws Exception {
         List<EstadosFinancieros> listEstadosFinancieros;
         List<EstadosFinancierosModel> listEstadosFinancierosModel = new ArrayList<EstadosFinancierosModel>();
-        Page<EstadosFinancieros> pageEstadosFinancieros;
+        Page<EstadosFinancieros> pageEstadosFinancieros = null;
         CrudEstadosFinancierosModel CcudEstadosFinancierosModel = new CrudEstadosFinancierosModel();
+        Date fechaDate;
+        Integer fechaNumero;
 
         try {
-            pageEstadosFinancieros = estadosFinancierosRepository.listEEFFByFideicomisoPaginado(fideicomiso,
-                                                                    obtenerIndexPorPagina(pagina,
-                                                                                          cant,
-                                                                                          "fechaCorte",
-                                                                                          true,
-                                                                                          false));
+            /*if (_equiv(anioFechaCorte, "0000") || _equiv(mesFechaCorte, "00") || _isEmpty(anioFechaCorte) || _isEmpty(mesFechaCorte)) {
+                if ((_equiv(anioFechaCorte, "0000") || _isEmpty(anioFechaCorte)) && (!_equiv(mesFechaCorte, "00") && !_isEmpty(mesFechaCorte))) {
+                    fechaNumero = _toInteger(mesFechaCorte);
+                    pageEstadosFinancieros = estadosFinancierosRepository.listEEFFByFideicomisoPaginadoByMes(fideicomiso,
+                                                                                                             rucFideicomisario,
+                                                                                                             fechaNumero,
+                                                                                                             obtenerIndexPorPagina(pagina,
+                                                                                                                                   cant,
+                                                                                                                                   "fechaCorte",
+                                                                                                                                   true,
+                                                                                                                                   false));
+                }
+                if ((!_equiv(anioFechaCorte, "0000") && !_isEmpty(anioFechaCorte)) && (_equiv(mesFechaCorte, "00") || _isEmpty(mesFechaCorte))) {
+                    fechaNumero = _toInteger(anioFechaCorte);
+                    pageEstadosFinancieros = estadosFinancierosRepository.listEEFFByFideicomisoPaginadoByAnio(fideicomiso,
+                                                                                                              rucFideicomisario,
+                                                                                                              fechaNumero,
+                                                                                                              obtenerIndexPorPagina(pagina,
+                                                                                                                                    cant,
+                                                                                                                                    "fechaCorte",
+                                                                                                                                    true,
+                                                                                                                                    false));
+                }
+                if ((_equiv(anioFechaCorte, "0000") || _isEmpty(anioFechaCorte)) && (_equiv(mesFechaCorte, "00") || _isEmpty(mesFechaCorte))) {
+
+                    pageEstadosFinancieros = estadosFinancierosRepository.listEEFFByFideicomisoPaginadoSinFecha(fideicomiso,
+                                                                                                                rucFideicomisario,
+                                                                                                                obtenerIndexPorPagina(pagina,
+                                                                                                                                      cant,
+                                                                                                                                      "fechaCorte",
+                                                                                                                                      true,
+                                                                                                                                      false));
+                }
+            } else {
+                Calendar calendario = Calendar.getInstance();
+                calendario.set(_toInteger(anioFechaCorte), _toInteger(mesFechaCorte) - 1, 1);
+                Integer ultimoDiaMes = calendario.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                fechaDate = formato.parse(_toStr(ultimoDiaMes) + "/" + _toStr(mesFechaCorte) + "/" + _toStr(anioFechaCorte));
+                
+                pageEstadosFinancieros = estadosFinancierosRepository.listEEFFByFideicomisoPaginado(fideicomiso,
+                                                                                                    rucFideicomisario,
+                                                                                                    fechaDate,
+                                                                                                    obtenerIndexPorPagina(pagina,
+                                                                                                                          cant,
+                                                                                                                          "fechaCorte",
+                                                                                                                          true,
+                                                                                                                          false));
+            }*/
+            
+            pageEstadosFinancieros = estadosFinancierosRepository.listEEFFByFideicomisoPaginadoByPeriodo(fideicomiso,
+                                                                                                         rucFideicomisario,
+                                                                                                         anioFechaCorte+mesFechaCorte,
+                                                                                                         obtenerIndexPorPagina(pagina,
+                                                                                                                               cant,
+                                                                                                                               "fechaCorte",
+                                                                                                                               true,
+                                                                                                                               false));
 
             listEstadosFinancieros = pageEstadosFinancieros.getContent();
             CcudEstadosFinancierosModel.setPaginaFinal(pageEstadosFinancieros.getTotalPages());

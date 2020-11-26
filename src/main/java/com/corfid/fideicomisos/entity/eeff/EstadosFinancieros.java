@@ -63,6 +63,9 @@ public class EstadosFinancieros extends Auditoria {
     @Column(name = "c_estado", nullable = false, length = 1, insertable = true, updatable = true)
     private String estado;
 
+    @Column(name = "c_periodo", nullable = true, length = 6, insertable = true, updatable = true)
+    private String periodo;
+
     public Integer getIdEstadosFinancieros() {
         return idEstadosFinancieros;
     }
@@ -159,7 +162,15 @@ public class EstadosFinancieros extends Auditoria {
         this.estado = estado;
     }
 
-    public EstadosFinancieros(Integer idEstadosFinancieros, Fideicomiso fideicomiso, String tipoInforme, Date fechaCorte, String monedaElaboracionInforme, String monedaExpresionInforme, String ruta, byte[] archivo, String nombreArchivo, String pesoArchivo, String tipoArchivo, String estado) {
+    public String getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(String periodo) {
+        this.periodo = periodo;
+    }
+
+    public EstadosFinancieros(Integer idEstadosFinancieros, Fideicomiso fideicomiso, String tipoInforme, Date fechaCorte, String monedaElaboracionInforme, String monedaExpresionInforme, String ruta, byte[] archivo, String nombreArchivo, String pesoArchivo, String tipoArchivo, String estado, String periodo) {
         super();
         this.idEstadosFinancieros = idEstadosFinancieros;
         this.fideicomiso = fideicomiso;
@@ -173,6 +184,7 @@ public class EstadosFinancieros extends Auditoria {
         this.pesoArchivo = pesoArchivo;
         this.tipoArchivo = tipoArchivo;
         this.estado = estado;
+        this.periodo = periodo;
     }
 
     public EstadosFinancieros() {

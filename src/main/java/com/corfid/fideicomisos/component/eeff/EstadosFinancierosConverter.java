@@ -42,6 +42,7 @@ public class EstadosFinancierosConverter {
         estadosFinancierosModel.setRuta(estadosFinancieros.getRuta());
         estadosFinancierosModel.setTipoArchivo(estadosFinancieros.getTipoArchivo());
         estadosFinancierosModel.setTipoInforme(estadosFinancieros.getTipoInforme());
+        estadosFinancierosModel.setNombreFideicomiso(estadosFinancieros.getFideicomiso().getNombreFideicomiso());
 
         if (StringUtil.equiv(estadosFinancieros.getEstadoRegistro(), "S")) {
             estadosFinancierosModel.setDescEstadoRegistro("Vigente");

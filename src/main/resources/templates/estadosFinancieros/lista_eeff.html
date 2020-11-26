@@ -38,25 +38,37 @@
 
 
 					<form class="ui form" action="#"
+						name="formlistaeeff"
 						th:action="@{/eeff/crudAccionesListaEEFF}"
 						th:object="${crudEstadosFinancierosModel}" method="POST" id="frm-eeff">
 
 
 						<div class="ui segments">
 							<div class="ui segment">
-								<div class="ui fluid action input">
-									<select class="ui fluid search dropdown"
-											name="busqueda" id="busqueda"
-											th:field="*{busqueda}">
-										<option selected value="">Seleccionar Fideicomiso...</option>
-										<option th:each="fideicomiso : ${comboFideicomisarios}"
-												th:value="${fideicomiso.identificadorFideicomiso}"
-												th:text="${fideicomiso.nombreFideicomiso}"
-												th:selected="${fideicomiso.identificadorFideicomiso==busqueda}"></option>
+								<div class="ui fluid icon input">
+									<input type="text" th:field="*{busqueda}"
+										th:value="${busqueda}" placeholder="Busqueda por Nombre de Fideicomiso...">
+									<select
+										class="ui dropdown" name="mesFechaCorte"
+										id="mesFechaCorte" th:field="*{mesFechaCorte}">
+										<option value="">Mes...</option>
+										<option th:each="mes : ${listMeses}"
+											th:value="${mes.valorConstraint}"
+											th:text="${mes.descConstraint}"
+											th:selected="${mes.valorConstraint==mesFechaCorte}"></option>
+									</select>
+									<select
+										class="ui dropdown" name="anioFechaCorte"
+										id="anioFechaCorte" th:field="*{anioFechaCorte}">
+										<option value="">Año...</option>
+										<option th:each="anio : ${listAnios}"
+											th:value="${anio.valorConstraint}"
+											th:text="${anio.descConstraint}"
+											th:selected="${anio.valorConstraint==anioFechaCorte}"></option>
 									</select>
 									<button name="findRow" class="ui icon button"
 										data-tooltip="Buscar" data-position="bottom center">
-										<i class="search icon"></i>Búsqueda
+										<i class="search icon"></i>
 									</button>
 								</div>
 							</div>
@@ -64,6 +76,7 @@
 								<table class="ui selectable celled table">
 									<thead>
 										<tr>
+											<th class="ui center aligned">Fideicomiso</th>
 											<th class="ui center aligned">Fecha de Corte</th>
 											<th class="ui center aligned">Tipo de Informe</th>
 											<th class="ui center aligned">Estado</th>
@@ -73,18 +86,18 @@
 									<tbody>
 										<tr th:each="eeff : ${crudEstadosFinancierosModel.rows}"
 											th:class="${eeff.estadoRegistro=='N'}? 'negative'">
+											<td th:text="${eeff.nombreFideicomiso}"></td>
 											<td th:text="${eeff.fechaCorte}"></td>
-											<td class="ui center aligned" th:text="${eeff.descTipoInforme}"></td>
-											<td class="ui center aligned"
+											<td class="ui left aligned" th:text="${eeff.descTipoInforme}"></td>
+											<td class="ui left aligned"
 												th:text="${eeff.descEstado}"></td>
 											<td class="ui center aligned">
-												<div class="ui icon buttons">
+												<a href="#" th:href="@{/eeff/descargarEEFF?id=__${eeff.idEstadosFinancieros}__}" TARGET="_blank">
 													<button class="ui button" data-tooltip="Descargar"
-														data-position="right center" type="submit" name="descargarRow"
-														th:value="${eeff.idEstadosFinancieros}">
-														<i class="edit icon"></i>
+														data-position="right center" type="button">
+														<i class="download icon"></i>
 													</button>
-												</div>
+												</a>
 											</td>
 										</tr>
 									</tbody>
@@ -179,16 +192,11 @@
 			  toggleSidebar();
 		  });
 	});
+
+	
 </script>
 <script type="text/javascript">
 	$('.ui.dropdown').dropdown();
-</script>
-<script type="text/javascript">
-	/*$('#busqueda').change(function() {
-		var end = this.value;
-		//alert(end);
-	  
-	});*/
 </script>
 </body>
 </html>
