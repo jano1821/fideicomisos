@@ -22,9 +22,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,6 +41,7 @@ import com.corfid.fideicomisos.service.banco.FideicomisoInterface;
 import com.corfid.fideicomisos.service.flujoprocesodocumento.ActividadDetalleDocumentoFideicomisoInterface;
 import com.corfid.fideicomisos.service.flujoprocesodocumento.DetalleDocumentoFideicomisoInterface;
 import com.corfid.fideicomisos.service.flujoprocesodocumento.DocumentoFideicomisoInterface;
+import com.corfid.fideicomisos.service.utilities.RestClientEstadosFinancierosInterface;
 import com.corfid.fideicomisos.utilities.Constante;
 import com.corfid.fideicomisos.utilities.InitialController;
 import com.corfid.fideicomisos.utilities.StringUtil;
@@ -62,6 +65,10 @@ public class DetalleContratoController extends InitialController {
 	@Autowired
 	@Qualifier("actividadDetalleDocumentoFideicomisoServiceImpl")
 	private ActividadDetalleDocumentoFideicomisoInterface actividadDetalleDocumentoFideicomisoInterface;
+	
+	@Autowired
+    @Qualifier("restClientEstadosFinancierosServiceImpl")
+    RestClientEstadosFinancierosInterface restClientEstadosFinancierosInterface;
 
 	@PostMapping(value = "/buscarDetalleContrato", params = { "rightRow", "identificadorFideicomiso", "tipoDocumento",
 			"paginaActual", "paginaFinal" })
@@ -190,74 +197,74 @@ public class DetalleContratoController extends InitialController {
 		return modelAndView;
 	}
 
-	@PostMapping(value = "/buscarDetalleContrato", params = { "descargarRow" })
-	public ResponseEntity<byte[]> descargarPDF(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
-			DocumentoFideicomisoModel documentoFideicomisoConvenioRetribucionModel,
-			DocumentoFideicomisoModel documentoFideicomisoContratoFideicomisoModel, final BindingResult bindingResult,
-			final HttpServletRequest request) throws Exception {
+    @GetMapping("/buscarDetalleContrato")
+    public ResponseEntity<byte[]> descargarPDF(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+                                               DocumentoFideicomisoModel documentoFideicomisoConvenioRetribucionModel,
+                                               DocumentoFideicomisoModel documentoFideicomisoContratoFideicomisoModel,
+                                               @RequestParam(name = "id", required = false) int id) throws Exception {
 
-		DocumentoFideicomisoModel documentoFideicomisoModel = new DocumentoFideicomisoModel();
+        DocumentoFideicomisoModel documentoFideicomisoModel = new DocumentoFideicomisoModel();
 
-		String nombreArchivo = null;
-		String formaAccesoArchivo = null;
-		String identificadorDocumentoFideicomiso = null;
+        String nombreArchivo = null;
+        String formaAccesoArchivo = null;
+        String identificadorDocumentoFideicomiso = null;
 
-		ResponseEntity<byte[]> responseEntity = null;
+        ResponseEntity<byte[]> responseEntity = null;
 
-		byte[] bytes = null;
+        byte[] bytes = null;
 
-		try {
-			identificadorDocumentoFideicomiso = request.getParameter("descargarRow");
+        try {
+            identificadorDocumentoFideicomiso = StringUtil.toStr(id);
 
-			documentoFideicomisoModel = documentoFideicomisoInterface
-					.getDocumentoFideicomisoModel(StringUtil.toInteger(identificadorDocumentoFideicomiso));
+            documentoFideicomisoModel = documentoFideicomisoInterface.getDocumentoFideicomisoModel(StringUtil.toInteger(identificadorDocumentoFideicomiso));
 
-			nombreArchivo = documentoFideicomisoModel.getNombreArchivo();
-			formaAccesoArchivo = documentoFideicomisoModel.getFormaAccesoArchivo();
+            nombreArchivo = documentoFideicomisoModel.getNombreArchivo();
+            formaAccesoArchivo = documentoFideicomisoModel.getFormaAccesoArchivo();
 
-			if (StringUtil.equiv(Constante.FORMA_ACCESO_RUTA_DIRECTORIO, formaAccesoArchivo)) {
+            if (StringUtil.equiv(Constante.FORMA_ACCESO_RUTA_DIRECTORIO, formaAccesoArchivo)) {
 
-				String rutaDirectorio = "D:\\FTP\\" + nombreArchivo;
+                String rutaDirectorio = "D:\\FTP\\" + nombreArchivo;
 
-				File archivo = new File(rutaDirectorio);
-				FileInputStream fileInputStream = new FileInputStream(archivo);
+                File archivo = new File(rutaDirectorio);
+                FileInputStream fileInputStream = new FileInputStream(archivo);
 
-				byte[] buffer = new byte[1024];
-				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-				try {
-					for (int readNum; (readNum = fileInputStream.read(buffer)) != -1;) {
-						byteArrayOutputStream.write(buffer, 0, readNum);
-					}
-				} catch (IOException ex) {
-					System.out.print(ex.getMessage());
-				}
+                try {
+                    for (int readNum; (readNum = fileInputStream.read(buffer)) != -1;) {
+                        byteArrayOutputStream.write(buffer, 0, readNum);
+                    }
+                } catch (IOException ex) {
+                    System.out.print(ex.getMessage());
+                }
 
-				fileInputStream.close();
-				bytes = byteArrayOutputStream.toByteArray();
+                fileInputStream.close();
+                bytes = byteArrayOutputStream.toByteArray();
 
-				documentoFideicomisoInterface
-						.guardarDocumentoPDF(StringUtil.toInteger(identificadorDocumentoFideicomiso), bytes);
+                documentoFideicomisoInterface.guardarDocumentoPDF(StringUtil.toInteger(identificadorDocumentoFideicomiso),
+                                                                  bytes);
 
-			} else if (StringUtil.equiv(Constante.FORMA_ACCESO_BASE_DATOS, formaAccesoArchivo)) {
-				bytes = documentoFideicomisoModel.getArchivoFisicoAtachado();
-			}
+            } else if (StringUtil.equiv(Constante.FORMA_ACCESO_BASE_DATOS, formaAccesoArchivo)) {
+                bytes = documentoFideicomisoModel.getArchivoFisicoAtachado();
+            } else {
+                String token = restClientEstadosFinancierosInterface.getObtenerToken();
+                bytes = restClientEstadosFinancierosInterface.ObtenerArchivos(token,
+                                                                              documentoFideicomisoModel.getRutaUbicacionArchivo(),
+                                                                              nombreArchivo);
+            }
 
-			HttpHeaders headers = new HttpHeaders();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/pdf"));
+            headers.add("Content-Disposition", "inline; filename= .. ");
+            responseEntity = new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
 
-			headers.setContentType(MediaType.parseMediaType("application/pdf"));
-			headers.add("content-disposition", "attachment; filename=" + nombreArchivo);
-			headers.setContentDispositionFormData(nombreArchivo, nombreArchivo);
-			headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            return responseEntity;
 
-			responseEntity = new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
-
-			return responseEntity;
-
-		} catch (Exception e) {
-			return responseEntity;
-		}
-	}
+        } catch (Exception e) {
+            return responseEntity;
+        }
+    }
 
 	@PostMapping("/mostrarDetalleDocumentoFideicomiso")
 	public ResponseEntity<?> mostrarDetalleDocumentoFideicomiso(

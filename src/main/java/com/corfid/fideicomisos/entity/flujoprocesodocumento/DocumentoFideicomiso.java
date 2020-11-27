@@ -47,7 +47,7 @@ public class DocumentoFideicomiso extends Auditoria {
 	@Column(name = "c_foacar", nullable = false, insertable = true, updatable = true, length = 2)
 	private String formaAccesoArchivo;
 
-	@Column(name = "c_rutarc", nullable = true, insertable = true, updatable = true, length = 50)
+	@Column(name = "c_rutarc", nullable = true, insertable = true, updatable = true, length = 500)
 	private String rutaUbicacionArchivo;
 
 	 @Lob

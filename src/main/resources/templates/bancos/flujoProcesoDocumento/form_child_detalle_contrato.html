@@ -62,13 +62,13 @@
 												<td class="ui center aligned" th:text="${documentoFideicomisoConvenioRetribucion.fechaFirmaDocumento}"></td>
 												<td class="ui center aligned" th:text="${documentoFideicomisoConvenioRetribucion.indicadorAdenda}"></td>
 												<td class="ui center aligned">
-													<div class="ui icon buttons">
-														<button class="ui button" data-tooltip="Descargar" data-position="right center" type="submit" name="descargarRow"
-																th:value="${documentoFideicomisoConvenioRetribucion.identificadorDocumentoFideicomiso}">
+													<a href="#" th:href="@{/detalleContrato/buscarDetalleContrato?id=__${documentoFideicomisoConvenioRetribucion.identificadorDocumentoFideicomiso}__}" TARGET="_blank">
+														<button class="ui button" data-tooltip="Descargar"
+															data-position="right center" type="button">
 															<i class="download icon"></i>
 														</button>
-													</div>
-												</td>			
+													</a>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -140,13 +140,13 @@
 												<td class="ui center aligned" th:text="${documentoFideicomisoContratoFideicomiso.fechaFirmaDocumento}"></td>
 												<td class="ui center aligned" th:text="${documentoFideicomisoContratoFideicomiso.indicadorAdenda}"></td>
 												<td class="ui center aligned">
-													<div class="ui icon buttons">
-														<button class="ui button" data-tooltip="Descargar" data-position="right center" type="submit" name="descargarRow"
-																th:value="${documentoFideicomisoContratoFideicomiso.identificadorDocumentoFideicomiso}">
+													<a href="#" th:href="@{/detalleContrato/buscarDetalleContrato?id=__${documentoFideicomisoContratoFideicomiso.identificadorDocumentoFideicomiso}__}" TARGET="_blank">
+														<button class="ui button" data-tooltip="Descargar"
+															data-position="right center" type="button">
 															<i class="download icon"></i>
 														</button>
-													</div>
-												</td>															
+													</a>
+												</td>
 											</tr>
 										</tbody>
 									</table>
