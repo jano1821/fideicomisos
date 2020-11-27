@@ -304,12 +304,8 @@
 					$('#tSaldoTotal').html(cadena1HTML);
 					$('#tSaldoTotalConsolidado').html(cadena2HTML);					
 					$('#montoTipoCambio').text(Number.parseFloat(data["montoTipoCambio"]).toFixed(2));
-					
-					//if(data["montoTipoCambio"]==3.4){
-					$('.ui.modal').modal('show');
-					//}else{
-						//alert("hola mundo");
-					//}					
+
+					$('.ui.modal').modal('show');								
 				},
 				error : function(e) {
 				}

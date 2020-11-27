@@ -284,7 +284,7 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 
 		List<Object> listFideicomisoCuentaEntidadFinanciera;
 
-		tipoCambioSBSModel = tipoCambioSBSInterface.getTipoCambioSBSByFechaProceso(fechaProceso);
+		tipoCambioSBSModel = tipoCambioSBSInterface.getTipoCambioSBS();
 		tipoCambioSBS = tipoCambioSBSModel.getMontoTipoCambio();
 
 		listFideicomisoCuentaEntidadFinanciera = fideicomisoRepository

@@ -1,14 +1,16 @@
 package com.corfid.fideicomisos.model.flujoprocesodocumento;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActividadDetalleDocumentoFideicomisoModel {
 
 	private Integer identificadorActividadDetalleDocumentoFideicomiso;
-
 	private String descripcionActividad;
-
 	private String tipoDocumento;
-
 	private Integer nivelServicio;
+
+	public List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel = new ArrayList<ActividadDetalleDocumentoFideicomisoModel>();
 
 	public Integer getIdentificadorActividadDetalleDocumentoFideicomiso() {
 		return identificadorActividadDetalleDocumentoFideicomiso;
@@ -41,6 +43,15 @@ public class ActividadDetalleDocumentoFideicomisoModel {
 
 	public void setNivelServicio(Integer nivelServicio) {
 		this.nivelServicio = nivelServicio;
+	}
+
+	public List<ActividadDetalleDocumentoFideicomisoModel> getListActividadDetalleDocumentoFideicomisoModel() {
+		return listActividadDetalleDocumentoFideicomisoModel;
+	}
+
+	public void setListActividadDetalleDocumentoFideicomisoModel(
+			List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel) {
+		this.listActividadDetalleDocumentoFideicomisoModel = listActividadDetalleDocumentoFideicomisoModel;
 	}
 
 }

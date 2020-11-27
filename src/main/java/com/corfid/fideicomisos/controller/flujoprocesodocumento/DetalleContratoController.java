@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +29,14 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corfid.fideicomisos.model.banco.FideicomisoModel;
+import com.corfid.fideicomisos.model.flujoprocesodocumento.ActividadDetalleDocumentoFideicomisoModel;
 import com.corfid.fideicomisos.model.flujoprocesodocumento.DetalleDocumentoFideicomisoModel;
 import com.corfid.fideicomisos.model.flujoprocesodocumento.DocumentoFideicomisoModel;
 import com.corfid.fideicomisos.model.flujoprocesodocumento.FlujoProcesoDocumentoFideicomisoModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.service.banco.FideicomisoInterface;
+import com.corfid.fideicomisos.service.flujoprocesodocumento.ActividadDetalleDocumentoFideicomisoInterface;
 import com.corfid.fideicomisos.service.flujoprocesodocumento.DetalleDocumentoFideicomisoInterface;
 import com.corfid.fideicomisos.service.flujoprocesodocumento.DocumentoFideicomisoInterface;
 import com.corfid.fideicomisos.utilities.Constante;
@@ -54,6 +58,10 @@ public class DetalleContratoController extends InitialController {
 	@Autowired
 	@Qualifier("detalleDocumentoFideicomisoServiceImpl")
 	private DetalleDocumentoFideicomisoInterface detalleDocumentoFideicomisoInterface;
+
+	@Autowired
+	@Qualifier("actividadDetalleDocumentoFideicomisoServiceImpl")
+	private ActividadDetalleDocumentoFideicomisoInterface actividadDetalleDocumentoFideicomisoInterface;
 
 	@PostMapping(value = "/buscarDetalleContrato", params = { "rightRow", "identificadorFideicomiso", "tipoDocumento",
 			"paginaActual", "paginaFinal" })
@@ -257,6 +265,9 @@ public class DetalleContratoController extends InitialController {
 			final BindingResult bindingResult, Errors errors) {
 
 		String msgError = null;
+		Integer identificadorDocumentoFideicomiso = null;
+
+		List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel = new ArrayList<ActividadDetalleDocumentoFideicomisoModel>();
 
 		try {
 			if (errors.hasErrors()) {
@@ -265,8 +276,17 @@ public class DetalleContratoController extends InitialController {
 				return ResponseEntity.badRequest().body(msgError);
 			}
 
-			detalleDocumentoFideicomisoModel = detalleDocumentoFideicomisoInterface.getListDetalleDocumentoFideicomiso(
-					detalleDocumentoFideicomisoModel.getIdentificadorDocumentoFideicomiso());
+			identificadorDocumentoFideicomiso = detalleDocumentoFideicomisoModel.getIdentificadorDocumentoFideicomiso();
+
+			detalleDocumentoFideicomisoModel = detalleDocumentoFideicomisoInterface
+					.getListDetalleDocumentoFideicomiso(identificadorDocumentoFideicomiso);
+
+			listActividadDetalleDocumentoFideicomisoModel = actividadDetalleDocumentoFideicomisoInterface
+					.getListActividadDetalleDocumentoFideicomisoModel(identificadorDocumentoFideicomiso);
+
+			detalleDocumentoFideicomisoModel.setCadenaActividadDetalleDocumentoFideicomiso(
+					actividadDetalleDocumentoFideicomisoInterface.getCadenaActividadDetalleDocumentoFideicomiso(
+							listActividadDetalleDocumentoFideicomisoModel));
 
 		} catch (Exception ex) {
 			System.out.println(ex);
@@ -278,8 +298,8 @@ public class DetalleContratoController extends InitialController {
 
 	@PostMapping(value = "/buscarDetalleContrato", params = { "backListaContratoFideicomiso" })
 	public String retrocederListaFideicomiso(
-			FlujoProcesoDocumentoFideicomisoModel flujoProcesoDocumentoFideicomisoModel, BindingResult bindingResult)
-			throws Exception {
+			FlujoProcesoDocumentoFideicomisoModel flujoProcesoDocumentoFideicomisoModel, BindingResult bindingResult,
+			final HttpServletRequest request) throws Exception {
 
 		String urlOrigen = Constante.URL_CONTRATO;
 

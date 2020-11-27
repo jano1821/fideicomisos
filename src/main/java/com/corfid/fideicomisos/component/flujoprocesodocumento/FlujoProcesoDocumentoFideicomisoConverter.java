@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.component.flujoprocesodocumento;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.springframework.stereotype.Component;

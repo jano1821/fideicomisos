@@ -187,20 +187,18 @@
 									<input type="hidden" id="tipoDocumento" name="tipoDocumento" value="CF">
 								</div>
 							</div>
-						</form>
-						<div class="ui hidden divider"></div>	
-						<div>					
+							<div>					
 							<button class="fluid ui negative basic button" type="submit" name="backListaContratoFideicomiso">
 								<i class="reply icon"></i> Retroceder
 							</button>
-						</div>						
+						</div>	
+						</form>											
 					</form>
 					
 					<div class="ui fullscreen modal" id="modalPrincipal">
 						<div class="ui form">							
-							<h3><label>FORMALIZACIÓN CONTRACTUAL</label></h3>																										
 							<div class="ui secondary segment">
-								<h4>ACTIVIDADES</h4>
+								<h3>FORMALIZACIÓN CONTRACTUAL</h3>
 								<table class="ui celled table">
 									<thead>
 										<tr>
@@ -215,10 +213,11 @@
 									<tbody id="tDetalleDocumentoFideicomiso"></tbody>
 								</table>
 							</div>
-						</div>	
-						<div class="actions">
-							<div class="ui black deny button">Cerrar</div>
+							<div class="ui secondary segment" id="divActividadDetalleDocumentoFideicomiso"></div>
 						</div>						
+						<div  class="actions">
+							<div class="ui black deny button">Cerrar</div>
+						</div>										
 					</div>
 					
 					<div class="ui mini test modal" id="modalSecundario">							
@@ -306,14 +305,34 @@
 								detalleTabla += 	"<td>" + listDetalleDocumentoFideicomiso[i]['descripcionEstadoActividad'] + "</td>";
 								detalleTabla += 	"<td class=\"ui center aligned\">" + listDetalleDocumentoFideicomiso[i]['fechaFinActividad'] + "</td>";
 								detalleTabla += 	"<td>" + listDetalleDocumentoFideicomiso[i]['nombreResponsable'] + "</td>";
-								detalleTabla += 	"<td class=\"ui center aligned\">" + listDetalleDocumentoFideicomiso[i]['flagAtencion'] + "</td>";
+								
+								if(listDetalleDocumentoFideicomiso[i]['flagAtencion'] == 1){
+									detalleTabla += 	"<td class=\"positive ui center aligned\">" + "<div class=\"ui avatar image\"><img src=\"/imgs/circleGreen.png\"/></div>" + "</td>";
+								}
+								if(listDetalleDocumentoFideicomiso[i]['flagAtencion'] == 2){
+									detalleTabla += 	"<td class=\"warning ui center aligned\">" + "<div class=\"ui avatar image\"><img src=\"/imgs/circleYellow.png\"/></div>" + "</td>";
+								}
+								if(listDetalleDocumentoFideicomiso[i]['flagAtencion'] == 3){
+									detalleTabla += 	"<td class=\"negative ui center aligned\">" + "<div class=\"ui avatar image\"><img src=\"/imgs/circleRed.png\"/></div>" + "</td>";
+								}
+								if(listDetalleDocumentoFideicomiso[i]['flagAtencion'] == 4){
+									detalleTabla += 	"<td class=\"ui center aligned\"></td>";
+								}
+
 								detalleTabla += "</tr>";
 							}
-							$('#tDetalleDocumentoFideicomiso').html(detalleTabla);
+							$('#tDetalleDocumentoFideicomiso').html(detalleTabla);							
+							
+							var cadenaHtml = data['cadenaActividadDetalleDocumentoFideicomiso'];							
+							$('#divActividadDetalleDocumentoFideicomiso').html(cadenaHtml);
+							
 							$('#modalPrincipal').modal('show');
+														
 						} else {
 							$('#modalSecundario').modal('show');	
 						}
+						
+						
 			    },
 				error: function (e) {}
 			});						

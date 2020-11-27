@@ -18,8 +18,10 @@ public class DetalleDocumentoFideicomisoModel {
 	private String flagAtencion;
 	private Integer ordenVisualizacion;
 	private String descripcionActividad;
+	private String cadenaActividadDetalleDocumentoFideicomiso;
 
 	public List<DetalleDocumentoFideicomisoModel> rows = new ArrayList<DetalleDocumentoFideicomisoModel>();
+	public List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel = new ArrayList<ActividadDetalleDocumentoFideicomisoModel>();
 
 	public Integer getIdentificadorDetalleDocumentoFideicomiso() {
 		return identificadorDetalleDocumentoFideicomiso;
@@ -118,12 +120,29 @@ public class DetalleDocumentoFideicomisoModel {
 		this.descripcionActividad = descripcionActividad;
 	}
 
+	public String getCadenaActividadDetalleDocumentoFideicomiso() {
+		return cadenaActividadDetalleDocumentoFideicomiso;
+	}
+
+	public void setCadenaActividadDetalleDocumentoFideicomiso(String cadenaActividadDetalleDocumentoFideicomiso) {
+		this.cadenaActividadDetalleDocumentoFideicomiso = cadenaActividadDetalleDocumentoFideicomiso;
+	}
+
 	public List<DetalleDocumentoFideicomisoModel> getRows() {
 		return rows;
 	}
 
 	public void setRows(List<DetalleDocumentoFideicomisoModel> rows) {
 		this.rows = rows;
+	}
+
+	public List<ActividadDetalleDocumentoFideicomisoModel> getListActividadDetalleDocumentoFideicomisoModel() {
+		return listActividadDetalleDocumentoFideicomisoModel;
+	}
+
+	public void setListActividadDetalleDocumentoFideicomisoModel(
+			List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel) {
+		this.listActividadDetalleDocumentoFideicomisoModel = listActividadDetalleDocumentoFideicomisoModel;
 	}
 
 }
