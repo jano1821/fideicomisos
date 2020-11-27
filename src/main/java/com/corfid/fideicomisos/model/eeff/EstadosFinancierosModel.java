@@ -24,6 +24,7 @@ public class EstadosFinancierosModel extends GenericModel {
     private String estadoRegistro;
     private String descTipoInforme;
     private String fechaCorteFormateada;
+    private String periodo;
 
     public Integer getIdEstadosFinancieros() {
         return idEstadosFinancieros;
@@ -167,6 +168,14 @@ public class EstadosFinancierosModel extends GenericModel {
 
     public void setFechaCorteFormateada(String fechaCorteFormateada) {
         this.fechaCorteFormateada = fechaCorteFormateada;
+    }
+
+    public String getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(String periodo) {
+        this.periodo = periodo;
     }
 
 }

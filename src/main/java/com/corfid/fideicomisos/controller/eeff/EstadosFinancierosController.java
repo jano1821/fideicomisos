@@ -272,9 +272,6 @@ public class EstadosFinancierosController extends InitialController {
             }
 
             CatalogoConstraintModel mes = new CatalogoConstraintModel();
-            /*mes.setValorConstraint("00");
-            mes.setDescConstraint("Todos");
-            listMeses.add(mes);*/
             for (int i = 1; i <= 12; i++) {
                 mes = new CatalogoConstraintModel();
                 if (i >= 10) {
@@ -323,9 +320,6 @@ public class EstadosFinancierosController extends InitialController {
             }
 
             CatalogoConstraintModel anio = new CatalogoConstraintModel();
-            /*anio.setValorConstraint("0000");
-            anio.setDescConstraint("Todos");
-            listAnios.add(anio);*/
             for (int i = 0; i < 30; i++) {
                 anio = new CatalogoConstraintModel();
                 anio.setValorConstraint(StringUtil.toStr(2005 + i));
@@ -339,7 +333,6 @@ public class EstadosFinancierosController extends InitialController {
             crudEstadosFinancierosModelLista.setPaginaActual(paginadoModel.getPaginaActual());
 
             mav.addObject("crudEstadosFinancierosModel", crudEstadosFinancierosModelLista);
-            //mav.addObject("comboFideicomisarios", listFideicomisoModel);
 
             mav.addObject("listMeses", listMeses);
             mav.addObject("listAnios", listAnios);
