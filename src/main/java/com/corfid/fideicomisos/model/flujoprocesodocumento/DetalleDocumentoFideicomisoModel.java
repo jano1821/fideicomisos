@@ -19,6 +19,7 @@ public class DetalleDocumentoFideicomisoModel {
 	private Integer ordenVisualizacion;
 	private String descripcionActividad;
 	private String cadenaActividadDetalleDocumentoFideicomiso;
+	private String cadenaTituloActividadDetalleDocumentoFideicomiso;
 
 	public List<DetalleDocumentoFideicomisoModel> rows = new ArrayList<DetalleDocumentoFideicomisoModel>();
 	public List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel = new ArrayList<ActividadDetalleDocumentoFideicomisoModel>();
@@ -143,6 +144,15 @@ public class DetalleDocumentoFideicomisoModel {
 	public void setListActividadDetalleDocumentoFideicomisoModel(
 			List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel) {
 		this.listActividadDetalleDocumentoFideicomisoModel = listActividadDetalleDocumentoFideicomisoModel;
+	}
+
+	public String getCadenaTituloActividadDetalleDocumentoFideicomiso() {
+		return cadenaTituloActividadDetalleDocumentoFideicomiso;
+	}
+
+	public void setCadenaTituloActividadDetalleDocumentoFideicomiso(
+			String cadenaTituloActividadDetalleDocumentoFideicomiso) {
+		this.cadenaTituloActividadDetalleDocumentoFideicomiso = cadenaTituloActividadDetalleDocumentoFideicomiso;
 	}
 
 }

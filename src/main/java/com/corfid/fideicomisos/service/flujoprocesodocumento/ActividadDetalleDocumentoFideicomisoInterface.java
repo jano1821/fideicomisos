@@ -12,4 +12,6 @@ public interface ActividadDetalleDocumentoFideicomisoInterface {
 	public String getCadenaActividadDetalleDocumentoFideicomiso(
 			List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel);
 
+	public String getTituloActividadesDetalleDocumentoFideicomiso(Integer identificadorDocumentoFideicomiso);
+
 }

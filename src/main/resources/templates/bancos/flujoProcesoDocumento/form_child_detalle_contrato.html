@@ -138,7 +138,7 @@
 												</td>
 												<td th:text="${documentoFideicomisoContratoFideicomiso.descripcionEstado}"></td>
 												<td class="ui center aligned" th:text="${documentoFideicomisoContratoFideicomiso.fechaFirmaDocumento}"></td>
-												<td class="ui center aligned" th:text="${documentoFideicomisoContratoFideicomiso.indicadorAdenda}"></td>
+												<td class="ui center aligned" th:text="${documentoFideicomisoContratoFideicomiso.indicadorAdenda}"></td>												
 												<td class="ui center aligned">
 													<a href="#" th:href="@{/detalleContrato/buscarDetalleContrato?id=__${documentoFideicomisoContratoFideicomiso.identificadorDocumentoFideicomiso}__}" TARGET="_blank">
 														<button class="ui button" data-tooltip="Descargar"
@@ -197,8 +197,12 @@
 					
 					<div class="ui fullscreen modal" id="modalPrincipal">
 						<div class="ui form">							
-							<div class="ui secondary segment">
-								<h3>FORMALIZACIÓN CONTRACTUAL</h3>
+							<div class="ui secondary segment">								
+								<h3>
+									<div class="ui fluid transparent input">
+										<input type="text" name="tituloActividades" id="tituloActividades" value="">
+									</div>
+								</h3>
 								<table class="ui celled table">
 									<thead>
 										<tr>
@@ -223,7 +227,7 @@
 					<div class="ui mini test modal" id="modalSecundario">							
 							<div class="header">Atención!</div>
 							<div class="content">
-								<div class="description"><h4>No existe detalle de movimiento en la cuenta</h4></div>
+								<div class="description"><h4>No existe detalle de actividades</h4></div>
 							</div>
 							<div class="actions">
 								<div class="ui negative button">Cerrar</div>								
@@ -294,7 +298,8 @@
 			    dataType: 'json',
 			    cache: false,
 			    timeout: 600000,
-				success: function (data) {						
+				success: function (data) {
+						$("#tituloActividades").val(data['cadenaTituloActividadDetalleDocumentoFideicomiso']);
 						var listDetalleDocumentoFideicomiso = data['rows'];
 						if (listDetalleDocumentoFideicomiso.length > 0){						
 							var detalleTabla = "";
