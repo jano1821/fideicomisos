@@ -41,8 +41,15 @@ public interface FideicomisoInterface {
 			Integer identificadorFideicomisario, String nombreFideicomiso, String codigoMoneda, Date fechaProceso);
 
 	public FideicomisoModel getFideicomisoModel(Integer identificadorCuentaEntidadFinanciera);
-	
+
 	public FideicomisoModel getFideicomisoByIdFideicomisoModel(Integer identificadorFideicomiso);
-	
-    public List<FideicomisoModel> getFideicomisoModel(String rucFideicomisario) throws Exception;
+
+	public List<FideicomisoModel> getFideicomisoModel(String rucFideicomisario) throws Exception;
+
+	public SaldoTotalMonedaModel calcularSaldoTotalMoneda(String cadenaBusqueda, String numeroDocumento,
+			String codigoMoneda, Double montoTipoCambio);
+
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisario(
+			Integer identificadorFideicomisario, Double montoTipoCambio);
+
 }

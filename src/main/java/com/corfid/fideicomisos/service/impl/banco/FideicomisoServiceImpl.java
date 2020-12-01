@@ -50,10 +50,10 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 	@Autowired
 	@Qualifier("cuentaEntidadFinancieraRepository")
 	private CuentaEntidadFinancieraRepository cuentaEntidadFinancieraRepository;
-	
+
 	@Autowired
-    @Qualifier("fideicomisoConverter")
-    private FideicomisoConverter fideicomisoConverter;
+	@Qualifier("fideicomisoConverter")
+	private FideicomisoConverter fideicomisoConverter;
 
 	public PosicionBancoModel getListaFideicomiso(String cadenaBusqueda, String numeroDocumento, String codigoMoneda,
 			Integer pagina, Integer cantRegistros) {
@@ -262,6 +262,45 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 		return saldoTotalMonedaModel;
 
 	}
+	
+	public SaldoTotalMonedaModel calcularSaldoTotalMoneda(String cadenaBusqueda, String numeroDocumento,
+			String codigoMoneda, Double montoTipoCambio) {
+
+		FideicomisarioModel fideicomisarioModel = new FideicomisarioModel();
+		SaldoTotalMonedaModel saldoTotalMonedaModel = new SaldoTotalMonedaModel();
+
+		Integer identificadorFideicomisario = null;
+
+		String cadenaFideicomiso = null;
+
+		fideicomisarioModel = fideicomisarioInterface.getFideicomisarioByNumeroDocumento(numeroDocumento);
+		identificadorFideicomisario = fideicomisarioModel.getIdentificadorFideicomisario();
+
+		if (StringUtil.isEmpty(codigoMoneda)) {
+			if (StringUtil.isEmpty(cadenaBusqueda)) {
+				saldoTotalMonedaModel = getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisario(
+						identificadorFideicomisario, montoTipoCambio);
+			} else {
+				cadenaFideicomiso = Constante.COMODIN_LIKE + cadenaBusqueda + Constante.COMODIN_LIKE;
+				saldoTotalMonedaModel = getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioNombreFideicomiso(
+						identificadorFideicomisario, cadenaFideicomiso, montoTipoCambio);
+			}
+
+		} else {
+			if (StringUtil.isEmpty(cadenaBusqueda)) {
+				saldoTotalMonedaModel = getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMoneda(
+						identificadorFideicomisario, codigoMoneda, montoTipoCambio);
+			} else {
+				cadenaFideicomiso = Constante.COMODIN_LIKE + cadenaBusqueda + Constante.COMODIN_LIKE;
+				saldoTotalMonedaModel = getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
+						identificadorFideicomisario, cadenaFideicomiso, codigoMoneda, montoTipoCambio);
+
+			}
+		}
+
+		return saldoTotalMonedaModel;
+
+	}
 
 	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisario(
 			Integer identificadorFideicomisario, Date fechaProceso) {
@@ -334,6 +373,74 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 
 		return saldoTotalMonedaModel;
 	}
+	
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisario(
+			Integer identificadorFideicomisario, Double montoTipoCambio) {
+
+		Double tipoCambioSBS = montoTipoCambio;
+		Double saldoContableSolesCuentaFideicomiso = new Double(0);
+		Double saldoDisponibleSolesCuentaFideicomiso = new Double(0);
+		Double saldoContableDolaresCuentaFideicomiso = new Double(0);
+		Double saldoDisponibleDolaresCuentaFideicomiso = new Double(0);
+
+		Double saldoConsolidadoContableSolesCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoDisponibleSolesCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoContableDolaresCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoDisponibleDolaresCuentaFideicomiso = new Double(0);
+
+		String codigoMoneda = null;
+		
+		SaldoTotalMonedaModel saldoTotalMonedaModel = new SaldoTotalMonedaModel();
+
+		List<Object> listFideicomisoCuentaEntidadFinanciera;
+
+		listFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
+				.getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisario(
+						identificadorFideicomisario);
+
+		for (int i = 0; i < listFideicomisoCuentaEntidadFinanciera.size(); i++) {
+
+			Object[] fila = (Object[]) listFideicomisoCuentaEntidadFinanciera.get(i);
+
+			codigoMoneda = (String) fila[10];
+
+			if (StringUtil.equiv(Constante.CODIGO_MONEDA_SOLES, codigoMoneda)) {
+				saldoContableSolesCuentaFideicomiso = saldoContableSolesCuentaFideicomiso
+						+ ((BigDecimal) fila[6]).doubleValue();
+				saldoDisponibleSolesCuentaFideicomiso = saldoDisponibleSolesCuentaFideicomiso
+						+ ((BigDecimal) fila[7]).doubleValue();
+			} else {
+				saldoContableDolaresCuentaFideicomiso = saldoContableDolaresCuentaFideicomiso
+						+ ((BigDecimal) fila[6]).doubleValue();
+				saldoDisponibleDolaresCuentaFideicomiso = saldoDisponibleDolaresCuentaFideicomiso
+						+ ((BigDecimal) fila[7]).doubleValue();
+			}
+
+		}
+
+		saldoConsolidadoContableSolesCuentaFideicomiso = saldoContableSolesCuentaFideicomiso
+				+ (saldoContableDolaresCuentaFideicomiso * tipoCambioSBS);
+		saldoConsolidadoDisponibleSolesCuentaFideicomiso = saldoDisponibleSolesCuentaFideicomiso
+				+ (saldoDisponibleDolaresCuentaFideicomiso * tipoCambioSBS);
+
+		saldoConsolidadoContableDolaresCuentaFideicomiso = saldoContableDolaresCuentaFideicomiso
+				+ (saldoContableSolesCuentaFideicomiso / tipoCambioSBS);
+		saldoConsolidadoDisponibleDolaresCuentaFideicomiso = saldoDisponibleDolaresCuentaFideicomiso
+				+ (saldoDisponibleSolesCuentaFideicomiso / tipoCambioSBS);
+
+		saldoTotalMonedaModel.setMontoTipoCambio(tipoCambioSBS);
+		saldoTotalMonedaModel.setSaldoTotalContableSoles(saldoContableSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalContableDolares(saldoContableDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalDisponibleSoles(saldoDisponibleSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalDisponibleDolares(saldoDisponibleDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoContableSoles(saldoConsolidadoContableSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoDisponibleSoles(saldoConsolidadoDisponibleSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoContableDolares(saldoConsolidadoContableDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel
+				.setSaldoTotalConsolidadoDisponibleDolares(saldoConsolidadoDisponibleDolaresCuentaFideicomiso);
+
+		return saldoTotalMonedaModel;
+	}
 
 	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioNombreFideicomiso(
 			Integer identificadorFideicomisario, String nombreFideicomiso, Date fechaProceso) {
@@ -356,8 +463,76 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 
 		List<Object> listFideicomisoCuentaEntidadFinanciera;
 
-		tipoCambioSBSModel = tipoCambioSBSInterface.getTipoCambioSBSByFechaProceso(fechaProceso);
+		tipoCambioSBSModel = tipoCambioSBSInterface.getTipoCambioSBS();
 		tipoCambioSBS = tipoCambioSBSModel.getMontoTipoCambio();
+
+		listFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
+				.getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioNombreFideicomiso(
+						identificadorFideicomisario, nombreFideicomiso);
+
+		for (int i = 0; i < listFideicomisoCuentaEntidadFinanciera.size(); i++) {
+
+			Object[] fila = (Object[]) listFideicomisoCuentaEntidadFinanciera.get(i);
+
+			codigoMoneda = (String) fila[10];
+
+			if (StringUtil.equiv(Constante.CODIGO_MONEDA_SOLES, codigoMoneda)) {
+				saldoContableSolesCuentaFideicomiso = saldoContableSolesCuentaFideicomiso
+						+ ((BigDecimal) fila[6]).doubleValue();
+				saldoDisponibleSolesCuentaFideicomiso = saldoDisponibleSolesCuentaFideicomiso
+						+ ((BigDecimal) fila[7]).doubleValue();
+			} else {
+				saldoContableDolaresCuentaFideicomiso = saldoContableDolaresCuentaFideicomiso
+						+ ((BigDecimal) fila[6]).doubleValue();
+				saldoDisponibleDolaresCuentaFideicomiso = saldoDisponibleDolaresCuentaFideicomiso
+						+ ((BigDecimal) fila[7]).doubleValue();
+			}
+
+		}
+
+		saldoConsolidadoContableSolesCuentaFideicomiso = saldoContableSolesCuentaFideicomiso
+				+ (saldoContableDolaresCuentaFideicomiso * tipoCambioSBS);
+		saldoConsolidadoDisponibleSolesCuentaFideicomiso = saldoDisponibleSolesCuentaFideicomiso
+				+ (saldoDisponibleDolaresCuentaFideicomiso * tipoCambioSBS);
+
+		saldoConsolidadoContableDolaresCuentaFideicomiso = saldoContableDolaresCuentaFideicomiso
+				+ (saldoContableSolesCuentaFideicomiso / tipoCambioSBS);
+		saldoConsolidadoDisponibleDolaresCuentaFideicomiso = saldoDisponibleDolaresCuentaFideicomiso
+				+ (saldoDisponibleSolesCuentaFideicomiso / tipoCambioSBS);
+
+		saldoTotalMonedaModel.setMontoTipoCambio(tipoCambioSBS);
+		saldoTotalMonedaModel.setSaldoTotalContableSoles(saldoContableSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalContableDolares(saldoContableDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalDisponibleSoles(saldoDisponibleSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalDisponibleDolares(saldoDisponibleDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoContableSoles(saldoConsolidadoContableSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoDisponibleSoles(saldoConsolidadoDisponibleSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoContableDolares(saldoConsolidadoContableDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel
+				.setSaldoTotalConsolidadoDisponibleDolares(saldoConsolidadoDisponibleDolaresCuentaFideicomiso);
+
+		return saldoTotalMonedaModel;
+	}
+	
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioNombreFideicomiso(
+			Integer identificadorFideicomisario, String nombreFideicomiso, Double montoTipoCambio) {
+
+		Double tipoCambioSBS = montoTipoCambio;
+		Double saldoContableSolesCuentaFideicomiso = new Double(0);
+		Double saldoDisponibleSolesCuentaFideicomiso = new Double(0);
+		Double saldoContableDolaresCuentaFideicomiso = new Double(0);
+		Double saldoDisponibleDolaresCuentaFideicomiso = new Double(0);
+
+		Double saldoConsolidadoContableSolesCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoDisponibleSolesCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoContableDolaresCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoDisponibleDolaresCuentaFideicomiso = new Double(0);
+
+		String codigoMoneda = null;
+		
+		SaldoTotalMonedaModel saldoTotalMonedaModel = new SaldoTotalMonedaModel();
+
+		List<Object> listFideicomisoCuentaEntidadFinanciera;
 
 		listFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
 				.getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioNombreFideicomiso(
@@ -426,8 +601,72 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 
 		List<Object> listFideicomisoCuentaEntidadFinanciera;
 
-		tipoCambioSBSModel = tipoCambioSBSInterface.getTipoCambioSBSByFechaProceso(fechaProceso);
+		tipoCambioSBSModel = tipoCambioSBSInterface.getTipoCambioSBS();
 		tipoCambioSBS = tipoCambioSBSModel.getMontoTipoCambio();
+
+		listFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
+				.getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMoneda(
+						identificadorFideicomisario, codigoMoneda);
+
+		for (int i = 0; i < listFideicomisoCuentaEntidadFinanciera.size(); i++) {
+
+			Object[] fila = (Object[]) listFideicomisoCuentaEntidadFinanciera.get(i);
+
+			if (StringUtil.equiv(Constante.CODIGO_MONEDA_SOLES, codigoMoneda)) {
+				saldoContableSolesCuentaFideicomiso = saldoContableSolesCuentaFideicomiso
+						+ ((BigDecimal) fila[6]).doubleValue();
+				saldoDisponibleSolesCuentaFideicomiso = saldoDisponibleSolesCuentaFideicomiso
+						+ ((BigDecimal) fila[7]).doubleValue();
+			} else {
+				saldoContableDolaresCuentaFideicomiso = saldoContableDolaresCuentaFideicomiso
+						+ ((BigDecimal) fila[6]).doubleValue();
+				saldoDisponibleDolaresCuentaFideicomiso = saldoDisponibleDolaresCuentaFideicomiso
+						+ ((BigDecimal) fila[7]).doubleValue();
+			}
+
+		}
+
+		saldoConsolidadoContableSolesCuentaFideicomiso = saldoContableSolesCuentaFideicomiso
+				+ (saldoContableDolaresCuentaFideicomiso * tipoCambioSBS);
+		saldoConsolidadoDisponibleSolesCuentaFideicomiso = saldoDisponibleSolesCuentaFideicomiso
+				+ (saldoDisponibleDolaresCuentaFideicomiso * tipoCambioSBS);
+
+		saldoConsolidadoContableDolaresCuentaFideicomiso = saldoContableDolaresCuentaFideicomiso
+				+ (saldoContableSolesCuentaFideicomiso / tipoCambioSBS);
+		saldoConsolidadoDisponibleDolaresCuentaFideicomiso = saldoDisponibleDolaresCuentaFideicomiso
+				+ (saldoDisponibleSolesCuentaFideicomiso / tipoCambioSBS);
+
+		saldoTotalMonedaModel.setMontoTipoCambio(tipoCambioSBS);
+		saldoTotalMonedaModel.setSaldoTotalContableSoles(saldoContableSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalContableDolares(saldoContableDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalDisponibleSoles(saldoDisponibleSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalDisponibleDolares(saldoDisponibleDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoContableSoles(saldoConsolidadoContableSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoDisponibleSoles(saldoConsolidadoDisponibleSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoContableDolares(saldoConsolidadoContableDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel
+				.setSaldoTotalConsolidadoDisponibleDolares(saldoConsolidadoDisponibleDolaresCuentaFideicomiso);
+
+		return saldoTotalMonedaModel;
+	}
+	
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMoneda(
+			Integer identificadorFideicomisario, String codigoMoneda, Double montoTipoCambio) {
+
+		Double tipoCambioSBS = montoTipoCambio;
+		Double saldoContableSolesCuentaFideicomiso = new Double(0);
+		Double saldoDisponibleSolesCuentaFideicomiso = new Double(0);
+		Double saldoContableDolaresCuentaFideicomiso = new Double(0);
+		Double saldoDisponibleDolaresCuentaFideicomiso = new Double(0);
+
+		Double saldoConsolidadoContableSolesCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoDisponibleSolesCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoContableDolaresCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoDisponibleDolaresCuentaFideicomiso = new Double(0);
+
+		SaldoTotalMonedaModel saldoTotalMonedaModel = new SaldoTotalMonedaModel();
+
+		List<Object> listFideicomisoCuentaEntidadFinanciera;
 
 		listFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
 				.getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMoneda(
@@ -494,8 +733,72 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 
 		List<Object> listFideicomisoCuentaEntidadFinanciera;
 
-		tipoCambioSBSModel = tipoCambioSBSInterface.getTipoCambioSBSByFechaProceso(fechaProceso);
+		tipoCambioSBSModel = tipoCambioSBSInterface.getTipoCambioSBS();
 		tipoCambioSBS = tipoCambioSBSModel.getMontoTipoCambio();
+
+		listFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
+				.getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
+						identificadorFideicomisario, codigoMoneda, nombreFideicomiso);
+
+		for (int i = 0; i < listFideicomisoCuentaEntidadFinanciera.size(); i++) {
+
+			Object[] fila = (Object[]) listFideicomisoCuentaEntidadFinanciera.get(i);
+
+			if (StringUtil.equiv(Constante.CODIGO_MONEDA_SOLES, codigoMoneda)) {
+				saldoContableSolesCuentaFideicomiso = saldoContableSolesCuentaFideicomiso
+						+ ((BigDecimal) fila[6]).doubleValue();
+				saldoDisponibleSolesCuentaFideicomiso = saldoDisponibleSolesCuentaFideicomiso
+						+ ((BigDecimal) fila[7]).doubleValue();
+			} else {
+				saldoContableDolaresCuentaFideicomiso = saldoContableDolaresCuentaFideicomiso
+						+ ((BigDecimal) fila[6]).doubleValue();
+				saldoDisponibleDolaresCuentaFideicomiso = saldoDisponibleDolaresCuentaFideicomiso
+						+ ((BigDecimal) fila[7]).doubleValue();
+			}
+
+		}
+
+		saldoConsolidadoContableSolesCuentaFideicomiso = saldoContableSolesCuentaFideicomiso
+				+ (saldoContableDolaresCuentaFideicomiso * tipoCambioSBS);
+		saldoConsolidadoDisponibleSolesCuentaFideicomiso = saldoDisponibleSolesCuentaFideicomiso
+				+ (saldoDisponibleDolaresCuentaFideicomiso * tipoCambioSBS);
+
+		saldoConsolidadoContableDolaresCuentaFideicomiso = saldoContableDolaresCuentaFideicomiso
+				+ (saldoContableSolesCuentaFideicomiso / tipoCambioSBS);
+		saldoConsolidadoDisponibleDolaresCuentaFideicomiso = saldoDisponibleDolaresCuentaFideicomiso
+				+ (saldoDisponibleSolesCuentaFideicomiso / tipoCambioSBS);
+
+		saldoTotalMonedaModel.setMontoTipoCambio(tipoCambioSBS);
+		saldoTotalMonedaModel.setSaldoTotalContableSoles(saldoContableSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalContableDolares(saldoContableDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalDisponibleSoles(saldoDisponibleSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalDisponibleDolares(saldoDisponibleDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoContableSoles(saldoConsolidadoContableSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoDisponibleSoles(saldoConsolidadoDisponibleSolesCuentaFideicomiso);
+		saldoTotalMonedaModel.setSaldoTotalConsolidadoContableDolares(saldoConsolidadoContableDolaresCuentaFideicomiso);
+		saldoTotalMonedaModel
+				.setSaldoTotalConsolidadoDisponibleDolares(saldoConsolidadoDisponibleDolaresCuentaFideicomiso);
+
+		return saldoTotalMonedaModel;
+	}
+	
+	public SaldoTotalMonedaModel getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
+			Integer identificadorFideicomisario, String nombreFideicomiso, String codigoMoneda, Double montoTipoCambio) {
+
+		Double tipoCambioSBS = montoTipoCambio;
+		Double saldoContableSolesCuentaFideicomiso = new Double(0);
+		Double saldoDisponibleSolesCuentaFideicomiso = new Double(0);
+		Double saldoContableDolaresCuentaFideicomiso = new Double(0);
+		Double saldoDisponibleDolaresCuentaFideicomiso = new Double(0);
+
+		Double saldoConsolidadoContableSolesCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoDisponibleSolesCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoContableDolaresCuentaFideicomiso = new Double(0);
+		Double saldoConsolidadoDisponibleDolaresCuentaFideicomiso = new Double(0);
+
+		SaldoTotalMonedaModel saldoTotalMonedaModel = new SaldoTotalMonedaModel();
+
+		List<Object> listFideicomisoCuentaEntidadFinanciera;
 
 		listFideicomisoCuentaEntidadFinanciera = fideicomisoRepository
 				.getListSaldoTotalMonedaFideicomisoCuentaEntidadFinancieraByIdFideicomisarioMonedaNombreFideicomiso(
@@ -560,40 +863,40 @@ public class FideicomisoServiceImpl extends AbstractService implements Fideicomi
 
 		return fideicomisoModel;
 	}
-	
+
 	public FideicomisoModel getFideicomisoByIdFideicomisoModel(Integer identificadorFideicomiso) {
-		
+
 		FideicomisoModel fideicomisoModel = new FideicomisoModel();
-		
+
 		Fideicomiso fideicomiso = new Fideicomiso();
-		
+
 		fideicomiso = fideicomisoRepository.findByIdentificadorFideicomiso(identificadorFideicomiso);
-		
+
 		fideicomisoModel.setIdentificadorFideicomiso(fideicomiso.getIdentificadorFideicomiso());
 		fideicomisoModel.setNombreFideicomiso(fideicomiso.getNombreFideicomiso());
 		fideicomisoModel.setCodigoEstado(fideicomiso.getCodigoEstado());
 		fideicomisoModel.setDescripcionEstado(fideicomiso.getDescripcionEstado());
-		
+
 		return fideicomisoModel;
 	}
 
-    public List<FideicomisoModel> getFideicomisoModel(String rucFideicomisario) throws Exception {
-        FideicomisoModel fideicomisoModel;
-        List<FideicomisoModel> listFideicomisoModel = new ArrayList<FideicomisoModel>();
-        List<Fideicomiso> listFideicomiso = new ArrayList<Fideicomiso>();
-        try {
+	public List<FideicomisoModel> getFideicomisoModel(String rucFideicomisario) throws Exception {
+		FideicomisoModel fideicomisoModel;
+		List<FideicomisoModel> listFideicomisoModel = new ArrayList<FideicomisoModel>();
+		List<Fideicomiso> listFideicomiso = new ArrayList<Fideicomiso>();
+		try {
 
-            listFideicomiso = fideicomisoRepository.getListFideicomisoByRucFideicomisario(rucFideicomisario);
+			listFideicomiso = fideicomisoRepository.getListFideicomisoByRucFideicomisario(rucFideicomisario);
 
-            for (Fideicomiso fideicomiso : listFideicomiso) {
-                fideicomisoModel = new FideicomisoModel();
-                fideicomisoModel = fideicomisoConverter.convertFideicomisoToFideicomisoModel(fideicomiso);
-                listFideicomisoModel.add(fideicomisoModel);
-            }
-        } catch (Exception e) {
-            listFideicomisoModel = new ArrayList<FideicomisoModel>();
-        }
+			for (Fideicomiso fideicomiso : listFideicomiso) {
+				fideicomisoModel = new FideicomisoModel();
+				fideicomisoModel = fideicomisoConverter.convertFideicomisoToFideicomisoModel(fideicomiso);
+				listFideicomisoModel.add(fideicomisoModel);
+			}
+		} catch (Exception e) {
+			listFideicomisoModel = new ArrayList<FideicomisoModel>();
+		}
 
-        return listFideicomisoModel;
-    }
+		return listFideicomisoModel;
+	}
 }

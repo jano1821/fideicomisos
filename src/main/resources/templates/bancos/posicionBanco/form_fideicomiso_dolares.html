@@ -176,10 +176,11 @@
 						   <div class="two column row">
 						   		<div class="left floated column">
 						   			<h2>SALDOS TOTALES CONSOLIDADOS</h2>
-						   		</div>
-						   		<div class="ui right aligned right floated column">
-						   			<h3>Tipo Cambio: <span id="montoTipoCambio"></span></h3>
-						   		</div>
+						   		</div>						   		
+						   		<div class="ui right aligned right floated column">				   			
+								   	<h3><label>Tipo Cambio:</label>
+								    <input type="text" name="montoTipoCambio" id="montoTipoCambio" style="text-align:right" size="5"></h3>
+								</div>
 						   </div>						  	
 						  	<div class="row">
 						  		<table class="ui definition table">
@@ -255,6 +256,16 @@
 		});
 	</script>
 	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#montoTipoCambio").keypress(function(e) {
+		        var code = (e.keyCode ? e.keyCode : e.which);
+		        if(code==13){
+		        	calcularSaldoTotalMoneda();
+		        }
+		    });
+		});
+	</script>
+	<script type="text/javascript">
 		$(document).ready(function() {
 			$('#consolidatedBalances').click(function() {
 				event.preventDefault();
@@ -304,7 +315,55 @@
 
 					$('#tSaldoTotal').html(cadena1HTML);
 					$('#tSaldoTotalConsolidado').html(cadena2HTML);
-					$('#montoTipoCambio').text(Number.parseFloat(data["montoTipoCambio"]).toFixed(2));
+					$('#montoTipoCambio').val(Number.parseFloat(data["montoTipoCambio"]).toFixed(2));
+				},
+				error : function(e) {
+				}
+			});
+		}
+	</script>
+	<script type="text/javascript">
+		function calcularSaldoTotalMoneda() {
+
+			event.preventDefault();
+			var datosGenerales = {};
+			datosGenerales["montoTipoCambio"] = $('#montoTipoCambio').val();
+
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "/fideicomiso/calcularSaldoTotalMonedaDolares",
+				data : JSON.stringify(datosGenerales),
+				dataType : 'json',
+				cache : false,
+				timeout : 600000,
+				success : function(data) {
+
+					var cadena1HTML = "<tr>" + 
+										"<td>TOTAL SOLES</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalContableSoles"]).toFixed(2)) + "</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalDisponibleSoles"]).toFixed(2)) + "</td>" +							
+							 		  "</tr>" + 
+							 		  "<tr>" + 
+							 		  	"<td>TOTAL DÓLARES</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalContableDolares"]).toFixed(2)) + "</td>" +							
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalDisponibleDolares"]).toFixed(2)) + "</td>"	+							
+									  "</tr>";
+					
+					var cadena2HTML = "<tr>" + 
+										"<td>EXPRESADO EN SOLES</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalConsolidadoContableSoles"]).toFixed(2)) + "</td>" +							
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalConsolidadoDisponibleSoles"]).toFixed(2)) + "</td>" +		
+									  "</tr>" + 
+									  "<tr>" +
+										"<td>EXPRESADO EN DOLARES</td>" +
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalConsolidadoContableDolares"]).toFixed(2)) + "</td>" +							
+										"<td class=\"ui right aligned\">" + addCommas(Number.parseFloat(data["saldoTotalConsolidadoDisponibleDolares"]).toFixed(2)) + "</td>" +		
+									  "</tr>";
+
+					$('#tSaldoTotal').html(cadena1HTML);
+					$('#tSaldoTotalConsolidado').html(cadena2HTML);
+					$('#montoTipoCambio').val(Number.parseFloat(data["montoTipoCambio"]).toFixed(2));
 				},
 				error : function(e) {
 				}

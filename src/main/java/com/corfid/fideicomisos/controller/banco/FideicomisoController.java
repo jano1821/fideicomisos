@@ -385,6 +385,34 @@ public class FideicomisoController extends InitialController {
 
 	}
 
+	@PostMapping("/calcularSaldoTotalMoneda")
+	public ResponseEntity<?> calcularSaldoTotalMoneda(@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			@Valid @RequestBody SaldoTotalMonedaModel saldoTotalMonedaModel, final BindingResult bindingResult,
+			final HttpServletRequest request, Errors errors) {
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		Double montoTipoCambio = saldoTotalMonedaModel.getMontoTipoCambio();
+
+		String msgError = null;
+
+		try {
+			if (errors.hasErrors()) {
+				msgError = errors.getAllErrors().stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining(","));
+				return ResponseEntity.badRequest().body(msgError);
+			}
+
+			saldoTotalMonedaModel = fideicomisoInterface.calcularSaldoTotalMoneda(saldoTotalMonedaModel.getBusqueda(),
+					numeroDocumento, Constante.CONST_VACIA, montoTipoCambio);
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+
+		return ResponseEntity.ok(saldoTotalMonedaModel);
+
+	}
+
 	@PostMapping("/obtenerSaldoTotalMonedaSoles")
 	public ResponseEntity<?> obtenerSaldoTotalMonedaSoles(
 			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
@@ -406,6 +434,35 @@ public class FideicomisoController extends InitialController {
 
 			saldoTotalMonedaModel = fideicomisoInterface.obtenerSaldoTotalMonedaFideicomiso(
 					saldoTotalMonedaModel.getBusqueda(), numeroDocumento, Constante.CODIGO_MONEDA_SOLES, fechaProceso);
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+
+		return ResponseEntity.ok(saldoTotalMonedaModel);
+
+	}
+
+	@PostMapping("/calcularSaldoTotalMonedaSoles")
+	public ResponseEntity<?> calcularSaldoTotalMonedaSoles(
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			@Valid @RequestBody SaldoTotalMonedaModel saldoTotalMonedaModel, final BindingResult bindingResult,
+			final HttpServletRequest request, Errors errors) {
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		Double montoTipoCambio = saldoTotalMonedaModel.getMontoTipoCambio();
+
+		String msgError = null;
+
+		try {
+			if (errors.hasErrors()) {
+				msgError = errors.getAllErrors().stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining(","));
+				return ResponseEntity.badRequest().body(msgError);
+			}
+
+			saldoTotalMonedaModel = fideicomisoInterface.calcularSaldoTotalMoneda(saldoTotalMonedaModel.getBusqueda(),
+					numeroDocumento, Constante.CODIGO_MONEDA_SOLES, montoTipoCambio);
 
 		} catch (Exception ex) {
 			System.out.println(ex);
@@ -437,6 +494,35 @@ public class FideicomisoController extends InitialController {
 			saldoTotalMonedaModel = fideicomisoInterface.obtenerSaldoTotalMonedaFideicomiso(
 					saldoTotalMonedaModel.getBusqueda(), numeroDocumento, Constante.CODIGO_MONEDA_DOLARES,
 					fechaProceso);
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+
+		return ResponseEntity.ok(saldoTotalMonedaModel);
+
+	}
+
+	@PostMapping("/calcularSaldoTotalMonedaDolares")
+	public ResponseEntity<?> calcularSaldoTotalMonedaDolares(
+			@SessionAttribute("datosGenerales") DatosGenerales datosGenerales,
+			@Valid @RequestBody SaldoTotalMonedaModel saldoTotalMonedaModel, final BindingResult bindingResult,
+			final HttpServletRequest request, Errors errors) {
+
+		String numeroDocumento = datosGenerales.getRucEmpresa();
+		Double montoTipoCambio = saldoTotalMonedaModel.getMontoTipoCambio();
+
+		String msgError = null;
+
+		try {
+			if (errors.hasErrors()) {
+				msgError = errors.getAllErrors().stream().map(x -> x.getDefaultMessage())
+						.collect(Collectors.joining(","));
+				return ResponseEntity.badRequest().body(msgError);
+			}
+
+			saldoTotalMonedaModel = fideicomisoInterface.calcularSaldoTotalMoneda(saldoTotalMonedaModel.getBusqueda(),
+					numeroDocumento, Constante.CODIGO_MONEDA_DOLARES, montoTipoCambio);
 
 		} catch (Exception ex) {
 			System.out.println(ex);
