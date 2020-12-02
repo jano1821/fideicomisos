@@ -76,6 +76,7 @@
 								<table class="ui selectable celled table">
 									<thead>
 										<tr>
+											<th class="ui center aligned">Código</th>
 											<th class="ui center aligned">Fideicomiso</th>
 											<th class="ui center aligned">Fecha de Corte</th>
 											<th class="ui center aligned">Tipo de Informe</th>
@@ -86,10 +87,11 @@
 									<tbody>
 										<tr th:each="eeff : ${crudEstadosFinancierosModel.rows}"
 											th:class="${eeff.estadoRegistro=='N'}? 'negative'">
+											<td class="ui center aligned" th:text="${eeff.idEstadosFinancieros}"></td>
 											<td th:text="${eeff.nombreFideicomiso}"></td>
-											<td th:text="${eeff.fechaCorte}"></td>
+											<td class="ui center aligned" th:text="${eeff.periodo}"></td>
 											<td class="ui left aligned" th:text="${eeff.descTipoInforme}"></td>
-											<td class="ui left aligned"
+											<td class="ui center aligned"
 												th:text="${eeff.descEstado}"></td>
 											<td class="ui center aligned">
 												<a href="#" th:href="@{/eeff/descargarEEFF?id=__${eeff.idEstadosFinancieros}__}" TARGET="_blank">
