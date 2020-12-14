@@ -29,7 +29,6 @@ import com.corfid.fideicomisos.model.administrativo.CatalogoConstraintModel;
 import com.corfid.fideicomisos.model.cruds.CrudEstadosFinancierosModel;
 import com.corfid.fideicomisos.model.eeff.EstadosFinancierosModel;
 import com.corfid.fideicomisos.model.utilities.DatosGenerales;
-import com.corfid.fideicomisos.model.utilities.GenericModel;
 import com.corfid.fideicomisos.model.utilities.PaginadoModel;
 import com.corfid.fideicomisos.service.banco.FideicomisoInterface;
 import com.corfid.fideicomisos.service.eeff.EstadosFinancierosInterface;

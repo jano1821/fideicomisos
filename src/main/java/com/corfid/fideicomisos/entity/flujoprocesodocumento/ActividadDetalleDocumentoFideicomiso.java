@@ -26,6 +26,9 @@ public class ActividadDetalleDocumentoFideicomiso extends Auditoria {
 
 	@Column(name = "n_nivser", nullable = false, insertable = true, updatable = true, precision = 2)
 	private Integer nivelServicio;
+	
+	@Column(name = "n_ordvis", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
+    private Integer ordenVisualizacion;
 
 	public Integer getIdentificadorActividadDetalleDocumentoFideicomiso() {
 		return identificadorActividadDetalleDocumentoFideicomiso;

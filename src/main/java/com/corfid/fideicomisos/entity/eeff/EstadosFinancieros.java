@@ -57,7 +57,7 @@ public class EstadosFinancieros extends Auditoria {
     @Column(name = "c_pesarc", nullable = false, length = 15, insertable = true, updatable = true)
     private String pesoArchivo;
 
-    @Column(name = "c_tiparc", nullable = false, length = 25, insertable = true, updatable = true)
+    @Column(name = "c_tiparc", nullable = false, length = 100, insertable = true, updatable = true)
     private String tipoArchivo;
 
     @Column(name = "c_estado", nullable = false, length = 1, insertable = true, updatable = true)
@@ -65,6 +65,9 @@ public class EstadosFinancieros extends Auditoria {
 
     @Column(name = "c_periodo", nullable = true, length = 6, insertable = true, updatable = true)
     private String periodo;
+
+    @Column(name = "c_indext", nullable = true, length = 1, insertable = true, updatable = true)
+    private String extraccionArchivo;
 
     public Integer getIdEstadosFinancieros() {
         return idEstadosFinancieros;
@@ -170,7 +173,15 @@ public class EstadosFinancieros extends Auditoria {
         this.periodo = periodo;
     }
 
-    public EstadosFinancieros(Integer idEstadosFinancieros, Fideicomiso fideicomiso, String tipoInforme, Date fechaCorte, String monedaElaboracionInforme, String monedaExpresionInforme, String ruta, byte[] archivo, String nombreArchivo, String pesoArchivo, String tipoArchivo, String estado, String periodo) {
+    public String getExtraccionArchivo() {
+        return extraccionArchivo;
+    }
+
+    public void setExtraccionArchivo(String extraccionArchivo) {
+        this.extraccionArchivo = extraccionArchivo;
+    }
+
+    public EstadosFinancieros(Integer idEstadosFinancieros, Fideicomiso fideicomiso, String tipoInforme, Date fechaCorte, String monedaElaboracionInforme, String monedaExpresionInforme, String ruta, byte[] archivo, String nombreArchivo, String pesoArchivo, String tipoArchivo, String estado, String periodo, String extraccionArchivo) {
         super();
         this.idEstadosFinancieros = idEstadosFinancieros;
         this.fideicomiso = fideicomiso;
@@ -185,6 +196,7 @@ public class EstadosFinancieros extends Auditoria {
         this.tipoArchivo = tipoArchivo;
         this.estado = estado;
         this.periodo = periodo;
+        this.extraccionArchivo = extraccionArchivo;
     }
 
     public EstadosFinancieros() {
