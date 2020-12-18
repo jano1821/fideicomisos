@@ -17,6 +17,7 @@ public class ActividadDetalleDocumentoFideicomisoConverter {
 		actividadDetalleDocumentoFideicomisoModel.setTipoDocumento(actividadDetalleDocumentoFideicomiso.getTipoDocumento());
 		actividadDetalleDocumentoFideicomisoModel.setDescripcionActividad(actividadDetalleDocumentoFideicomiso.getDescripcionActividad());
 		actividadDetalleDocumentoFideicomisoModel.setNivelServicio(actividadDetalleDocumentoFideicomiso.getNivelServicio());
+		actividadDetalleDocumentoFideicomisoModel.setOrdenVisualizacion(actividadDetalleDocumentoFideicomiso.getOrdenVisualizacion());
 		
 		return actividadDetalleDocumentoFideicomisoModel;
 	

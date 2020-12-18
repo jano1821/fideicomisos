@@ -1,6 +1,5 @@
 package com.corfid.fideicomisos.model.flujoprocesodocumento;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +18,8 @@ public class DocumentoFideicomisoModel extends PaginacionGeneralModel {
 	private String formaAccesoArchivo;
 	private String rutaUbicacionArchivo;
 	private byte[] archivoFisicoAtachado;
+	private String pesoArchivo;
+	private String tipoArchivo;	
 	private String indicadorAdenda;
 	private Date fechaFirmaDocumento;
 
@@ -102,6 +103,22 @@ public class DocumentoFideicomisoModel extends PaginacionGeneralModel {
 
 	public void setArchivoFisicoAtachado(byte[] archivoFisicoAtachado) {
 		this.archivoFisicoAtachado = archivoFisicoAtachado;
+	}
+	
+	public String getPesoArchivo() {
+		return pesoArchivo;
+	}
+
+	public void setPesoArchivo(String pesoArchivo) {
+		this.pesoArchivo = pesoArchivo;
+	}
+	
+	public String getTipoArchivo() {
+		return tipoArchivo;
+	}
+
+	public void setTipoArchivo(String tipoArchivo) {
+		this.tipoArchivo = tipoArchivo;
 	}
 
 	public String getIndicadorAdenda() {

@@ -62,6 +62,7 @@ public class DetalleDocumentoFideicomisoConverter {
 		
 		detalleDocumentoFideicomisoModel.setFlagAtencion(detalleDocumentoFideicomiso.getFlagAtencion());
 		detalleDocumentoFideicomisoModel.setOrdenVisualizacion(detalleDocumentoFideicomiso.getOrdenVisualizacion());
+		detalleDocumentoFideicomisoModel.setObservacionActividad(detalleDocumentoFideicomiso.getObservacionActividad());
 		detalleDocumentoFideicomisoModel.setDescripcionActividad(
 				detalleDocumentoFideicomiso.getActividadDetalleDocumentoFideicomiso().getDescripcionActividad());
 

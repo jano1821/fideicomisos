@@ -9,6 +9,7 @@ public class ActividadDetalleDocumentoFideicomisoModel {
 	private String descripcionActividad;
 	private String tipoDocumento;
 	private Integer nivelServicio;
+	private Integer ordenVisualizacion;
 
 	public List<ActividadDetalleDocumentoFideicomisoModel> listActividadDetalleDocumentoFideicomisoModel = new ArrayList<ActividadDetalleDocumentoFideicomisoModel>();
 
@@ -43,6 +44,14 @@ public class ActividadDetalleDocumentoFideicomisoModel {
 
 	public void setNivelServicio(Integer nivelServicio) {
 		this.nivelServicio = nivelServicio;
+	}
+
+	public Integer getOrdenVisualizacion() {
+		return ordenVisualizacion;
+	}
+
+	public void setOrdenVisualizacion(Integer ordenVisualizacion) {
+		this.ordenVisualizacion = ordenVisualizacion;
 	}
 
 	public List<ActividadDetalleDocumentoFideicomisoModel> getListActividadDetalleDocumentoFideicomisoModel() {

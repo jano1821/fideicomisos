@@ -27,8 +27,8 @@ public class ActividadDetalleDocumentoFideicomiso extends Auditoria {
 	@Column(name = "n_nivser", nullable = false, insertable = true, updatable = true, precision = 2)
 	private Integer nivelServicio;
 	
-	@Column(name = "n_ordvis", nullable = true, insertable = true, updatable = true, precision = 11, scale = 0)
-    private Integer ordenVisualizacion;
+	@Column(name = "n_ordvis", nullable = false, insertable = true, updatable = true, length = 2)
+	private Integer ordenVisualizacion;
 
 	public Integer getIdentificadorActividadDetalleDocumentoFideicomiso() {
 		return identificadorActividadDetalleDocumentoFideicomiso;
@@ -62,14 +62,23 @@ public class ActividadDetalleDocumentoFideicomiso extends Auditoria {
 	public void setNivelServicio(Integer nivelServicio) {
 		this.nivelServicio = nivelServicio;
 	}
+	
+	public Integer getOrdenVisualizacion() {
+		return ordenVisualizacion;
+	}
+
+	public void setOrdenVisualizacion(Integer ordenVisualizacion) {
+		this.ordenVisualizacion = ordenVisualizacion;
+	}
 
 	public ActividadDetalleDocumentoFideicomiso(Integer identificadorActividadDetalleDocumentoFideicomiso,
-			String descripcionActividad, String tipoDocumento, Integer nivelServicio) {
+			String descripcionActividad, String tipoDocumento, Integer nivelServicio, Integer ordenVisualizacion) {
 		super();
 		this.identificadorActividadDetalleDocumentoFideicomiso = identificadorActividadDetalleDocumentoFideicomiso;
 		this.descripcionActividad = descripcionActividad;
 		this.tipoDocumento = tipoDocumento;
 		this.nivelServicio = nivelServicio;
+		this.ordenVisualizacion = ordenVisualizacion;
 	}
 
 	public ActividadDetalleDocumentoFideicomiso() {

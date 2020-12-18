@@ -16,7 +16,7 @@ public interface MovimientoCuentaEntidadFinancieraRepository
 
 	@Query(value = "SELECT model FROM MovimientoCuentaEntidadFinanciera model "
 			+ "WHERE model.cuentaEntidadFinanciera.identificadorCuentaEntidadFinanciera = :identificadorCuentaEntidadFinanciera "
-			+ "AND model.estadoRegistro = 'S'", 
+			+ "AND model.estadoRegistro = 'S' ORDER BY model.fechaProcesoMovimiento DESC", 
 			countQuery = "SELECT COUNT(model) FROM MovimientoCuentaEntidadFinanciera model "
 					+ "WHERE model.cuentaEntidadFinanciera.identificadorCuentaEntidadFinanciera = :identificadorCuentaEntidadFinanciera "
 					+ "AND model.estadoRegistro = 'S'")

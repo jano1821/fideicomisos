@@ -22,9 +22,11 @@ public class DocumentoFideicomisoConverter {
 		documentoFideicomisoModel.setFormaAccesoArchivo(documentoFideicomiso.getFormaAccesoArchivo());
 		documentoFideicomisoModel.setRutaUbicacionArchivo(documentoFideicomiso.getRutaUbicacionArchivo());
 		documentoFideicomisoModel.setArchivoFisicoAtachado(documentoFideicomiso.getArchivoFisicoAtachado());
+		documentoFideicomisoModel.setPesoArchivo(documentoFideicomiso.getPesoArchivo());
+		documentoFideicomisoModel.setTipoArchivo(documentoFideicomiso.getTipoArchivo());
 		documentoFideicomisoModel.setIndicadorAdenda(documentoFideicomiso.getIndicadorAdenda());
 		documentoFideicomisoModel.setFechaFirmaDocumento(documentoFideicomiso.getFechaFirmaDocumento());
-		
+				
 		return documentoFideicomisoModel;
 
 	}

@@ -17,6 +17,7 @@ public class DetalleDocumentoFideicomisoModel {
 	private String nombreResponsable;
 	private String flagAtencion;
 	private Integer ordenVisualizacion;
+	private String observacionActividad;
 	private String descripcionActividad;
 	private String cadenaActividadDetalleDocumentoFideicomiso;
 	private String cadenaTituloActividadDetalleDocumentoFideicomiso;
@@ -111,6 +112,14 @@ public class DetalleDocumentoFideicomisoModel {
 
 	public void setOrdenVisualizacion(Integer ordenVisualizacion) {
 		this.ordenVisualizacion = ordenVisualizacion;
+	}
+	
+	public String getObservacionActividad() {
+		return observacionActividad;
+	}
+
+	public void setObservacionActividad(String observacionActividad) {
+		this.observacionActividad = observacionActividad;
 	}
 
 	public String getDescripcionActividad() {
