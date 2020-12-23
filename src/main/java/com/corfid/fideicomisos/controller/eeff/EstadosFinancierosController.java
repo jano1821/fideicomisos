@@ -173,10 +173,9 @@ public class EstadosFinancierosController extends InitialController {
         try {
             String idEEFF = StringUtil.toStr(id);
             EstadosFinancierosModel estadosFinancierosModel;
-            String desicion = obtenerConstante(Constante.ORIGEN_ARC);
             estadosFinancierosModel = estadosFinancierosInterface.obtenerEEFF(StringUtil.toInteger(idEEFF));
             String nombreArchivo = estadosFinancierosModel.getNombreArchivo() + "." + estadosFinancierosModel.getTipoArchivo();
-            if (StringUtil.equiv(desicion, Constante.POR_FTP)) {
+            if (StringUtil.equiv(estadosFinancierosModel.getExtraccionArchivo(), Constante.FORMA_ACCESO_RUTA_DIRECTORIO)) {
                 String ruta = obtenerConstante("RUTA_FTP");
                 String fileString = ruta + nombreArchivo;
                 File file = new File(fileString);
@@ -195,7 +194,7 @@ public class EstadosFinancierosController extends InitialController {
                 bytes = bos.toByteArray();
 
                 estadosFinancierosInterface.guardarpdf(StringUtil.toInteger(idEEFF), bytes);
-            } else if(StringUtil.equiv(desicion, Constante.POR_ARC)){
+            } else if(StringUtil.equiv(estadosFinancierosModel.getExtraccionArchivo(), Constante.FORMA_ACCESO_BASE_DATOS)){
                 bytes = estadosFinancierosModel.getArchivo();
             } else {
                 String token = restClientEstadosFinancierosInterface.getObtenerToken();

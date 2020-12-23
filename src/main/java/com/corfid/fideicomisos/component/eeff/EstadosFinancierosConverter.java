@@ -9,23 +9,6 @@ import com.corfid.fideicomisos.utilities.StringUtil;
 @Component("estadosFinancierosConverter")
 public class EstadosFinancierosConverter {
 
-    /*
-     * @Autowired
-     * @Qualifier("tipoUsuarioServiceImpl") TipoUsuarioInterface tipoUsuarioInterface;
-     */
-
-    public EstadosFinancieros convertEstadosFinancierosModelToEstadosFinancieros(EstadosFinancierosModel estadosFinancierosModel) {
-        EstadosFinancieros estadosFinancieros = new EstadosFinancieros();
-        /*
-         * TipoUsuario tipoUsuario = new TipoUsuario(); menu.setIdMenu(menuModel.getIdMenu()); menu.setDescripcion(menuModel.getDescripcion()); menu.setUrl(menuModel.getUrl());
-         * menu.setTipoMenu(menuModel.getTipoMenu()); menu.setIdMenuPadre(menuModel.getIdMenuPadre()); menu.setOrden(menuModel.getOrden()); menu.setEstadoRegistro(menuModel.getEstadoRegistro());
-         * tipoUsuario = tipoUsuarioInterface.findTipoUsuarioById(EstadosFinancierosModel.getTipoUsuario()); menu.setTipoUsuario(tipoUsuario);
-         */
-
-        return estadosFinancieros;
-
-    }
-
     public EstadosFinancierosModel convertEstadosFinancierosToEstadosFinancierosModel(EstadosFinancieros estadosFinancieros) {
         EstadosFinancierosModel estadosFinancierosModel = new EstadosFinancierosModel();
 
@@ -43,7 +26,11 @@ public class EstadosFinancierosConverter {
         estadosFinancierosModel.setTipoArchivo(estadosFinancieros.getTipoArchivo());
         estadosFinancierosModel.setTipoInforme(estadosFinancieros.getTipoInforme());
         estadosFinancierosModel.setNombreFideicomiso(estadosFinancieros.getFideicomiso().getNombreFideicomiso());
-        estadosFinancierosModel.setPeriodo(estadosFinancieros.getPeriodo());
+        if (!StringUtil.isEmpty(estadosFinancieros.getPeriodo())) {
+            estadosFinancierosModel.setPeriodo(estadosFinancieros.getPeriodo().substring(0,
+                                                                                         4) + "-" + estadosFinancieros.getPeriodo().substring(4));
+        }
+        estadosFinancierosModel.setExtraccionArchivo(estadosFinancieros.getExtraccionArchivo());
 
         if (StringUtil.equiv(estadosFinancieros.getEstadoRegistro(), "S")) {
             estadosFinancierosModel.setDescEstadoRegistro("Vigente");

@@ -126,6 +126,4 @@ public class Constante {
     public static final String CANTIDAD_REGISTROS_X_PAGINA = "CANT_PAG";
     public static final String MODULO_EEFF = "Estado Financiero";
     public static final String ORIGEN_ARC = "ORIGEN_ARC";
-    public static final String POR_FTP = "S";
-    public static final String POR_ARC = "A";
 }

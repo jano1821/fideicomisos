@@ -35,7 +35,7 @@ public class EstadosFinancieros extends Auditoria {
     private String tipoInforme;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "d_fecinf", nullable = false, insertable = true, updatable = true, length = 7)
+    @Column(name = "d_fecinf", nullable = true, insertable = true, updatable = true, length = 7)
     private Date fechaCorte;
 
     @Column(name = "c_moninf", nullable = false, length = 3, insertable = true, updatable = true)
@@ -51,10 +51,10 @@ public class EstadosFinancieros extends Auditoria {
     @Column(name = "l_archiv", nullable = true, insertable = true, updatable = true)
     private byte[] archivo;
 
-    @Column(name = "c_nomarc", nullable = false, length = 250, insertable = true, updatable = true)
+    @Column(name = "c_nomarc", nullable = true, length = 250, insertable = true, updatable = true)
     private String nombreArchivo;
 
-    @Column(name = "c_pesarc", nullable = false, length = 15, insertable = true, updatable = true)
+    @Column(name = "c_pesarc", nullable = true, length = 15, insertable = true, updatable = true)
     private String pesoArchivo;
 
     @Column(name = "c_tiparc", nullable = false, length = 100, insertable = true, updatable = true)
@@ -66,7 +66,7 @@ public class EstadosFinancieros extends Auditoria {
     @Column(name = "c_periodo", nullable = true, length = 6, insertable = true, updatable = true)
     private String periodo;
 
-    @Column(name = "c_indext", nullable = true, length = 1, insertable = true, updatable = true)
+    @Column(name = "c_indext", nullable = false, length = 1, insertable = true, updatable = true)
     private String extraccionArchivo;
 
     public Integer getIdEstadosFinancieros() {

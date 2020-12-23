@@ -23,187 +23,184 @@ import com.corfid.fideicomisos.entity.banco.Fideicomiso;
 @Table(name = "flumdofi")
 public class DocumentoFideicomiso extends Auditoria {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "n_iddofi", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
-	private Integer identificadorDocumentoFideicomiso;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "n_iddofi", nullable = false, insertable = true, updatable = true, precision = 11, scale = 0)
+    private Integer identificadorDocumentoFideicomiso;
 
-	@Column(name = "c_tipdoc", nullable = false, insertable = true, updatable = true, length = 2)
-	private String tipoDocumento;
+    @Column(name = "c_tipdoc", nullable = false, insertable = true, updatable = true, length = 2)
+    private String tipoDocumento;
 
-	@Column(name = "c_desdoc", nullable = false, insertable = true, updatable = true, length = 100)
-	private String descripcionDocumento;
+    @Column(name = "c_desdoc", nullable = false, insertable = true, updatable = true, length = 100)
+    private String descripcionDocumento;
 
-	@Column(name = "c_codest", nullable = false, insertable = true, updatable = true, length = 2)
-	private String codigoEstado;
+    @Column(name = "c_codest", nullable = false, insertable = true, updatable = true, length = 2)
+    private String codigoEstado;
 
-	@Column(name = "c_desest", nullable = false, insertable = true, updatable = true, length = 20)
-	private String descripcionEstado;
+    @Column(name = "c_desest", nullable = false, insertable = true, updatable = true, length = 20)
+    private String descripcionEstado;
 
-	@Column(name = "c_nomarc", nullable = false, insertable = true, updatable = true, length = 30)
-	private String nombreArchivo;
+    @Column(name = "c_nomarc", nullable = true, insertable = true, updatable = true, length = 255)
+    private String nombreArchivo;
 
-	@Column(name = "c_foacar", nullable = false, insertable = true, updatable = true, length = 2)
-	private String formaAccesoArchivo;
+    @Column(name = "c_foacar", nullable = true, insertable = true, updatable = true, length = 2)
+    private String formaAccesoArchivo;
 
-	@Column(name = "c_rutarc", nullable = true, insertable = true, updatable = true, length = 500)
-	private String rutaUbicacionArchivo;
+    @Column(name = "c_rutarc", nullable = true, insertable = true, updatable = true, length = 500)
+    private String rutaUbicacionArchivo;
 
-	 @Lob
-	@Column(name = "c_arcfis", nullable = true, insertable = true, updatable = true)
-	private byte[] archivoFisicoAtachado;
-	 	 
-	@Column(name = "c_pesarc", nullable = false, insertable = true, updatable = true, length = 15)
-	private String pesoArchivo;	
-	
-	@Column(name = "c_tiparc", nullable = false, insertable = true, updatable = true, length = 100)
-    private String tipoArchivo;	
+    @Lob
+    @Column(name = "c_arcfis", nullable = true, insertable = true, updatable = true)
+    private byte[] archivoFisicoAtachado;
 
-	@Column(name = "c_indade", nullable = false, insertable = true, updatable = true, length = 1)
-	private String indicadorAdenda;
+    @Column(name = "c_pesarc", nullable = true, insertable = true, updatable = true, length = 15)
+    private String pesoArchivo;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "d_fecdoc", nullable = true, insertable = true, updatable = true, length = 7)
-	private Date fechaFirmaDocumento;
+    @Column(name = "c_tiparc", nullable = true, insertable = true, updatable = true, length = 100)
+    private String tipoArchivo;
 
-	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "n_idfico", nullable = false, insertable = true, updatable = true)
-	private Fideicomiso fideicomiso;
+    @Column(name = "c_indade", nullable = false, insertable = true, updatable = true, length = 1)
+    private String indicadorAdenda;
 
-	public Integer getIdentificadorDocumentoFideicomiso() {
-		return identificadorDocumentoFideicomiso;
-	}
+    @Temporal(TemporalType.DATE)
+    @Column(name = "d_fecdoc", nullable = true, insertable = true, updatable = true, length = 7)
+    private Date fechaFirmaDocumento;
 
-	public void setIdentificadorDocumentoFideicomiso(Integer identificadorDocumentoFideicomiso) {
-		this.identificadorDocumentoFideicomiso = identificadorDocumentoFideicomiso;
-	}
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "n_idfico", nullable = false, insertable = true, updatable = true)
+    private Fideicomiso fideicomiso;
 
-	public String getTipoDocumento() {
-		return tipoDocumento;
-	}
+    public Integer getIdentificadorDocumentoFideicomiso() {
+        return identificadorDocumentoFideicomiso;
+    }
 
-	public void setTipoDocumento(String tipoDocumento) {
-		this.tipoDocumento = tipoDocumento;
-	}
+    public void setIdentificadorDocumentoFideicomiso(Integer identificadorDocumentoFideicomiso) {
+        this.identificadorDocumentoFideicomiso = identificadorDocumentoFideicomiso;
+    }
 
-	public String getDescripcionDocumento() {
-		return descripcionDocumento;
-	}
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
 
-	public void setDescripcionDocumento(String descripcionDocumento) {
-		this.descripcionDocumento = descripcionDocumento;
-	}
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
 
-	public String getCodigoEstado() {
-		return codigoEstado;
-	}
+    public String getDescripcionDocumento() {
+        return descripcionDocumento;
+    }
 
-	public void setCodigoEstado(String codigoEstado) {
-		this.codigoEstado = codigoEstado;
-	}
+    public void setDescripcionDocumento(String descripcionDocumento) {
+        this.descripcionDocumento = descripcionDocumento;
+    }
 
-	public String getDescripcionEstado() {
-		return descripcionEstado;
-	}
+    public String getCodigoEstado() {
+        return codigoEstado;
+    }
 
-	public void setDescripcionEstado(String descripcionEstado) {
-		this.descripcionEstado = descripcionEstado;
-	}
+    public void setCodigoEstado(String codigoEstado) {
+        this.codigoEstado = codigoEstado;
+    }
 
-	public String getNombreArchivo() {
-		return nombreArchivo;
-	}
+    public String getDescripcionEstado() {
+        return descripcionEstado;
+    }
 
-	public void setNombreArchivo(String nombreArchivo) {
-		this.nombreArchivo = nombreArchivo;
-	}
+    public void setDescripcionEstado(String descripcionEstado) {
+        this.descripcionEstado = descripcionEstado;
+    }
 
-	public String getFormaAccesoArchivo() {
-		return formaAccesoArchivo;
-	}
+    public String getNombreArchivo() {
+        return nombreArchivo;
+    }
 
-	public void setFormaAccesoArchivo(String formaAccesoArchivo) {
-		this.formaAccesoArchivo = formaAccesoArchivo;
-	}
+    public void setNombreArchivo(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
+    }
 
-	public String getRutaUbicacionArchivo() {
-		return rutaUbicacionArchivo;
-	}
+    public String getFormaAccesoArchivo() {
+        return formaAccesoArchivo;
+    }
 
-	public void setRutaUbicacionArchivo(String rutaUbicacionArchivo) {
-		this.rutaUbicacionArchivo = rutaUbicacionArchivo;
-	}
+    public void setFormaAccesoArchivo(String formaAccesoArchivo) {
+        this.formaAccesoArchivo = formaAccesoArchivo;
+    }
 
-	public byte[] getArchivoFisicoAtachado() {
-		return archivoFisicoAtachado;
-	}
+    public String getRutaUbicacionArchivo() {
+        return rutaUbicacionArchivo;
+    }
 
-	public void setArchivoFisicoAtachado(byte[] archivoFisicoAtachado) {
-		this.archivoFisicoAtachado = archivoFisicoAtachado;
-	}
-	
-	public String getPesoArchivo() {
-		return pesoArchivo;
-	}
+    public void setRutaUbicacionArchivo(String rutaUbicacionArchivo) {
+        this.rutaUbicacionArchivo = rutaUbicacionArchivo;
+    }
 
-	public void setPesoArchivo(String pesoArchivo) {
-		this.pesoArchivo = pesoArchivo;
-	}
-	
-	public String getTipoArchivo() {
-		return tipoArchivo;
-	}
+    public byte[] getArchivoFisicoAtachado() {
+        return archivoFisicoAtachado;
+    }
 
-	public void setTipoArchivo(String tipoArchivo) {
-		this.tipoArchivo = tipoArchivo;
-	}
+    public void setArchivoFisicoAtachado(byte[] archivoFisicoAtachado) {
+        this.archivoFisicoAtachado = archivoFisicoAtachado;
+    }
 
-	public String getIndicadorAdenda() {
-		return indicadorAdenda;
-	}
+    public String getPesoArchivo() {
+        return pesoArchivo;
+    }
 
-	public void setIndicadorAdenda(String indicadorAdenda) {
-		this.indicadorAdenda = indicadorAdenda;
-	}
+    public void setPesoArchivo(String pesoArchivo) {
+        this.pesoArchivo = pesoArchivo;
+    }
 
-	public Date getFechaFirmaDocumento() {
-		return fechaFirmaDocumento;
-	}
+    public String getTipoArchivo() {
+        return tipoArchivo;
+    }
 
-	public void setFechaFirmaDocumento(Date fechaFirmaDocumento) {
-		this.fechaFirmaDocumento = fechaFirmaDocumento;
-	}
+    public void setTipoArchivo(String tipoArchivo) {
+        this.tipoArchivo = tipoArchivo;
+    }
 
-	public Fideicomiso getFideicomiso() {
-		return fideicomiso;
-	}
+    public String getIndicadorAdenda() {
+        return indicadorAdenda;
+    }
 
-	public void setFideicomiso(Fideicomiso fideicomiso) {
-		this.fideicomiso = fideicomiso;
-	}
+    public void setIndicadorAdenda(String indicadorAdenda) {
+        this.indicadorAdenda = indicadorAdenda;
+    }
 
-	public DocumentoFideicomiso(Integer identificadorDocumentoFideicomiso, String tipoDocumento,
-			String descripcionDocumento, String codigoEstado, String descripcionEstado, String nombreArchivo,
-			String formaAccesoArchivo, String rutaUbicacionArchivo, byte[] archivoFisicoAtachado, String pesoArchivo,
-			String tipoArchivo, String indicadorAdenda, Date fechaFirmaDocumento, Fideicomiso fideicomiso) {
-		super();
-		this.identificadorDocumentoFideicomiso = identificadorDocumentoFideicomiso;
-		this.tipoDocumento = tipoDocumento;
-		this.descripcionDocumento = descripcionDocumento;
-		this.codigoEstado = codigoEstado;
-		this.descripcionEstado = descripcionEstado;
-		this.nombreArchivo = nombreArchivo;
-		this.formaAccesoArchivo = formaAccesoArchivo;
-		this.rutaUbicacionArchivo = rutaUbicacionArchivo;
-		this.archivoFisicoAtachado = archivoFisicoAtachado;
-		this.pesoArchivo = pesoArchivo;
-		this.tipoArchivo = tipoArchivo;
-		this.indicadorAdenda = indicadorAdenda;
-		this.fechaFirmaDocumento = fechaFirmaDocumento;
-		this.fideicomiso = fideicomiso;
-	}
+    public Date getFechaFirmaDocumento() {
+        return fechaFirmaDocumento;
+    }
 
-	public DocumentoFideicomiso() {
-	}
+    public void setFechaFirmaDocumento(Date fechaFirmaDocumento) {
+        this.fechaFirmaDocumento = fechaFirmaDocumento;
+    }
+
+    public Fideicomiso getFideicomiso() {
+        return fideicomiso;
+    }
+
+    public void setFideicomiso(Fideicomiso fideicomiso) {
+        this.fideicomiso = fideicomiso;
+    }
+
+    public DocumentoFideicomiso(Integer identificadorDocumentoFideicomiso, String tipoDocumento, String descripcionDocumento, String codigoEstado, String descripcionEstado, String nombreArchivo, String formaAccesoArchivo, String rutaUbicacionArchivo, byte[] archivoFisicoAtachado, String pesoArchivo, String tipoArchivo, String indicadorAdenda, Date fechaFirmaDocumento, Fideicomiso fideicomiso) {
+        super();
+        this.identificadorDocumentoFideicomiso = identificadorDocumentoFideicomiso;
+        this.tipoDocumento = tipoDocumento;
+        this.descripcionDocumento = descripcionDocumento;
+        this.codigoEstado = codigoEstado;
+        this.descripcionEstado = descripcionEstado;
+        this.nombreArchivo = nombreArchivo;
+        this.formaAccesoArchivo = formaAccesoArchivo;
+        this.rutaUbicacionArchivo = rutaUbicacionArchivo;
+        this.archivoFisicoAtachado = archivoFisicoAtachado;
+        this.pesoArchivo = pesoArchivo;
+        this.tipoArchivo = tipoArchivo;
+        this.indicadorAdenda = indicadorAdenda;
+        this.fechaFirmaDocumento = fechaFirmaDocumento;
+        this.fideicomiso = fideicomiso;
+    }
+
+    public DocumentoFideicomiso() {
+    }
 
 }
