@@ -26,6 +26,7 @@ public class EstadosFinancierosModel extends GenericModel {
     private String fechaCorteFormateada;
     private String periodo;
     private String extraccionArchivo;
+    private Integer idFideicomisos;
 
     public Integer getIdEstadosFinancieros() {
         return idEstadosFinancieros;
@@ -185,6 +186,14 @@ public class EstadosFinancierosModel extends GenericModel {
 
     public void setExtraccionArchivo(String extraccionArchivo) {
         this.extraccionArchivo = extraccionArchivo;
+    }
+
+    public Integer getIdFideicomisos() {
+        return idFideicomisos;
+    }
+
+    public void setIdFideicomisos(Integer idFideicomisos) {
+        this.idFideicomisos = idFideicomisos;
     }
 
 }

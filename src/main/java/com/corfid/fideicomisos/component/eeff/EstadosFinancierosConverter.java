@@ -26,6 +26,7 @@ public class EstadosFinancierosConverter {
         estadosFinancierosModel.setTipoArchivo(estadosFinancieros.getTipoArchivo());
         estadosFinancierosModel.setTipoInforme(estadosFinancieros.getTipoInforme());
         estadosFinancierosModel.setNombreFideicomiso(estadosFinancieros.getFideicomiso().getNombreFideicomiso());
+        estadosFinancierosModel.setIdFideicomisos(estadosFinancieros.getFideicomiso().getIdentificadorFideicomiso());
         if (!StringUtil.isEmpty(estadosFinancieros.getPeriodo())) {
             estadosFinancierosModel.setPeriodo(estadosFinancieros.getPeriodo().substring(0,
                                                                                          4) + "-" + estadosFinancieros.getPeriodo().substring(4));

@@ -87,7 +87,7 @@
 									<tbody>
 										<tr th:each="eeff : ${crudEstadosFinancierosModel.rows}"
 											th:class="${eeff.estadoRegistro=='N'}? 'negative'">
-											<td class="ui center aligned" th:text="${eeff.idEstadosFinancieros}"></td>
+											<td class="ui center aligned" th:text="${eeff.idFideicomisos}"></td>
 											<td th:text="${eeff.nombreFideicomiso}"></td>
 											<td class="ui center aligned" th:text="${eeff.periodo}"></td>
 											<td class="ui left aligned" th:text="${eeff.descTipoInforme}"></td>
